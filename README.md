@@ -9,3 +9,9 @@ __Current__ is a C library that provides a convenient implementation of generic 
 and `vector` data structures.
 
 TODO
+
+## Benchmarks
+
+```shell
+\time -v exe/benchmark insert
+```

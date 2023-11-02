@@ -32,12 +32,12 @@ void benchmark_insert (
     //map_print(benchmark, char*, int, "%s", "%i");
   }
 
-  map_print(benchmark, char*, int, "%s", "%i");
-  fprintf(stderr, "key: %s\n", keys[0]);
-  char* akey = "a";
-  fprintf(stderr, "a: %i\n", map_get(benchmark, akey));
-  fprintf(stderr, "a: %i\n", map_get(benchmark, keys[0]));
-  fprintf(stderr, "a: %i\n", benchmark[6]);
+  //map_print(benchmark, char*, int, "%s", "%i");
+  char* key_to_check = "a";
+  int value_to_check = 16777072;
+  fprintf(stderr, "CHECK: %i\n", map_get(benchmark, key_to_check) == value_to_check);
+  //fprintf(stderr, "CHECK: %i\n", map_get(benchmark, keys[0]) == value_to_check);
+  //fprintf(stderr, "CHECK: %i\n", benchmark[6] == value_to_check);
 
   map_free(benchmark);
   vector_each(keys, index)
