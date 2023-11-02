@@ -8,12 +8,14 @@ if [ "$1" == "current" ]; then
     -Wno-unused-label               \
     -Werror                         \
     -shared                         \
-    -o exe/libcurrent.so
+    -o lib/libcurrent.so
 elif [ "$1" == "benchmark" ]; then
   gcc src/benchmark.c               \
     $(find src/benchmark -name "*.c"\
       | tr '\n' ' ')                \
     -include "def/current.h"        \
+    -L lib/                         \
+    -lcurrent                       \
     -Wall                           \
     -Wno-unused-label               \
     -Werror                         \

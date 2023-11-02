@@ -1,6 +1,7 @@
 /tmp
 /reg
 /exe
+/lib
 
 !/**/.gitkeep
 *.gz

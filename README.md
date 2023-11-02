@@ -6,6 +6,6 @@
 ## Introduction
 
 __Current__ is a C library that provides a convenient implementation of generic `map`
-and 'vector` data structures.
+and `vector` data structures.
 
 TODO

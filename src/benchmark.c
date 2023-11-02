@@ -8,7 +8,6 @@ int main (
     char** argv
 )
 {
-  printf(">>> %i\n", argc);
   if (argc != 2) {
     fprintf(stderr,
       "Usage: current-benchmark [case]"           "\n"
