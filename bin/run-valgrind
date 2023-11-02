@@ -1,0 +1,8 @@
+#!/bin/bash
+bin/compile benchmark -g -o exe/benchmark  &&
+valgrind                    \
+  --track-origins=yes       \
+  --leak-check=full         \
+  --show-leak-kinds=all     \
+  exe/benchmark ${@:1}
+echo

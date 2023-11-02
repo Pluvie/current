@@ -1,0 +1,3 @@
+**/*.bat            linguist-generated
+bin/*               linguist-generated
+exe/*               linguist-generated

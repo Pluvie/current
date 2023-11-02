@@ -1,0 +1,4 @@
+#!/bin/bash
+bin/compile benchmark -o exe/benchmark  &&
+exe/benchmark ${@:1}
+echo

@@ -1,0 +1,39 @@
+#!/bin/bash
+if [ "$1" == "current" ]; then
+  gcc src/current.c                 \
+    $(find src/current -name "*.c"  \
+      | tr '\n' ' ')                \
+    -include "def/current.h"        \
+    -Wall                           \
+    -Wno-unused-label               \
+    -Werror                         \
+    -shared                         \
+    -o exe/libcurrent.so
+elif [ "$1" == "benchmark" ]; then
+  gcc src/benchmark.c               \
+    $(find src/benchmark -name "*.c"\
+      | tr '\n' ' ')                \
+    -include "def/current.h"        \
+    -Wall                           \
+    -Wno-unused-label               \
+    -Werror                         \
+    ${@:2}
+elif [ "$1" == "test" ]; then
+  gcc src/test.c                    \
+    $(find def -name "*.c"          \
+      | tr '\n' ' ')                \
+    $(find src/ion -name "*.c"      \
+      | tr '\n' ' ')                \
+    $(find src/test -name "*.c"     \
+      | tr '\n' ' ')                \
+    -include "def/ion.h"            \
+    -include "def/test.h"           \
+    -Wall                           \
+    -Wno-unused-label               \
+    -Werror                         \
+    -g                              \
+    ${@:2}
+else
+  echo "Unrecognized compilation output: $1."
+  echo "Supported outputs are: 'ion', 'test'."
+fi
