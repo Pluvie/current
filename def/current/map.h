@@ -96,13 +96,13 @@ struct __map_data {
 /**
  * Returns `true` if the map has the given key, `false` otherwise. */
 #define map_has(map_ptr, key)                                                           \
-  (map_find(map_data(map_ptr), key) > 0)
+  (map_find(map_data(map_ptr), &(key)) > 0)
 
 /**
  * Returns the map value associated to the given key. If the key is not present,
  * then the __zero value__ of the map value type is returned. */
 #define map_get(map_ptr, key) (                                                         \
-  __map_find(map_data(map_ptr), key, map_hash(map_ptr, key), true),                     \
+  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, &(key)), true),               \
   *(map_ptr + ((map_data(map_ptr))->find.pos)))
 
 /**
@@ -110,15 +110,15 @@ struct __map_data {
  * the value will be overwritten. */
 #define map_set(map_ptr, key, value) (                                                  \
   map_check_rehash(map_ptr, 1) ?                                                        \
-  __map_find(map_data(map_ptr), key, map_hash(map_ptr, key), false),                    \
-  __map_use(map_data(map_ptr), key),                                                    \
+  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, &(key)), false),              \
+  __map_use(map_data(map_ptr), &(key)),                                                 \
   ((*(map_ptr + (map_data(map_ptr))->find.offset) = value), 1) : 0)
 
 /**
  * Deletes the value for the given key in the map. */
 #define map_delete(map_ptr, key) (                                                      \
-  __map_find(map_data(map_ptr), key, map_hash(map_ptr, key), true),                     \
-  __map_delete(map_data(map_ptr), key), 1)
+  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, &(key)), true),               \
+  __map_delete(map_data(map_ptr), &(key)), 1)
 
 /**
  * Checks if the map needs a rehash. */

@@ -5,10 +5,10 @@
   struct __map_data* data = map_data(map_ptr);                                          \
                                                                                         \
   fprintf(stderr, "Keys\n");                                                            \
-  key_type key;                                                                         \
+  key_type* key;                                                                        \
   for (uint32 iter = 0; iter < data->capacity; iter++) {                                \
-    key = (key_type) ((byte*) data->keys + (iter * data->key_size));                    \
-    fprintf(stderr, "[" key_format "] ", key);                                          \
+    key = (key_type*) ((byte*) data->keys + (iter * data->key_size));                   \
+    fprintf(stderr, "[" key_format "] ", *key);                                         \
   }                                                                                     \
   fprintf(stderr, "\n");                                                                \
                                                                                         \

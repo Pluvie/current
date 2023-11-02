@@ -14,8 +14,21 @@ elif [ "$1" == "benchmark" ]; then
     $(find src/benchmark -name "*.c"\
       | tr '\n' ' ')                \
     -include "def/current.h"        \
+    -include "def/benchmark.h"      \
     -L lib/                         \
     -lcurrent                       \
+    -Wall                           \
+    -Wno-unused-label               \
+    -Werror                         \
+    ${@:2}
+elif [ "$1" == "benchmark-local" ]; then
+  gcc src/benchmark.c               \
+    $(find src/current -name "*.c"  \
+      | tr '\n' ' ')                \
+    $(find src/benchmark -name "*.c"\
+      | tr '\n' ' ')                \
+    -include "def/current.h"        \
+    -include "def/benchmark.h"      \
     -Wall                           \
     -Wno-unused-label               \
     -Werror                         \

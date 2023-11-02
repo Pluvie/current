@@ -7,7 +7,7 @@ uint32 __map_string_key_hash (
 {
   int character;
   uint32 hash = 5381;
-  char* string = (char*) key;
+  char* string = *(char**) key;
 
   while ('\0' != (character = *string++))
     hash = ((hash << 5) + hash) + character; /* hash * 33 + character */

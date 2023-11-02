@@ -1,4 +1,5 @@
 #!/bin/bash
+bin/compile current &&
 bin/compile benchmark -o exe/benchmark  &&
 exe/benchmark ${@:1}
 echo

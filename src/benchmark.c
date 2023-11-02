@@ -1,8 +1,3 @@
-void benchmark_insert(void);
-void benchmark_lookup(void);
-void benchmark_delete(void);
-void benchmark_generic(void);
-
 int main (
     int argc,
     char** argv

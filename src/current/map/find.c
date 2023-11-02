@@ -62,7 +62,7 @@ search:
   offset++;
 
   /* Starts again from the beginning of the key array if the end was reached. */
-  if (offset > capacity)
+  if (offset >= capacity)
     offset = 0;
   /* Stops the search if more iterations than the map capacity have been done. */
   if (iter > max_iter)

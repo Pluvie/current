@@ -4,5 +4,5 @@ bool __map_string_key_compare (
 )
 {
   if (s1 == NULL || s2 == NULL) return false;
-  return strcmp(s1, s2) == 0;
+  return strcmp(*(char**) s1, *(char**) s2) == 0;
 }

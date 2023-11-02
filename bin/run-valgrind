@@ -1,5 +1,5 @@
 #!/bin/bash
-bin/compile benchmark -g -o exe/benchmark  &&
+bin/compile benchmark-local -g -o exe/benchmark  &&
 valgrind                    \
   --track-origins=yes       \
   --leak-check=full         \
