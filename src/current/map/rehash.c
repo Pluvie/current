@@ -39,6 +39,7 @@ void* __map_rehash (
   data->compare = old_data->compare;
   data->key_size = old_data->key_size;
   data->value_size = old_data->value_size;
+  data->has_string_key = old_data->has_string_key;
   data->length = 0;
   data->capacity = capacity;
   data->keys = calloc(1, key_size * capacity);

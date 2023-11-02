@@ -15,6 +15,7 @@ struct __map_data {
   uint32  value_size;
   void*   keys;
   bool*   usage;
+  bool    has_string_key;
   uint32* hashes;
   uint32  (*hash)(void*);
   bool    (*compare)(void*, void*);
@@ -57,7 +58,7 @@ struct __map_data {
 /**
  * Computes the map hash for the given key. */
 #define map_hash(map_ptr, key)                                                          \
-  ((map_data(map_ptr))->hash(key))
+  ((map_data(map_ptr))->hash(&key))
 
 /**
  * Computes the map load factor. */
@@ -82,12 +83,14 @@ struct __map_data {
   strcmp(#key_type, "char*") == 0 ?                                                     \
     __map_new(                                                                          \
         map_min_cap(initial_capacity),                                                  \
+        true,                                                                           \
         sizeof(key_type),                                                               \
         sizeof(value_type),                                                             \
         __map_string_key_hash,                                                          \
         __map_string_key_compare) :                                                     \
     __map_new(                                                                          \
         map_min_cap(initial_capacity),                                                  \
+        false,                                                                          \
         sizeof(key_type),                                                               \
         sizeof(value_type),                                                             \
         __map_identity_hash,                                                            \
@@ -102,7 +105,7 @@ struct __map_data {
  * Returns the map value associated to the given key. If the key is not present,
  * then the __zero value__ of the map value type is returned. */
 #define map_get(map_ptr, key) (                                                         \
-  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, &(key)), true),               \
+  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, key), true),                  \
   *(map_ptr + ((map_data(map_ptr))->find.pos)))
 
 /**
@@ -110,14 +113,14 @@ struct __map_data {
  * the value will be overwritten. */
 #define map_set(map_ptr, key, value) (                                                  \
   map_check_rehash(map_ptr, 1) ?                                                        \
-  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, &(key)), false),              \
+  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, key), false),                 \
   __map_use(map_data(map_ptr), &(key)),                                                 \
   ((*(map_ptr + (map_data(map_ptr))->find.offset) = value), 1) : 0)
 
 /**
  * Deletes the value for the given key in the map. */
 #define map_delete(map_ptr, key) (                                                      \
-  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, &(key)), true),               \
+  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, key), true),                  \
   __map_delete(map_data(map_ptr), &(key)), 1)
 
 /**
@@ -143,7 +146,7 @@ function(__map_find, int32) (struct __map_data* data, void* key, uint32 hash, bo
 function(__map_free, void) (struct __map_data* data);
 function(__map_identity_compare, bool) (void* s1, void* s2);
 function(__map_identity_hash, uint32) (void* key);
-function(__map_new, void*) (uint32 initial_capacity, uint32 key_size, uint32 value_size, uint32 (*hash_function)(void*), bool (*compare_function)(void*, void*));
+function(__map_new, void*) (uint32 initial_capacity, bool has_string_key, uint32 key_size, uint32 value_size, uint32 (*hash_function)(void*), bool (*compare_function)(void*, void*));
 function(__map_rehash, void*) (void* map_ptr, struct __map_data* data);
 function(__map_string_key_compare, bool) (void* s1, void* s2);
 function(__map_string_key_hash, uint32) (void* key);

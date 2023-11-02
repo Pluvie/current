@@ -6,12 +6,10 @@ void benchmark_insert (
 {
   fprintf(stderr, "Insert\n");
 
-  vector(char*) keys = vector_new(char*);
   map(char*, int) benchmark = map_new(char*, int);
   int string_length = 0;
   char character = ASCII_CHAR_BEGIN;
-  char key_forge[MAX_KEY_LENGTH + 1] = { 0 };
-  char* key = NULL;
+  char* key_forge = calloc(MAX_KEY_LENGTH + 1, sizeof(char));
 
   for (int round = 0; round < BENCHMARK_ROUNDS; round++) {
     memset(key_forge, '\0', MAX_KEY_LENGTH + 1);
@@ -24,23 +22,17 @@ void benchmark_insert (
         character = ASCII_CHAR_BEGIN;
     }
 
-    key = calloc(string_length + 1, sizeof(char));
-    vector_push(keys, key);
-    memcpy(key, key_forge, string_length + 1);
     //fprintf(stderr, ">> [%i] %s\n", round, key);
-    map_set(benchmark, key, round);
+    map_set(benchmark, key_forge, round);
     //map_print(benchmark, char*, int, "%s", "%i");
   }
 
-  //map_print(benchmark, char*, int, "%s", "%i");
+  map_print(benchmark, char*, int, "%s", "%i");
   char* key_to_check = "a";
   int value_to_check = 16777072;
   fprintf(stderr, "CHECK: %i\n", map_get(benchmark, key_to_check) == value_to_check);
-  //fprintf(stderr, "CHECK: %i\n", map_get(benchmark, keys[0]) == value_to_check);
   //fprintf(stderr, "CHECK: %i\n", benchmark[6] == value_to_check);
 
   map_free(benchmark);
-  vector_each(keys, index)
-    free(keys[index]);
-  vector_free(keys);
+  free(key_forge);
 }

@@ -15,6 +15,7 @@
  * or #map_new_cap. */
 void* __map_new (
     uint32 initial_capacity,
+    bool has_string_key,
     uint32 key_size,
     uint32 value_size,
     uint32 (*hash_function)(void*),
@@ -25,6 +26,7 @@ void* __map_new (
     map_datasize + value_size + (value_size * initial_capacity));
   data->length = 0;
   data->capacity = initial_capacity;
+  data->has_string_key = has_string_key;
   data->key_size = key_size;
   data->value_size = value_size;
   data->keys = calloc(1, key_size * initial_capacity);
