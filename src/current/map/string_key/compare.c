@@ -1,3 +1,6 @@
+/**
+ * This function shall compare two keys for a string based hash map and compare them
+ * using #strcmp. */
 bool __map_string_key_compare (
     void* s1,
     void* s2

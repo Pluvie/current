@@ -90,8 +90,8 @@ struct __map_data {
         map_min_cap(initial_capacity),                                                  \
         sizeof(key_type),                                                               \
         sizeof(value_type),                                                             \
-        NULL,                                                                           \
-        NULL))                                                                          \
+        __map_identity_hash,                                                            \
+        __map_identity_compare))
 
 /**
  * Returns `true` if the map has the given key, `false` otherwise. */
@@ -141,6 +141,8 @@ struct __map_data {
 function(__map_delete, void) (struct __map_data* data, void* key);
 function(__map_find, int32) (struct __map_data* data, void* key, uint32 hash, bool presence);
 function(__map_free, void) (struct __map_data* data);
+function(__map_identity_compare, bool) (void* s1, void* s2);
+function(__map_identity_hash, uint32) (void* key);
 function(__map_new, void*) (uint32 initial_capacity, uint32 key_size, uint32 value_size, uint32 (*hash_function)(void*), bool (*compare_function)(void*, void*));
 function(__map_rehash, void*) (void* map_ptr, struct __map_data* data);
 function(__map_string_key_compare, bool) (void* s1, void* s2);

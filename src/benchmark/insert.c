@@ -1,3 +1,5 @@
+#define cacca(str) str
+
 void benchmark_insert (
     void
 )
@@ -25,7 +27,7 @@ void benchmark_insert (
     key = calloc(string_length + 1, sizeof(char));
     vector_push(keys, key);
     memcpy(key, key_forge, string_length + 1);
-    fprintf(stderr, ">> [%i] %s\n", round, key);
+    //fprintf(stderr, ">> [%i] %s\n", round, key);
     map_set(benchmark, key, round);
     //map_print(benchmark, char*, int, "%s", "%i");
   }

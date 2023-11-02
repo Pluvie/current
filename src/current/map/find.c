@@ -49,13 +49,9 @@ search:
   if (!data->usage[offset])
     goto not_used;
 
-  /* The key is present, compares it with the provided *key* argument. If the compare
-   * function is set in the map data, it will be used for the comparison.
-   * Otherwise, a simple byte comparison is made. */
+  /* The key is present, compares it with the provided *key* argument. */
   current_key = ((byte*) data->keys + (key_size * offset));
-  if (compare != NULL && compare(key, current_key))
-    goto found;
-  else if (key == current_key)
+  if (compare(key, current_key))
     goto found;
 
   iter++;
