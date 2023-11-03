@@ -58,7 +58,7 @@ struct __map_data {
 /**
  * Computes the map hash for the given key. */
 #define map_hash(map_ptr, key)                                                          \
-  ((map_data(map_ptr))->hash(&key))
+  ((map_data(map_ptr))->hash(key))
 
 /**
  * Computes the map load factor. */
@@ -99,13 +99,13 @@ struct __map_data {
 /**
  * Returns `true` if the map has the given key, `false` otherwise. */
 #define map_has(map_ptr, key)                                                           \
-  (map_find(map_data(map_ptr), &(key)) > 0)
+  (map_find(map_data(map_ptr), key)) > 0)
 
 /**
  * Returns the map value associated to the given key. If the key is not present,
  * then the __zero value__ of the map value type is returned. */
 #define map_get(map_ptr, key) (                                                         \
-  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, key), true),                  \
+  __map_find(map_data(map_ptr), key, map_hash(map_ptr, key), true),                     \
   *(map_ptr + ((map_data(map_ptr))->find.pos)))
 
 /**
@@ -113,15 +113,15 @@ struct __map_data {
  * the value will be overwritten. */
 #define map_set(map_ptr, key, value) (                                                  \
   map_check_rehash(map_ptr, 1) ?                                                        \
-  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, key), false),                 \
-  __map_use(map_data(map_ptr), &(key)),                                                 \
+  __map_find(map_data(map_ptr), key, map_hash(map_ptr, key), false),                    \
+  __map_use(map_data(map_ptr), key, false),                                             \
   ((*(map_ptr + (map_data(map_ptr))->find.offset) = value), 1) : 0)
 
 /**
  * Deletes the value for the given key in the map. */
 #define map_delete(map_ptr, key) (                                                      \
-  __map_find(map_data(map_ptr), &(key), map_hash(map_ptr, key), true),                  \
-  __map_delete(map_data(map_ptr), &(key)), 1)
+  __map_find(map_data(map_ptr), key, map_hash(map_ptr, key), true),                     \
+  __map_delete(map_data(map_ptr), key), 1)
 
 /**
  * Checks if the map needs a rehash. */
@@ -150,6 +150,6 @@ function(__map_new, void*) (uint32 initial_capacity, bool has_string_key, uint32
 function(__map_rehash, void*) (void* map_ptr, struct __map_data* data);
 function(__map_string_key_compare, bool) (void* s1, void* s2);
 function(__map_string_key_hash, uint32) (void* key);
-function(__map_use, void) (struct __map_data* data, void* key);
+function(__map_use, void) (struct __map_data* data, void* key, bool rehashing);
 
 #include "map/print.h"

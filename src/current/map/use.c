@@ -5,20 +5,27 @@
  * must be done prior to calling this function. */
 void __map_use (
     struct __map_data* data,
-    void* key
+    void* key,
+    bool rehashing
 )
 {
   uint32 offset = data->find.offset;
 
-  bool already_used = data->usage[offset];
-  if (already_used) return;
+  if (data->usage[offset])
+    /* The key is already used, nothing to do. */
+    return;
 
-  uint32 key_size = data->key_size;
-  void* key_location = (byte*) data->keys + (offset * key_size);
   if (data->has_string_key) {
-    char* key_copy = strdup(*(char**) key);
-    memcpy(key_location, &key_copy, sizeof(char*));
+    char** keys = (char**) data->keys;
+    if (rehashing) {
+      keys[offset] = key;
+    } else {
+      char* key_copy = strdup(key);
+      keys[offset] = key_copy;
+    }
   } else {
+    uint32 key_size = data->key_size;
+    void* key_location = (byte*) data->keys + (offset * key_size);
     memcpy(key_location, key, key_size);
   }
 

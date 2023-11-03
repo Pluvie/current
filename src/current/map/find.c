@@ -31,10 +31,12 @@ int32 __map_find (
     bool presence
 )
 {
+  fprintf(stderr, "finding: [%i] %s\n", hash, (char*)key);
   uint32 capacity = data->capacity;
   uint32 key_size = data->key_size;
   uint32 capped_hash = hash % data->capacity;
   bool (*compare)(void*, void*) = data->compare;
+  bool has_string_key = data->has_string_key;
 
   uint32 offset = capped_hash;
   void* current_key = NULL;
@@ -51,8 +53,13 @@ search:
 
   /* The key is present, compares it with the provided *key* argument. */
   current_key = ((byte*) data->keys + (key_size * offset));
-  if (compare(key, current_key))
-    goto found;
+  if (has_string_key) {
+    if (compare(key, *(char**)current_key))
+      goto found;
+  } else {
+    if (compare(key, current_key))
+      goto found;
+  }
 
   iter++;
   offset++;
@@ -78,6 +85,7 @@ found:
   goto end;
 
 end:
+  fprintf(stderr, "find results: [%i][%i][%i]\n", pos, hash, offset);
   data->find.pos = pos;
   data->find.hash = hash;
   data->find.offset = offset;

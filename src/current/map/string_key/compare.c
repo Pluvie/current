@@ -6,6 +6,7 @@ bool __map_string_key_compare (
     void* s2
 )
 {
+  fprintf(stderr, "comparing: %s <-> %s\n", (char*) s1, (char*) s2);
   if (s1 == NULL || s2 == NULL) return false;
-  return strcmp(*(char**) s1, *(char**) s2) == 0;
+  return strcmp((char*) s1, (char*) s2) == 0;
 }

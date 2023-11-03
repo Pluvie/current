@@ -48,14 +48,13 @@ void* __map_rehash (
   map_ptr = (byte*) data + map_datasize + value_size;
 
   void* key = NULL;
-  bool used = false;
   uint32 hash = 0;
   int32 offset = -1;
 
   /* Loops through the old map and redistributes the keys and values. */
   for (uint32 iter = 0; iter < old_capacity; iter++) {
-    used = old_usage[iter];
-    if (!used) continue;
+    /* The key was not used, it will be skipped. */
+    if (!old_usage[iter]) continue;
 
     /* Reuses the stored hash of the key, so it will not have to be recalculated,
      * speeding up the rehashing a little bit. */
@@ -63,11 +62,17 @@ void* __map_rehash (
 
     /* Finds the old key and calculates its new offset in the new map. */
     key = (byte*) old_keys + (iter * key_size);
-    offset = __map_find(data, key, hash, false);
+    if (data->has_string_key)
+      offset = __map_find(data, *(char**)key, hash, false);
+    else
+      offset = __map_find(data, key, hash, false);
 
     /* Sets the key as used in the new map and copies the value at the same
      * offset from the old map to the new map. */
-    __map_use(data, key);
+    if (data->has_string_key)
+      __map_use(data, *(char**)key, true);
+    else
+      __map_use(data, key, true);
     memcpy((byte*) map_ptr + (offset * value_size),
       (byte*) old_map_ptr + (iter * value_size),
       value_size);
