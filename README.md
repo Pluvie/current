@@ -8,7 +8,7 @@
 __Current__ is a C library that provides a convenient implementation of generic `map`
 and `vector` data structures.
 
-__Current__'s endeavor is to streamline and make as joyful as possible working with
+__Current__'s endeavor is to streamline and make as joyful as possible your work with
 those modern data structures in C. This of course does not come without limits, however
 our hope is that you find it as useful and enjoyable as we do.
 
@@ -18,7 +18,8 @@ This is easy. TODO.
 
 ## Map
 
-Map is a lot more complicated than `vector`. Just like it, it can be declared as follows:
+Map is a lot more complicated than `vector`. Nonetheless, just like `vector` it can be
+declared as follows:
 
 ```c
 map(char*, int) my_map;
@@ -44,7 +45,12 @@ map_free(my_map);
 
 ### Hash and compare functions
 
-TODO, explain hash and compare functions.
+A map makes sense only if it's tied to a `hash` and a `compare` function. If you use
+`char*` as key type, the hash and compare function are provided by the library.
+The same is true if you use an `int`-like scalar type.
+
+For all other types, either scalar or pointer, you **must** provide your own hash and
+compare function. They can be then linked to the map using the `map_config` macro.
 
 ### Operations
 
@@ -64,7 +70,7 @@ map_delete(my_map, "abc");
 map_has(my_map, "def");
 ```
 
-The types of the value that you provide to the `map_set` macro is checked at compile
+The type of the value that you provide to the `map_set` macro is checked at compile
 time, so you are safe on that regard.
 
 The key, however, is another (sad) story. Since the implementation, to be easy and as
@@ -146,6 +152,27 @@ map_get(user_ages, &toni);              // Will return 33.
 
 map_free(user_ages);
 ```
+
+This brings us to the main limitation of __Current__ map: you cannot use scalar literals
+in map operations. The reason is that, in C, a scalar literal cannot be the target of
+the "address of" (`&`) operator. You must save the literal value on a variable first,
+and the use that variable as key. Example:
+
+```c
+map(int, int) example = map_new(int, int);
+
+map_set(example, &7, 11);   // You cannot do this (it's not even valid C).
+int key = 7;
+map_set(example, &key, 11); // You must do this.
+
+map_free(example);
+```
+
+This is because in our choice of implementation, we required that all keys have to be
+passed by reference (pointer). There are other implementations that lets you pass
+a key by value, but they bring other complications on the table. In the end, we believe
+this implementation is the best tradeoff between simplicity of use and power of
+expression.
 
 ### Zero value
 
