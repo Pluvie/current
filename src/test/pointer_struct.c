@@ -20,24 +20,19 @@ void test_pointer_struct (
   map_config(pointer_struct, user_ptr_hash, user_ptr_compare);
 
   struct user* users[16] = { 0 };
-  for (int i = 0; i < sizeof(users); i++)
+  for (int i = 0; i < countof(users); i++)
     users[i] = pointer_user_generator(i);
 
-  map_set(pointer_struct, &user, 1);
+  for (int i = 0; i < 100; i++)
+    map_set(pointer_struct, &users[i % countof(users)], i);
 
-  //struct user user = { 0 };
-  //for (int i = 0; i < 100; i++) {
-  //  user = scalar_user_generator(i);
-  //  map_set(pointer_struct, &user, i);
-  //}
-
-  //for (int i = 74; i < 74 + 26; i++) {
-  //  user = scalar_user_generator(i);
-  //  assert(map_get(pointer_struct, &user) == i);
-  //}
+  for(int i = 84; i < 84 + countof(users); i++)
+    assert(map_get(pointer_struct, &users[i % countof(users)]) == i);
 
   //map_keys_hexdump(pointer_struct);
   //map_print(pointer_struct, struct user*, user_ptr_print, int, __map_identity_print);
+
   map_free(pointer_struct);
-  free(user);
+  for (int i = 0; i < countof(users); i++)
+    free(users[i]);
 }

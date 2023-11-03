@@ -13,4 +13,6 @@ typedef double          dec64;
 typedef long double     dec128;
 
 #define function(name, type) type name
+#define countof(name) (sizeof(name) / sizeof(*(name)))
+#define lengthof(name) (countof(name) - 1)
 #define next_pow2(number) (1 << ((8 * sizeof(uint32)) - __builtin_clz(number - 1)))
