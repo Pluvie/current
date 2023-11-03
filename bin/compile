@@ -35,13 +35,13 @@ elif [ "$1" == "benchmark-local" ]; then
     ${@:2}
 elif [ "$1" == "test" ]; then
   gcc src/test.c                    \
-    $(find def -name "*.c"          \
+    $(find src/current -name "*.c"  \
       | tr '\n' ' ')                \
-    $(find src/ion -name "*.c"      \
+    $(find def/test -name "*.c"     \
       | tr '\n' ' ')                \
     $(find src/test -name "*.c"     \
       | tr '\n' ' ')                \
-    -include "def/ion.h"            \
+    -include "def/current.h"        \
     -include "def/test.h"           \
     -Wall                           \
     -Wno-unused-label               \
@@ -50,5 +50,5 @@ elif [ "$1" == "test" ]; then
     ${@:2}
 else
   echo "Unrecognized compilation output: $1."
-  echo "Supported outputs are: 'ion', 'test'."
+  echo "Supported outputs are: 'current', 'benchmark', 'benchmark-local' or 'test'."
 fi

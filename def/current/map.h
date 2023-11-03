@@ -174,6 +174,7 @@ struct __map_data {
   fprintf(stderr, "\n----\nMap: %p\n----\n", map_ptr);                                  \
   map_all(map_ptr, key_type, value_type, iter) {                                        \
     fprintf(stderr, "[%4i] ", iter.index);                                              \
+    fprintf(stderr, "[%8i] ", iter.hash);                                               \
     iter.used ? fprintf(stderr, "[■] ") : fprintf(stderr, "[ ] ");                      \
     fprintf(stderr, "["); key_printer(iter.key); fprintf(stderr, "] ");                 \
     fprintf(stderr, "["); value_printer(iter.value); fprintf(stderr, "]\n");            \
