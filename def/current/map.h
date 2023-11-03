@@ -66,6 +66,22 @@ struct __map_data {
   ((dec64) (map_length(map_ptr) + amount) / (dec64) map_capacity(map_ptr))
 
 /**
+ * Determines if the given index is used in the map. */
+#define map_used(map_ptr, index)                                                        \
+  ((map_data(map_ptr))->usage)[index]
+
+/**
+ * Retrieves the key at the given index using the given type. */
+#define map_key(map_ptr, type, index)                                                   \
+  ((type*) (map_data(map_ptr))->keys)[index]
+
+/**
+ * Configures the hash and compare functions for the map. */
+#define map_config(map_ptr, hash_func, compare_func) (                                  \
+  map_data(map_ptr)->hash = hash_func,                                                  \
+  map_data(map_ptr)->compare = compare_func)
+
+/**
  * Calculates the map minimum capacity value given a capacity number. */
 #define map_min_cap(capacity)                                                           \
   (capacity < MAP_MIN_CAPACITY ? MAP_MIN_CAPACITY : next_pow2(capacity))
@@ -121,7 +137,7 @@ struct __map_data {
  * Deletes the value for the given key in the map. */
 #define map_delete(map_ptr, key) (                                                      \
   __map_find(map_data(map_ptr), key, map_hash(map_ptr, key), true),                     \
-  __map_delete(map_data(map_ptr), key), 1)
+  __map_delete(map_data(map_ptr), key))
 
 /**
  * Checks if the map needs a rehash. */
@@ -135,6 +151,35 @@ struct __map_data {
   (map_ptr = __map_rehash(map_ptr, map_data(map_ptr)), 1)
 
 /**
+ * Loops through all the used indexes of the map. */
+#define map_each(map_ptr, key_type, value_type, iter_name)                              \
+  for (struct { key_type key; value_type value; uint32 index; } iter_name =             \
+      { .index = 0 }; iter_name.index < map_capacity(map_ptr); iter_name.index++)       \
+    if (iter_name.key = map_key(map_ptr, key_type, iter_name.index),                    \
+        iter_name.value = map_ptr[iter_name.index],                                     \
+        !(map_used(map_ptr, iter_name.index))) { continue; } else
+
+/**
+ * Loops through all the indexes of the map, both used and not used. */
+#define map_all(map_ptr, key_type, value_type, iter_name)                               \
+  for (struct { key_type key; value_type value; bool used; uint32 hash; uint32 index; } \
+      iter_name =  { .index = 0 };                                                      \
+      iter_name.index < map_capacity(map_ptr); iter_name.index++)                       \
+    if (iter_name.key = map_key(map_ptr, key_type, iter_name.index),                    \
+        iter_name.value = map_ptr[iter_name.index],                                     \
+        iter_name.hash = (map_data(map_ptr))->hashes[iter_name.index],                  \
+        iter_name.used = map_used(map_ptr, iter_name.index), true)
+
+#define map_print(map_ptr, key_type, key_printer, value_type, value_printer)            \
+  fprintf(stderr, "\n----\nMap: %p\n----\n", map_ptr);                                  \
+  map_all(map_ptr, key_type, value_type, iter) {                                        \
+    fprintf(stderr, "[%4i] ", iter.index);                                              \
+    iter.used ? fprintf(stderr, "[■] ") : fprintf(stderr, "[ ] ");                      \
+    fprintf(stderr, "["); key_printer(iter.key); fprintf(stderr, "] ");                 \
+    fprintf(stderr, "["); value_printer(iter.value); fprintf(stderr, "]\n");            \
+  }
+
+/**
  * Releases all memory regions used by the map. */
 #define map_free(map_ptr)                                                               \
   (__map_free(map_data(map_ptr)))
@@ -146,10 +191,12 @@ function(__map_find, int32) (struct __map_data* data, void* key, uint32 hash, bo
 function(__map_free, void) (struct __map_data* data);
 function(__map_identity_compare, bool) (void* s1, void* s2);
 function(__map_identity_hash, uint32) (void* key);
+function(__map_identity_print, void) (int key);
 function(__map_new, void*) (uint32 initial_capacity, bool has_string_key, uint32 key_size, uint32 value_size, uint32 (*hash_function)(void*), bool (*compare_function)(void*, void*));
 function(__map_rehash, void*) (void* map_ptr, struct __map_data* data);
 function(__map_string_key_compare, bool) (void* s1, void* s2);
 function(__map_string_key_hash, uint32) (void* key);
+function(__map_string_key_print, void) (char* key);
 function(__map_use, void) (struct __map_data* data, void* key, bool rehashing);
 
-#include "map/print.h"
+#include "map/debug.h"

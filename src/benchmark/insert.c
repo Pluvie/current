@@ -22,10 +22,10 @@ void benchmark_insert (
 
     fprintf(stderr, "\n\n>> [%i] %s\n", round, key_forge);
     map_set(benchmark, key_forge, round);
-    map_print(benchmark, char*, int, "%s", "%i");
+    map_debug(benchmark, char*, int, "%s", "%i");
   }
 
-  map_print(benchmark, char*, int, "%s", "%i");
+  map_debug(benchmark, char*, int, "%s", "%i");
   char* key_to_check = "ghij";
   int value_to_check = 16777072;
   fprintf(stderr, "CHECK: %i\n", map_get(benchmark, "ghij"));

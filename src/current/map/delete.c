@@ -12,16 +12,29 @@ void __map_delete (
   uint32 pos = data->find.pos;
   if (pos == -1) return;
 
-  uint32 key_size = data->key_size;
-  void* key_location = (byte*) data->keys + (pos * key_size);
-  memset(key_location, '\0', key_size);
+  data->usage[pos] = false;
+  data->hashes[pos] = 0;
+  data->length--;
 
   uint32 value_size = data->value_size;
   void* values = (byte*) (data + 1) + value_size;
   void* value_location = (byte*) values + (pos * value_size);
   memset(value_location, '\0', value_size);
 
-  data->usage[pos] = false;
-  data->hashes[pos] = 0;
-  data->length--;
+  if (data->has_string_key)
+    goto string_key;
+  else
+    goto standard_key;
+
+string_key:
+  char** keys = (char**) data->keys;
+  free(keys[pos]);
+  keys[pos] = NULL;
+  return;
+
+standard_key:
+  uint32 key_size = data->key_size;
+  void* key_location = (byte*) data->keys + (pos * key_size);
+  memset(key_location, '\0', key_size);
+  return;
 }

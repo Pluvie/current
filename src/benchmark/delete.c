@@ -24,15 +24,37 @@ void benchmark_delete (
     fprintf(stderr, "\n\n>> [%i] %s\n", round, key_forge);
     value_forge = strdup(key_forge);
     map_set(benchmark, key_forge, value_forge);
-    map_print(benchmark, char*, char*, "%s", "%s");
+    map_debug(benchmark, char*, char*, "%s", "%s");
   }
 
-  map_print(benchmark, char*, char*, "%s", "%s");
+  map_debug(benchmark, char*, char*, "%s", "%s");
   char* key_to_check = "ghij";
   fprintf(stderr, "CHECK: %s\n", map_get(benchmark, "ghij"));
   fprintf(stderr, "CHECK: %s\n", map_get(benchmark, key_to_check));
+
+  free(map_get(benchmark, "ghij"));
+  map_delete(benchmark, "ghij");
+  fprintf(stderr, "CHECK: %s\n", map_get(benchmark, "ghij"));
   fprintf(stderr, "CHECK: %s\n", benchmark[8]);
   //fprintf(stderr, "CHECK: %i\n", benchmark[6] == value_to_check);
+
+  //map_each(benchmark, char*, char*, iter_key, iter_value, index)
+  //  fprintf(stderr, "%s : %s\n", iter_key, iter_value);
+
+  //map_each(benchmark, char*, char*, iter_key_2, iter_value_2, index) {
+  //  fprintf(stderr, "%i\n", index);
+  //  fprintf(stderr, "%s : %s\n", iter_key_2, iter_value_2);
+  //}
+
+  map_each(benchmark, char*, char*, iter) {
+    fprintf(stderr, "%i\n", iter.index);
+    fprintf(stderr, "%s : %s\n", iter.key, iter.value);
+  }
+
+  map_each(benchmark, char*, char*, iter)
+    fprintf(stderr, "%s : %s\n", iter.key, iter.value);
+
+  map_print(benchmark, char*, __map_string_key_print, char*, __map_string_key_print);
 
   for (int i = 0; i < map_capacity(benchmark); i++)
     free(benchmark[i]);

@@ -1,7 +1,7 @@
 /**
  * This macro shall print a map for debugging purposes. */
-#define map_print(map_ptr, key_type, value_type, key_format, value_format) {            \
-  fprintf(stderr, "\nTable %p\n", map_ptr);                                             \
+#define map_debug(map_ptr, key_type, value_type, key_format, value_format) {            \
+  fprintf(stderr, "\nMap %p\n", map_ptr);                                               \
   struct __map_data* data = map_data(map_ptr);                                          \
                                                                                         \
   fprintf(stderr, "Keys\n");                                                            \

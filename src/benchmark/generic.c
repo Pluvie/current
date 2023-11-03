@@ -12,9 +12,12 @@ void benchmark_generic (
     map_set(benchmark, &round_capped, round);
   }
 
-  map_print(benchmark, int, int, "%i", "%i");
+  map_debug(benchmark, int, int, "%i", "%i");
   int test = 4;
   fprintf(stderr, "TESTTT >>> %i: %i\n", test, map_get(benchmark, &test));
   fprintf(stderr, "TESTTT >>> %i: %i\n", test, benchmark[4]);
+
+  map_print(benchmark, int, __map_identity_print, int, __map_identity_print);
+
   map_free(benchmark);
 }
