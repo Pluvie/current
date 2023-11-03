@@ -75,9 +75,11 @@ struct __vector_data {
   (vector_check_resize(vec, 1) ? ((vec)[vector_data(vec)->length++] = (value), 1) : 0)
 
 /**
- * Loops through all the elements of the vector, using the provided `index_name`. */
-#define vector_each(vec, index_name)                                                    \
-  for (uint32 index_name = 0; index_name < vector_length(vec); index_name++)
+ * Loops through all the elements of the vector, using the provided `iter_name`. */
+#define vector_each(vec, element_type, iter_name)                                       \
+  for (struct { element_type element; uint32 index; } iter_name =                       \
+      { .index = 0 }; iter_name.index < vector_length(vec); iter_name.index++)          \
+    if (iter_name.element = vec[iter_name.index], 1)
 
 /**
  * Frees all memory used by the vector and its metadata. */

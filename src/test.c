@@ -7,5 +7,6 @@ int main (
   test_scalar_struct();
   test_pointer_struct();
   test_char_pointer();
+  test_vector();
   return 0;
 }

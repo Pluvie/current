@@ -1,5 +1,6 @@
 #!/bin/bash
 if [ "$1" == "current" ]; then
+  mkdir -p lib                      &&
   gcc src/current.c                 \
     $(find src/current -name "*.c"  \
       | tr '\n' ' ')                \

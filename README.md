@@ -12,9 +12,35 @@ __Current__'s endeavor is to streamline and make as joyful as possible your work
 those modern data structures in C. This of course does not come without limits, however
 our hope is that you'll find it as useful and enjoyable as we do.
 
+## Installation
+
+To install __Current__, use the provided Linux Bash script `bin/compile`. It will
+compile the library and output the shared object `libcurrent.so` in the `lib` directory
+of the current path. The library has no dependencies, so it can be directly copied into
+your `/usr/lib` directory and linked using `gcc ... -lcurrent`.
+
 ## Vector
 
-This is easy. TODO.
+A `vector` is a collection of dynamically allocated elements of the same type.
+It will grow automatically to fit the memory occupied by all the elements.
+
+Usage example:
+
+```c
+vector(int) my_vector = vector_new(int);
+
+vector_push(my_vector, 1);
+vector_push(my_vector, 2);
+vector_push(my_vector, 3);
+
+my_vector[0];   // Holds 1.
+my_vector[1];   // Holds 2.
+
+vector_each(my_vector, int, iter)
+  my_vector[iter.index] == iter.element  // You can access them both ways.
+
+vector_free(my_vector);
+```
 
 ## Map
 
@@ -228,6 +254,22 @@ a key by value, but they bring other complications on the table. In the end, we 
 this implementation is the best tradeoff between simplicity of use and power of
 expression.
 
+### Looping
+
+Looping a map is almost like a vector:
+
+```c
+map(char*, int) my_map = map_new(char*, int);
+
+map_each(my_map, char*, int, iter) {
+  iter.key;   // Will hold the map key.
+  iter.value; // Will hold the map value.
+  iter.index; // Will hold the current iterating index starting from 0.
+}
+
+map_free(my_map);
+```
+
 ### Zero value
 
 What happens when a `map_get` operation will not find the given key in the map? How
@@ -250,3 +292,8 @@ TODO
 ```shell
 \time -v exe/benchmark insert
 ```
+
+## Contributing
+
+Any contribution is very welcome. Please open an issue or a pull request and we will
+happily review it.
