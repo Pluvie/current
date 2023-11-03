@@ -20,6 +20,7 @@ void* __map_rehash (
   uint32 old_capacity = capacity;
   uint32 key_size = data->key_size;
   uint32 value_size = data->value_size;
+  bool has_string_key = data->has_string_key;
 
   /* Doubles capacity, by simply bit shifting the number left by one. */
   capacity <<= 1;
@@ -62,17 +63,11 @@ void* __map_rehash (
 
     /* Finds the old key and calculates its new offset in the new map. */
     key = (byte*) old_keys + (iter * key_size);
-    if (data->has_string_key)
-      offset = __map_find(data, *(char**)key, hash, false);
-    else
-      offset = __map_find(data, key, hash, false);
+    offset = __map_find(data, has_string_key ? *(char**)key : key, hash, false);
 
     /* Sets the key as used in the new map and copies the value at the same
      * offset from the old map to the new map. */
-    if (data->has_string_key)
-      __map_use(data, *(char**)key, true);
-    else
-      __map_use(data, key, true);
+    __map_use(data, has_string_key ? *(char**)key : key, true);
     memcpy((byte*) map_ptr + (offset * value_size),
       (byte*) old_map_ptr + (iter * value_size),
       value_size);
