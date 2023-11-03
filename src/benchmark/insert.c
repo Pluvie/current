@@ -1,5 +1,3 @@
-#define cacca(str) str
-
 void benchmark_insert (
     void
 )
