@@ -77,9 +77,9 @@ struct __map_data {
 
 /**
  * Configures the hash and compare functions for the map. */
-#define map_config(map_ptr, hash_func, compare_func) (                                  \
-  map_data(map_ptr)->hash = hash_func,                                                  \
-  map_data(map_ptr)->compare = compare_func)
+#define map_config(map_ptr, hash_func, compare_func)                                    \
+  (map_data(map_ptr))->hash = hash_func;                                                \
+  (map_data(map_ptr))->compare = compare_func
 
 /**
  * Calculates the map minimum capacity value given a capacity number. */

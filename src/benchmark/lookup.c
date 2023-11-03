@@ -1,7 +1,31 @@
 struct user {
-  char name[32];
+  uint32 id;
   uint32 age;
+  char name[32];
 };
+
+uint32 user_hash (
+    void* user
+)
+{
+  return ((struct user*) user)->id;
+}
+
+bool user_compare (
+    void* u1,
+    void* u2
+)
+{
+  if (u1 == NULL || u2 == NULL) return false;
+  return ((struct user*) u1)->id == ((struct user*) u2)->id;
+}
+
+void user_print (
+    struct user user
+)
+{
+  fprintf(stderr, "{%i, %i, %s}", user.id, user.age, user.name);
+}
 
 void benchmark_lookup (
     void
@@ -9,36 +33,16 @@ void benchmark_lookup (
 {
   fprintf(stderr, "Lookup\n");
 
-  map(char*, int) benchmark = map_new(char*, int);
-  int string_length = 0;
-  char character = ASCII_CHAR_BEGIN;
-  char* key_forge = calloc(MAX_KEY_LENGTH + 1, sizeof(char));
+  map(struct user, int) user_ages = map_new(struct user, int);
+  map_config(user_ages, user_hash, user_compare);
+  
+  struct user toni = { .id = 11, .age = 33, .name = "Toni" };
+  map_set(user_ages, &toni, toni.age);
+  fprintf(stderr, ">>> %i\n", map_get(user_ages, &toni));
 
-  for (int round = 0; round < BENCHMARK_ROUNDS; round++) {
-    memset(key_forge, '\0', MAX_KEY_LENGTH + 1);
+  map_print(user_ages, struct user, user_print, int, __map_identity_print);
 
-    string_length = (round % MAX_KEY_LENGTH) + 1;
-    for (int pos = 0; pos < string_length; pos++) {
-      key_forge[pos] = character;
-      character++;
-      if (character > ASCII_CHAR_END)
-        character = ASCII_CHAR_BEGIN;
-    }
-
-    fprintf(stderr, "\n\n>> [%i] %s\n", round, key_forge);
-    map_set(benchmark, key_forge, round);
-    map_debug(benchmark, char*, int, "%s", "%i");
-  }
-
-  map_debug(benchmark, char*, int, "%s", "%i");
-  char* key_to_check = "ghij";
-  int value_to_check = 16777072;
-  fprintf(stderr, "CHECK: %i\n", map_get(benchmark, "ghij"));
-  fprintf(stderr, "CHECK: %i\n", map_get(benchmark, key_to_check));
-  fprintf(stderr, "CHECK: %i\n", benchmark[8]);
-  fprintf(stderr, "CHECK: %i\n", map_get(benchmark, key_to_check) == value_to_check);
-  //fprintf(stderr, "CHECK: %i\n", benchmark[6] == value_to_check);
-
-  map_free(benchmark);
-  free(key_forge);
+  fprintf(stderr, "CHECK: %i\n", user_ages[0] == 0);
+  
+  map_free(user_ages);
 }
