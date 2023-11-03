@@ -10,7 +10,7 @@ and `vector` data structures.
 
 __Current__'s endeavor is to streamline and make as joyful as possible your work with
 those modern data structures in C. This of course does not come without limits, however
-our hope is that you find it as useful and enjoyable as we do.
+our hope is that you'll find it as useful and enjoyable as we do.
 
 ## Vector
 
@@ -46,11 +46,13 @@ map_free(my_map);
 ### Hash and compare functions
 
 A map makes sense only if it's tied to a `hash` and a `compare` function. If you use
-`char*` as key type, the hash and compare function are provided by the library.
+`char*` as key type, the hash and compare function are provided automatically by the
+__Current__ library, no need to specify them (of course, you can still override them).
 The same is true if you use an `int`-like scalar type.
 
 For all other types, either scalar or pointer, you **must** provide your own hash and
-compare function. They can be then linked to the map using the `map_config` macro.
+compare function. They can be then linked to the map using the `map_config` macro. There
+will be examples below.
 
 ### Operations
 
@@ -73,8 +75,8 @@ map_has(my_map, "def");
 The type of the value that you provide to the `map_set` macro is checked at compile
 time, so you are safe on that regard.
 
-The key, however, is another (sad) story. Since the implementation, to be easy and as
-generic as possible, uses a `void*` to store the keys, you won't have compile time
+The key, however, is another (sad) story. Since the implementation, in order to be easy
+and as generic as possible, uses a `void*` to store the keys, you won't have compile time
 checks on the key type.
 
 Moreover, there are certain caveats that we will explore now.
@@ -123,7 +125,7 @@ Remember that, when doing map operation with a key type that is not `char*`, you
 **must** give a pointer for the key, which will be used internally by the map to
 `memcpy` the key content.
 
-Using this struct as example,
+Using this struct,
 
 ```c
 struct user {
@@ -165,13 +167,13 @@ map(struct user*, int) user_ages = map_new(struct user*, int);
 map_config(user_ages, user_pointer_hash, user_pointer_compare);
 
 struct user* toni = calloc(1, sizeof(struct user));
-toni->id = 11; toni->age = 33; toni.name = "Toni";
-map_set(user_ages, &toni, toni.age);    // Remember the `&` with non `char*` key types.
+toni->id = 11; toni->age = 33; toni->name = "Toni";
+map_set(user_ages, &toni, toni->age);   // Remember the `&` with non `char*` key types.
 map_get(user_ages, &toni);              // Will return 33.
+
 /**
  * IMPORTANT: the `toni` struct must remain valid for all the lifetime of the map!
  * Otherwise, its keys will be broken. */
-
 free(toni);
 map_free(user_ages);
 ```
@@ -237,8 +239,8 @@ same length of the value type, filled with zero's. It is stored right before the
 value pointer, so, when the map find will return `-1` (key not found) a simple pointer
 arithmetic will return the zero value of the map value type.
 
-For pointer key types, the zero-value will be equal to the `NULL` macro, so you can use
-its logic. For scalar key types, you can just do a `== 0` comparison, even for `struct`
+For pointer value types, the zero-value will be equal to the `NULL` macro, so you can use
+its logic. For scalar value types, you can just do a `== 0` comparison, even for `struct`
 types.
 
 ## Benchmarks
