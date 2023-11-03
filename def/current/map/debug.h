@@ -36,3 +36,16 @@
   }                                                                                     \
   fprintf(stderr, "\n");                                                                \
 }
+
+/**
+ * This macro shall hex dump the map keys, in order to debug their content. */
+#define map_keys_hexdump(map_ptr) {                                                     \
+  byte* keys = (byte*) (map_data(map_ptr))->keys;                                       \
+  uint32 key_size = map_key_size(map_ptr);                                              \
+  uint32 keys_length = map_capacity(map_ptr) * key_size;                                \
+  fprintf(stderr, "\n-- Map %p | keys hexdump", map_ptr);                               \
+  for (int i = 0; i < keys_length; i++) {                                               \
+    if (i % key_size == 0) fprintf(stderr, "\n[%2i] ", i / key_size);                   \
+    fprintf(stderr, "%02x ", keys[i]);                                                  \
+  }                                                                                     \
+  fprintf(stderr, "\n--\n"); }

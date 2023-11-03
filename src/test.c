@@ -5,5 +5,6 @@ int main (
 {
   test_scalar_int();
   test_scalar_struct();
+  test_pointer_struct();
   return 0;
 }

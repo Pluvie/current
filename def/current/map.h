@@ -56,6 +56,16 @@ struct __map_data {
   ((map_data(map_ptr))->length)
 
 /**
+ * Returns the size of a map key. */
+#define map_key_size(map_ptr)                                                           \
+  ((map_data(map_ptr))->key_size)
+
+/**
+ * Returns the size of a map value. */
+#define map_value_size(map_ptr)                                                         \
+  ((map_data(map_ptr))->value_size)
+
+/**
  * Computes the map hash for the given key. */
 #define map_hash(map_ptr, key)                                                          \
   ((map_data(map_ptr))->hash(key))
@@ -174,7 +184,7 @@ struct __map_data {
   fprintf(stderr, "\n----\nMap: %p\n----\n", map_ptr);                                  \
   map_all(map_ptr, key_type, value_type, iter) {                                        \
     fprintf(stderr, "[%4i] ", iter.index);                                              \
-    fprintf(stderr, "[%8i] ", iter.hash);                                               \
+    fprintf(stderr, "[%12i] ", iter.hash);                                              \
     iter.used ? fprintf(stderr, "[■] ") : fprintf(stderr, "[ ] ");                      \
     fprintf(stderr, "["); key_printer(iter.key); fprintf(stderr, "] ");                 \
     fprintf(stderr, "["); value_printer(iter.value); fprintf(stderr, "]\n");            \
