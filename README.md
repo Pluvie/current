@@ -110,15 +110,20 @@ map_get(example, "abc");        // Will still work and return 7.
 map_free(example);
 ```
 
+#### Other key types
+
 This behaviour is not valid for other pointer key types. Let's say for example that
 you have your `struct user` type. If you use the `struct user*` pointer type as map
 key type, **remember that the map will copy only the pointer** for each key, and thus
-the pointed key object **must** remain valid for all the lifetime of the map.
+the pointed key object **must** remain valid for all the lifetime of the map. Scalar
+key types, instead, are perfectly fine. They will be copied by value, will not
+use any heap space, and will remain valid for all the lifetime of the map.
 
-Scalar key types, instead, are perfectly fine. They will be copied by value, will not
-use any heap space, and will remain valid for all the lifetime of the map. Remember
-that, when doing map operation with a scalar key type, you **must** give a pointer
-for the key, which will be used internally by the map to `memcpy` the key content:
+Remember that, when doing map operation with a key type that is not `char*`, you
+**must** give a pointer for the key, which will be used internally by the map to
+`memcpy` the key content.
+
+Using this struct as example,
 
 ```c
 struct user {
@@ -126,15 +131,62 @@ struct user {
   uint32 age;
   char name[32];
 };
+```
 
-uint32 user_hash (
+Let's look at an example with pointer types:
+
+```c
+uint32 user_pointer_hash (
+    void* user
+/**
+ * On pointer types, when this function is called, it will be given a pointer to a
+ * `struct user*` pointer. This is because in the map keys it is stored the address
+ * of the `struct user*` key, and not directly its content.
+ *
+ * Thus, all pointer type keys will have always a size of 8 byte (`sizeof(void*)`). */
+)
+{
+  return (*(struct user**) user)->id;
+}
+
+bool user_pointer_compare (
+    void* u1,
+    void* u2
+/**
+ * Just like we said before, here the comparison between keys is done again with
+ * pointers to a `struct user*` pointer. */
+)
+{
+  if (u1 == NULL || u2 == NULL) return false;
+  return (*(struct user**) u1)->id == (*(struct user**) u2)->id;
+}
+
+map(struct user*, int) user_ages = map_new(struct user*, int);
+map_config(user_ages, user_pointer_hash, user_pointer_compare);
+
+struct user* toni = calloc(1, sizeof(struct user));
+toni->id = 11; toni->age = 33; toni.name = "Toni";
+map_set(user_ages, &toni, toni.age);    // Remember the `&` with non `char*` key types.
+map_get(user_ages, &toni);              // Will return 33.
+/**
+ * IMPORTANT: the `toni` struct must remain valid for all the lifetime of the map!
+ * Otherwise, its keys will be broken. */
+
+free(toni);
+map_free(user_ages);
+```
+
+And another for scalar types:
+
+```c
+uint32 user_scalar_hash (
     void* user
 )
 {
   return ((struct user*) user)->id;
 }
 
-bool user_compare (
+bool user_scalar_compare (
     void* u1,
     void* u2
 )
@@ -144,10 +196,10 @@ bool user_compare (
 }
 
 map(struct user, int) user_ages = map_new(struct user, int);
-map_config(user_ages, user_hash, user_compare);
+map_config(user_ages, user_scalar_hash, user_scalar_compare);
 
 struct user toni = { .id = 11, .age = 33, .name = "Toni" };
-map_set(user_ages, &toni, toni.age);    // Remember the `&` when using scalar key types.
+map_set(user_ages, &toni, toni.age);    // Remember the `&` with non `char*` key types.
 map_get(user_ages, &toni);              // Will return 33.
 
 map_free(user_ages);
