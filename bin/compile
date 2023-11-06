@@ -9,6 +9,7 @@ if [ "$1" == "current" ]; then
     -Wno-unused-label               \
     -Werror                         \
     -shared                         \
+    -fPIC                           \
     -o lib/libcurrent.so
 elif [ "$1" == "benchmark" ]; then
   gcc src/benchmark.c               \
