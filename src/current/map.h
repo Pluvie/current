@@ -56,6 +56,9 @@ function(__map_new, void*) (int64, arena*, int64, int64);
 function(__map_rehash, void*) (void*, struct __map_fp*);
 function(__map_use, int64) (struct __map_fp*, void*, uint64, enum __map_use_op);
 
+function(__map_prebuilt_int32_compare, bool) (void*, void*);
+function(__map_prebuilt_int32_hash, uint64) (void*);
+function(__map_prebuilt_int32_print, void) (int32);
 function(__map_prebuilt_int64_compare, bool) (void*, void*);
 function(__map_prebuilt_int64_hash, uint64) (void*);
 function(__map_prebuilt_int64_print, void) (int64);
@@ -173,9 +176,13 @@ function(__map_prebuilt_string_length, uint64) (void*);
 #define map_has(map_ptr, key)                                                           \
   (map_find(map_data(map_ptr), key)) > 0)
 
+/**
+ * Finds a key in the map. */
 #define map_find(map_ptr, key, presence)                                                \
   __map_find(map_data(map_ptr), key, map_hash(map_ptr, key), presence)
 
+/**
+ * Sets as used a key in the map. */
 #define map_use(map_ptr, key, rehashing)                                                \
   __map_use(map_data(map_ptr), key, map_hash(map_ptr, key), rehashing)
 
