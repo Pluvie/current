@@ -1,3 +1,9 @@
+void* __map_new (
+    int64 initial_capacity,
+    arena* allocator,
+    int64 key_size,
+    int64 value_size
+)
 /**
  * This function shall create a new map using the provided arguments:
  *
@@ -6,40 +12,42 @@
  *    known, even rougly, beforehand.
  *  - *key_size*: the amount of bytes occupied by a map key.
  *  - *value_size*: the amount of bytes occupied by a map value.
- *  - *hash_function*: the hash function the map must use to calculate the hash
- *    of a given key.
- *  - *compare_function*: the compare function the map must use to determine if two
- *    keys are equal.
  *
  * All these arguments are usually automatically calculated by the macro #map_new
  * or #map_new_cap. */
-void* __map_new (
-    uint32 initial_capacity,
-    bool has_string_key,
-    uint32 key_size,
-    uint32 value_size,
-    uint32 (*hash_function)(void*),
-    bool (*compare_function)(void*, void*)
-)
 {
-  struct __map_data* data = calloc(1,
-    map_datasize + value_size + (value_size * initial_capacity));
-  data->length = 0;
-  data->capacity = initial_capacity;
-  data->has_string_key = has_string_key;
-  data->key_size = key_size;
-  data->value_size = value_size;
-  data->keys = calloc(1, key_size * initial_capacity);
-  data->usage = calloc(1, sizeof(bool) * initial_capacity);
-  data->hashes = calloc(1, sizeof(uint32) * initial_capacity);
-  data->hash = hash_function;
-  data->compare = compare_function;
+  int64 map_bytesize = map_fp_size +
+    value_size + /* Zero value. */
+    (value_size * initial_capacity);
+  struct __map_fp* map_fp = (allocator == NULL)
+    ? calloc(1, map_bytesize)
+    : arena_calloc(allocator, 1, map_bytesize);
+
+  map_fp->allocator = allocator;
+  map_fp->length = 0;
+  map_fp->capacity = initial_capacity;
+  map_fp->key_size = key_size;
+  map_fp->value_size = value_size;
+  map_fp->keys = (allocator == NULL)
+    ? calloc(1, key_size * initial_capacity)
+    : arena_calloc(allocator, 1, key_size * initial_capacity);
+  map_fp->usage = (allocator == NULL)
+    ? calloc(1, sizeof(bool) * initial_capacity)
+    : arena_calloc(allocator, 1, sizeof(bool) * initial_capacity);
+  map_fp->hashes = (allocator == NULL)
+    ? calloc(1, sizeof(uint64) * initial_capacity)
+    : arena_calloc(allocator, 1, sizeof(uint64) * initial_capacity);
+  map_fp->hash = __map_prebuilt_int64_hash;
+  map_fp->compare = __map_prebuilt_int64_compare;
+  map_fp->copy_keys = false;
+  map_fp->key_copy = NULL;
+  map_fp->key_length = NULL;
 
   /* Fat pointer technique. The returned pointer is offsetted by a precise amount,
    * in order to store the map data and zero value.
    *
    * When allocating all the memory used by the map, it is firstly allocated an
-   * amount of needed for the map data -- equal to `sizeof(struct __map_data)`,
+   * amount of needed for the map data -- equal to `sizeof(struct __map_fp)`,
    * then an amount needed to hold the map zero value -- equal to the `value_size`,
    * and lastly an amount needed to hold the actual map values -- equal to
    * `value_size * initial_capacity`.
@@ -47,7 +55,7 @@ void* __map_new (
    * ```
    * ┌────────────────────┐
    * │                    │ <---- the allocation starts here
-   * │     TABLE DATA     │
+   * │      MAP DATA      │
    * │                    │
    * ├────────────────────┤
    * │░░░░░ZERO░VALUE░░░░░│
@@ -69,5 +77,5 @@ void* __map_new (
    * The returned pointer starts in this last memory region. When it is passed around
    * in all the map operations and functions, it is always possible to retrieve the
    * pointer to the map data by going back to the known amount of bytes. */
-  return ((byte*) data + map_datasize + value_size);
+  return ((byte*) map_fp + map_fp_size + value_size);
 }

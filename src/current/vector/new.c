@@ -1,3 +1,8 @@
+void* __vector_new (
+    uint64 initial_capacity,
+    uint64 element_size,
+    arena* allocator
+)
 /**
  * This function shall create a new vector using the provided arguments:
  *
@@ -8,22 +13,21 @@
  *
  * All these arguments are usually automatically calculated by the macro #vector_new
  * or #vector_new_cap. */
-void* __vector_new (
-    uint32 initial_capacity,
-    uint32 element_size
-)
 {
-  void* vec = calloc(1, vector_datasize + (initial_capacity * element_size));
+  void* vec = (allocator == NULL)
+    ? calloc(1, vector_fp_size + (initial_capacity * element_size))
+    : arena_calloc(allocator, 1, vector_fp_size + (initial_capacity * element_size));
 
-  struct __vector_data* vector_data = vec;
-  vector_data->block = element_size;
-  vector_data->capacity = initial_capacity;
+  struct __vector_fp* vector_fp = vec;
+  vector_fp->allocator = allocator;
+  vector_fp->block = element_size;
+  vector_fp->capacity = initial_capacity;
 
   /* Fat pointer technique. The returned pointer is offsetted by a precise amount,
    * in order to store the vector data.
    *
    * When allocating all the memory used by the vector, it is firstly allocated an
-   * amount of needed for the vector data -- equal to `sizeof(struct __vector_data)`,
+   * amount of needed for the vector data -- equal to `sizeof(struct __vector_fp)`,
    * and then an amount needed to hold the actual vector elements -- equal to
    * `element_size * initial_capacity`.
    *
@@ -50,5 +54,5 @@ void* __vector_new (
    * The returned pointer starts in this last memory region. When it is passed around
    * in all the vector operations and functions, it is always possible to retrieve the
    * pointer to the vector data by going back to the known amount of bytes. */
-  return ((byte*) vec + vector_datasize);
+  return ((byte*) vec + vector_fp_size);
 }

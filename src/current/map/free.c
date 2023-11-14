@@ -1,18 +1,21 @@
+void __map_free (
+    struct __map_fp* map_fp
+)
 /**
  * Frees all the memory regions used by a map. */
-void __map_free (
-    struct __map_data* data
-)
 {
-  if (data->has_string_key) {
-    uint32 capacity = data->capacity;
-    char** keys = (char**) data->keys;
-    for (uint32 index = 0; index < capacity; index++)
+  if (map_fp->allocator != NULL)
+    return;
+
+  if (map_fp->copy_keys) {
+    uint32 capacity = map_fp->capacity;
+    void** keys = (void**) map_fp->keys;
+    for (uint64 index = 0; index < capacity; index++)
       free(keys[index]);
   }
 
-  free(data->keys);
-  free(data->usage);
-  free(data->hashes);
-  free(data);
+  free(map_fp->keys);
+  free(map_fp->usage);
+  free(map_fp->hashes);
+  free(map_fp);
 }

@@ -1,13 +1,13 @@
-uint32 user_hash (
+uint64 user_hash (
     void* user
 )
 {
-  return __map_string_key_hash(((struct user*) user)->name);
+  return __map_prebuilt_string_hash(((struct user*) user)->name);
 }
 
-uint32 user_ptr_hash (
+uint64 user_ptr_hash (
     void* user
 )
 {
-  return __map_string_key_hash((*(struct user**) user)->name);
+  return __map_prebuilt_string_hash((*(struct user**) user)->name);
 }

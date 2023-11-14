@@ -1,40 +1,40 @@
+void __map_delete (
+    struct __map_fp* map_fp,
+    void* key,
+    uint64 hash
+)
 /**
  * This function shall set as not used the provided *key* in the map, and shall
- * zero-out the corrisponding value.
- *
- * The pos will be retrieved from the map data `find` field, so a map lookup
- * must be done prior to calling this function. */
-void __map_delete (
-    struct __map_data* data,
-    void* key
-)
+ * zero-out the corrisponding value. */
 {
-  uint32 pos = data->find.pos;
+  int64 pos = __map_find(map_fp, key, hash, __Map_Find_Pos);
   if (pos == -1) return;
 
-  data->usage[pos] = false;
-  data->hashes[pos] = 0;
-  data->length--;
+  arena* allocator = map_fp->allocator;
+  map_fp->usage[pos] = false;
+  map_fp->hashes[pos] = 0;
+  map_fp->length--;
 
-  uint32 value_size = data->value_size;
-  void* values = (byte*) (data + 1) + value_size;
+  uint64 value_size = map_fp->value_size;
+  void* values = (byte*) (map_fp + 1) + value_size;
   void* value_location = (byte*) values + (pos * value_size);
   memset(value_location, '\0', value_size);
 
-  if (data->has_string_key)
-    goto string_key;
+  if (map_fp->copy_keys)
+    goto copied_key;
   else
     goto standard_key;
 
-string_key:
-  char** keys = (char**) data->keys;
-  free(keys[pos]);
+copied_key:
+  void** keys = (void**) map_fp->keys;
+  if (allocator == NULL)
+    free(keys[pos]);
   keys[pos] = NULL;
   return;
 
 standard_key:
-  uint32 key_size = data->key_size;
-  void* key_location = (byte*) data->keys + (pos * key_size);
+  uint64 key_size = map_fp->key_size;
+  void* key_location = (byte*) map_fp->keys + (pos * key_size);
   memset(key_location, '\0', key_size);
   return;
 }

@@ -1,3 +1,7 @@
+void* __map_rehash (
+    void* map_ptr,
+    struct __map_fp* map_fp
+)
 /**
  * This function shall extend a map and rehash all its keys.
  *
@@ -11,49 +15,49 @@
  * The rehash operation will double the capacity of the map and recalculate all
  * keys and values position in the map. The length of the map will of course remain
  * unchanged, as this operation simply redistributes the map data across more space. */
-void* __map_rehash (
-    void* map_ptr,
-    struct __map_data* data
-)
 {
-  uint32 capacity = data->capacity;
-  uint32 old_capacity = capacity;
-  uint32 key_size = data->key_size;
-  uint32 value_size = data->value_size;
-  bool has_string_key = data->has_string_key;
+  arena* allocator = map_fp->allocator;
+  uint64 capacity = map_fp->capacity;
+  uint64 old_capacity = capacity;
+  uint64 key_size = map_fp->key_size;
+  uint64 value_size = map_fp->value_size;
 
   /* Doubles capacity, by simply bit shifting the number left by one. */
   capacity <<= 1;
 
-  /* Keeps the old data reference: it will be needed to copy the values over to the
+  /* Keeps the old map_fp reference: it will be needed to copy the values over to the
    * newly allocated memory. */
-  struct __map_data* old_data = data;
+  struct __map_fp* old_map_fp = map_fp;
   void* old_map_ptr = map_ptr;
-  void* old_keys = data->keys;
-  bool* old_usage = data->usage;
-  uint32* old_hashes = data->hashes;
+  void* old_keys = map_fp->keys;
+  bool* old_usage = map_fp->usage;
+  uint64* old_hashes = map_fp->hashes;
 
-  /* Allocates an entire new map with the doubled capacity. In the map data,
-   * the info that will not change are copied over from the old map data. */
-  data = calloc(1, map_datasize + value_size + (capacity * value_size));
-  data->hash = old_data->hash;
-  data->compare = old_data->compare;
-  data->key_size = old_data->key_size;
-  data->value_size = old_data->value_size;
-  data->has_string_key = old_data->has_string_key;
-  data->length = 0;
-  data->capacity = capacity;
-  data->keys = calloc(1, key_size * capacity);
-  data->usage = calloc(1, sizeof(bool) * capacity);
-  data->hashes = calloc(1, sizeof(uint32) * capacity);
-  map_ptr = (byte*) data + map_datasize + value_size;
+  /* Allocates an entire new map with the doubled capacity. In the map map_fp,
+   * the info that will not change are copied over from the old map map_fp. */
+  map_fp = (allocator == NULL)
+    ? calloc(1, map_fp_size + value_size + (capacity * value_size))
+    : arena_calloc(allocator, 1, map_fp_size + value_size + (capacity * value_size));
+  memcpy(map_fp, old_map_fp, map_fp_size);
+  map_fp->length = 0;
+  map_fp->capacity = capacity;
+  map_fp->keys = (allocator == NULL)
+    ? calloc(1, key_size * capacity)
+    : arena_calloc(allocator, 1, key_size * capacity);
+  map_fp->usage = (allocator == NULL)
+    ? calloc(1, sizeof(bool) * capacity)
+    : arena_calloc(allocator, 1, sizeof(bool) * capacity);
+  map_fp->hashes = (allocator == NULL)
+    ? calloc(1, sizeof(uint64) * capacity)
+    : arena_calloc(allocator, 1, sizeof(uint64) * capacity);
+  map_ptr = (byte*) map_fp + map_fp_size + value_size;
 
   void* key = NULL;
-  uint32 hash = 0;
+  uint64 hash = 0;
   int32 offset = -1;
 
   /* Loops through the old map and redistributes the keys and values. */
-  for (uint32 iter = 0; iter < old_capacity; iter++) {
+  for (uint64 iter = 0; iter < old_capacity; iter++) {
     /* The key was not used, it will be skipped. */
     if (!old_usage[iter]) continue;
 
@@ -61,24 +65,25 @@ void* __map_rehash (
      * speeding up the rehashing a little bit. */
     hash = old_hashes[iter];
 
-    /* Finds the old key and calculates its new offset in the new map. */
+    /* Finds the old key, calculates its new offset in the new map, and sets the
+     * key as used. */
     key = (byte*) old_keys + (iter * key_size);
-    offset = __map_find(data, has_string_key ? *(char**)key : key, hash, false);
+    offset = __map_use(map_fp, key, hash, __Map_Use_Rehashing);
 
-    /* Sets the key as used in the new map and copies the value at the same
-     * offset from the old map to the new map. */
-    __map_use(data, has_string_key ? *(char**)key : key, true);
+    /* Copies the value at the same offset from the old map to the new map. */
     memcpy((byte*) map_ptr + (offset * value_size),
       (byte*) old_map_ptr + (iter * value_size),
       value_size);
   }
 
   /* Frees the old pointers, everything has been copied over to the new map. */
-  free(old_keys);
-  free(old_usage);
-  free(old_hashes);
-  free(old_data);
+  if (allocator == NULL) {
+    free(old_keys);
+    free(old_usage);
+    free(old_hashes);
+    free(old_map_fp);
+  }
 
   /* Returns the fat pointer to the new map. */
-  return ((byte*) data + map_datasize + value_size);
+  return ((byte*) map_fp + map_fp_size + value_size);
 }
