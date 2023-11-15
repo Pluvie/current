@@ -30,6 +30,7 @@ struct __map_fp {
   bool    (*compare)(void*, void*);
   bool    copy_keys;
   void    (*key_copy)(void*, void*, uint64);
+  uint64  key_copy_fixed_length;
   uint64  (*key_length)(void*);
 };
 
@@ -107,6 +108,23 @@ function(__map_prebuilt_string_length, uint64) (void*);
   ((map_data(map_ptr))->value_size)
 
 /**
+ * Returns the estimated capacity of a map, given the *estimated_amount* of elements
+ * that it may contain. */
+#define map_estimated_capacity(estimated_amount) (                                      \
+  ((dec64) estimated_amount / (dec64) next_pow2(estimated_amount)) >= 0.7               \
+  ? (int64) 2 * next_pow2(estimated_amount)                                             \
+  : (int64) next_pow2(estimated_amount))
+
+/**
+ * Returns the estimated bytesize for a map of given *key_type* and *value_type*. */
+#define map_estimated_bytesize(key_type, value_type, estimated_amount) ((int64) (       \
+  (map_estimated_capacity(estimated_amount) * sizeof(key_type)) +                       \
+  (map_estimated_capacity(estimated_amount) * sizeof(value_type)) +                     \
+  (map_estimated_capacity(estimated_amount) * sizeof(bool)) +                           \
+  (map_estimated_capacity(estimated_amount) * sizeof(uint64)) +                         \
+  (map_fp_size + sizeof(value_type))))
+
+/**
  * Computes the map hash for the given key. */
 #define map_hash(map_ptr, key)                                                          \
   ((map_data(map_ptr))->hash(key))
@@ -138,6 +156,13 @@ function(__map_prebuilt_string_length, uint64) (void*);
   (map_data(map_ptr))->copy_keys = true,                                                \
   (map_data(map_ptr))->key_length = length_function,                                    \
   (map_data(map_ptr))->key_copy = copy_function)
+
+/**
+ * Configures the key copy behaviour for the map, when keys have fixed size -- do not
+ * use this for `string` keys! */
+#define map_config_key_copy_fixlen(map_ptr, fixed_length) (                             \
+  (map_data(map_ptr))->copy_keys = true,                                                \
+  (map_data(map_ptr))->key_copy_fixed_length = fixed_length)
 
 /**
  * Calculates the map minimum capacity value given a capacity number. */
@@ -300,7 +325,7 @@ function(__map_prebuilt_string_length, uint64) (void*);
   uint64 keys_length = map_capacity(map_ptr) * key_size;                                \
   fprintf(stderr, "\n-- Map %p | keys hexdump", map_ptr);                               \
   for (int i = 0; i < keys_length; i++) {                                               \
-    if (i % key_size == 0) fprintf(stderr, "\n[%2i] ", i / key_size);                   \
+    if (i % key_size == 0) fprintf(stderr, "\n[%2li] ", i / key_size);                  \
     fprintf(stderr, "%02x ", keys[i]);                                                  \
   }                                                                                     \
   fprintf(stderr, "\n--\n"); }

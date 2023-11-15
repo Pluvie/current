@@ -1,8 +1,11 @@
-void test_scalar_struct (
+void test_scalar_struct_arena (
     void
 )
 {
-  map(struct user, int) scalar_struct = map_new(struct user, int);
+  arena* scratch = arena_init(map_estimated_bytesize(struct user, int, 100));
+
+  map(struct user, int) scalar_struct = map_new_cap_arena(
+    struct user, int, map_estimated_capacity(100), scratch);
   map_config(scalar_struct, user_hash, user_compare);
 
   struct user user = { 0 };
@@ -17,5 +20,5 @@ void test_scalar_struct (
   }
 
   //map_print(scalar_struct, struct user, user_print, int, __map_prebuilt_int32_print);
-  map_free(scalar_struct);
+  arena_destroy(scratch);
 }

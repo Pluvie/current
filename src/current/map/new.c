@@ -37,10 +37,11 @@ void* __map_new (
   map_fp->hashes = (allocator == NULL)
     ? calloc(1, sizeof(uint64) * initial_capacity)
     : arena_calloc(allocator, 1, sizeof(uint64) * initial_capacity);
-  map_fp->hash = __map_prebuilt_int64_hash;
-  map_fp->compare = __map_prebuilt_int64_compare;
+  map_fp->hash = NULL;
+  map_fp->compare = NULL;
   map_fp->copy_keys = false;
   map_fp->key_copy = NULL;
+  map_fp->key_copy_fixed_length = key_size;
   map_fp->key_length = NULL;
 
   /* Fat pointer technique. The returned pointer is offsetted by a precise amount,

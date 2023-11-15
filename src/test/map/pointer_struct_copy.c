@@ -1,9 +1,10 @@
-void test_pointer_struct (
+void test_pointer_struct_copy (
     void
 )
 {
   map(struct user*, int) pointer_struct = map_new(struct user*, int);
   map_config(pointer_struct, user_ptr_hash, user_ptr_compare);
+  map_config_key_copy_fixlen(pointer_struct, sizeof(struct user));
 
   struct user* users[16] = { 0 };
   for (int i = 0; i < countof(users); i++)
