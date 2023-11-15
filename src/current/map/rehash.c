@@ -21,6 +21,7 @@ void* __map_rehash (
   uint64 old_capacity = capacity;
   uint64 key_size = map_fp->key_size;
   uint64 value_size = map_fp->value_size;
+  bool copied_keys = map_fp->copy_keys;
 
   /* Doubles capacity, by simply bit shifting the number left by one. */
   capacity <<= 1;
@@ -67,7 +68,9 @@ void* __map_rehash (
 
     /* Finds the old key, calculates its new offset in the new map, and sets the
      * key as used. */
-    key = (byte*) old_keys + (iter * key_size);
+    key = (copied_keys)
+      ? ((void**) old_keys)[iter]
+      : (byte*) old_keys + (iter * key_size);
     offset = __map_use(map_fp, key, hash, __Map_Use_Rehashing);
 
     /* Copies the value at the same offset from the old map to the new map. */
