@@ -18,6 +18,7 @@ uint64 user_ptr_hash (void*);
 void user_ptr_print (struct user*);
 
 void test_char_pointer(void);
+void test_char_pointer_arena(void);
 void test_pointer_struct (void);
 void test_pointer_struct_arena (void);
 void test_pointer_struct_copy (void);

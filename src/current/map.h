@@ -66,7 +66,6 @@ function(__map_prebuilt_int64_print, void) (int64);
 function(__map_prebuilt_string_hash, uint64) (void*);
 function(__map_prebuilt_string_print, void) (char*);
 function(__map_prebuilt_string_compare, bool) (void*, void*);
-function(__map_prebuilt_string_copy, void) (void*, void*, uint64);
 function(__map_prebuilt_string_length, uint64) (void*);
 /**
  * Minimum map capacity. */
@@ -266,7 +265,7 @@ function(__map_prebuilt_string_length, uint64) (void*);
   fprintf(stderr, "\n----\nMap: %p\n----\n", map_ptr);                                  \
   map_all(map_ptr, key_type, value_type, iter) {                                        \
     fprintf(stderr, "[%4li] ", iter.index);                                             \
-    fprintf(stderr, "[%12li] ", iter.hash);                                             \
+    fprintf(stderr, "[%32li] ", iter.hash);                                             \
     iter.used ? fprintf(stderr, "[■] ") : fprintf(stderr, "[ ] ");                      \
     fprintf(stderr, "["); key_printer(iter.key); fprintf(stderr, "] ");                 \
     fprintf(stderr, "["); value_printer(iter.value); fprintf(stderr, "]\n");            \
@@ -334,6 +333,6 @@ function(__map_prebuilt_string_length, uint64) (void*);
  * Applies a prebuilt configuration, based on the given *key_type*. */
 #define map_prebuilt_config(map_ptr, key_type)                                          \
   if (strcmp(#key_type, "char*") == 0 || strcmp(#key_type, "string") == 0) {            \
-    map_config(map_ptr, __map_prebuilt_string_hash, __map__prebuilt_string_compare);    \
-    map_config_key_copy(map_ptr, __prebuilt__string_length, __map_prebuilt_string_copy);\
+    map_config(map_ptr, __map_prebuilt_string_hash, __map_prebuilt_string_compare);     \
+    map_config_key_copy(map_ptr, __map_prebuilt_string_length, NULL);                   \
   }
