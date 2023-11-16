@@ -18,14 +18,14 @@
  * This technique is called "Fat Pointer", [see more here](
  * https://libcello.org/learn/a-fat-pointer-library). */
 struct __vector_fp {
-  arena*  allocator;
   uint64  length;
   uint64  capacity;
   uint64  block;
+  struct arena* arena;
 };
 
 function(__vector_free, void) (struct __vector_fp*);
-function(__vector_new, void*) (uint64, uint64, arena*);
+function(__vector_new, void*) (uint64, uint64, struct arena*);
 function(__vector_resize, void*) (struct __vector_fp*);
 
 /**
@@ -58,6 +58,18 @@ function(__vector_resize, void*) (struct __vector_fp*);
   (vec == NULL ? 0 : vector_fp(vec)->length)
 
 /**
+ * Returns the estimated capacity of a vector, given the *estimated_amount* of elements
+ * that it may contain. */
+#define vector_estimated_capacity(estimated_amount) (                                   \
+  (int64) next_pow2(estimated_amount))
+
+/**
+ * Returns the estimated bytesize for a vector of given *type*. */
+#define vector_estimated_bytesize(type, estimated_amount) ((int64) (                    \
+  (vector_estimated_capacity(estimated_amount) * sizeof(type)) +                        \
+  (vector_fp_size)))
+
+/**
  * Calculates the vector minimum capacity value given a capacity number. */
 #define vector_min_cap(capacity)                                                        \
   (capacity < VECTOR_MIN_CAPACITY ? VECTOR_MIN_CAPACITY : next_pow2(capacity))
@@ -69,8 +81,8 @@ function(__vector_resize, void*) (struct __vector_fp*);
 
 /**
  * Same as #vector_new_cap, but using the specified allocator. */
-#define vector_new_cap_arena(type, initial_capacity, allocator) (                       \
-  __vector_new(vector_min_cap(initial_capacity), sizeof(type), allocator))
+#define vector_new_cap_arena(type, initial_capacity, arena) (                           \
+  __vector_new(vector_min_cap(initial_capacity), sizeof(type), arena))
 
 /**
  * Allocates a new vector of the provided `type`. The initial capacity shall be equal
@@ -80,8 +92,8 @@ function(__vector_resize, void*) (struct __vector_fp*);
 
 /**
  * Same as #vector_new, but using the specified allocator. */
-#define vector_new_arena(type, allocator)                                               \
-  vector_new_cap_arena(type, VECTOR_MIN_CAPACITY, allocator)
+#define vector_new_arena(type, arena)                                                   \
+  vector_new_cap_arena(type, VECTOR_MIN_CAPACITY, arena)
 
 /**
  * Resizes a vector, in order to be able to hold more elements. */

@@ -2,7 +2,7 @@ void test_scalar_struct_arena (
     void
 )
 {
-  arena* scratch = arena_init(map_estimated_bytesize(struct user, int, 100));
+  struct arena* scratch = arena_init(map_estimated_bytesize(struct user, int, 100));
 
   map(struct user, int) scalar_struct = map_new_cap_arena(
     struct user, int, map_estimated_capacity(100), scratch);

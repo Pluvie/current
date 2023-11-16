@@ -4,7 +4,7 @@ void __map_free (
 /**
  * Frees all the memory regions used by a map. */
 {
-  if (map_fp->allocator != NULL)
+  if (map_fp->arena != NULL)
     return;
 
   if (map_fp->copy_keys) {

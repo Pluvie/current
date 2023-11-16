@@ -10,7 +10,7 @@ void __map_delete (
   int64 pos = __map_find(map_fp, key, hash, __Map_Find_Pos);
   if (pos == -1) return;
 
-  arena* allocator = map_fp->allocator;
+  struct arena* arena = map_fp->arena;
   map_fp->usage[pos] = false;
   map_fp->hashes[pos] = 0;
   map_fp->length--;
@@ -27,7 +27,7 @@ void __map_delete (
 
 copied_key:
   void** keys = (void**) map_fp->keys;
-  if (allocator == NULL)
+  if (arena == NULL)
     free(keys[pos]);
   keys[pos] = NULL;
   return;

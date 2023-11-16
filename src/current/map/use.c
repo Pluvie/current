@@ -12,7 +12,7 @@ int64 __map_use (
  * The *rehashing* argument is used only for copying key maps, in order to control
  * the duplication of keys: see more below. */
 {
-  arena* allocator = map_fp->allocator;
+  struct arena* arena = map_fp->arena;
   int64 offset = __map_find(map_fp, key, hash, __Map_Find_Offset);
 
   if (map_fp->usage[offset])
@@ -48,9 +48,9 @@ copied_key:
   uint64 key_length = (key_length_function == NULL)
     ? map_fp->key_copy_fixed_length
     : key_length_function(key);
-  void* key_copy = (allocator == NULL)
+  void* key_copy = (arena == NULL)
     ? calloc(1, key_length)
-    : arena_calloc(allocator, 1, key_length);
+    : arena_calloc(arena, 1, key_length);
 
   if (key_copy_function == NULL)
     memcpy(key_copy, key, key_length);

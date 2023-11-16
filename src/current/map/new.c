@@ -1,6 +1,6 @@
 void* __map_new (
     int64 initial_capacity,
-    arena* allocator,
+    struct arena* arena,
     int64 key_size,
     int64 value_size
 )
@@ -19,24 +19,24 @@ void* __map_new (
   int64 map_bytesize = map_fp_size +
     value_size + /* Zero value. */
     (value_size * initial_capacity);
-  struct __map_fp* map_fp = (allocator == NULL)
+  struct __map_fp* map_fp = (arena == NULL)
     ? calloc(1, map_bytesize)
-    : arena_calloc(allocator, 1, map_bytesize);
+    : arena_calloc(arena, 1, map_bytesize);
 
-  map_fp->allocator = allocator;
+  map_fp->arena = arena;
   map_fp->length = 0;
   map_fp->capacity = initial_capacity;
   map_fp->key_size = key_size;
   map_fp->value_size = value_size;
-  map_fp->keys = (allocator == NULL)
+  map_fp->keys = (arena == NULL)
     ? calloc(1, key_size * initial_capacity)
-    : arena_calloc(allocator, 1, key_size * initial_capacity);
-  map_fp->usage = (allocator == NULL)
+    : arena_calloc(arena, 1, key_size * initial_capacity);
+  map_fp->usage = (arena == NULL)
     ? calloc(1, sizeof(bool) * initial_capacity)
-    : arena_calloc(allocator, 1, sizeof(bool) * initial_capacity);
-  map_fp->hashes = (allocator == NULL)
+    : arena_calloc(arena, 1, sizeof(bool) * initial_capacity);
+  map_fp->hashes = (arena == NULL)
     ? calloc(1, sizeof(uint64) * initial_capacity)
-    : arena_calloc(allocator, 1, sizeof(uint64) * initial_capacity);
+    : arena_calloc(arena, 1, sizeof(uint64) * initial_capacity);
   map_fp->hash = NULL;
   map_fp->compare = NULL;
   map_fp->copy_keys = false;

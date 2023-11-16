@@ -18,7 +18,6 @@
  * This technique is called "Fat Pointer", [see more here](
  * https://libcello.org/learn/a-fat-pointer-library). */
 struct __map_fp {
-  arena*  allocator;
   uint64  length;
   uint64  capacity;
   uint64  key_size;
@@ -32,6 +31,7 @@ struct __map_fp {
   void    (*key_copy)(void*, void*, uint64);
   uint64  key_copy_fixed_length;
   uint64  (*key_length)(void*);
+  struct arena* arena;
 };
 
 /**
@@ -53,7 +53,7 @@ enum __map_use_op {
 function(__map_delete, void) (struct __map_fp*, void*, uint64);
 function(__map_find, int64) (struct __map_fp*, void*, uint64, enum __map_find_op);
 function(__map_free, void) (struct __map_fp*);
-function(__map_new, void*) (int64, arena*, int64, int64);
+function(__map_new, void*) (int64, struct arena*, int64, int64);
 function(__map_rehash, void*) (void*, struct __map_fp*);
 function(__map_use, int64) (struct __map_fp*, void*, uint64, enum __map_use_op);
 
@@ -176,8 +176,8 @@ function(__map_prebuilt_string_length, uint64) (void*);
 
 /**
  * Same as #map_new, but with an arena allocator. */
-#define map_new_arena(key_type, value_type, allocator)                                  \
-  (map_new_cap_arena(key_type, value_type, MAP_MIN_CAPACITY, allocator))
+#define map_new_arena(key_type, value_type, arena)                                      \
+  (map_new_cap_arena(key_type, value_type, MAP_MIN_CAPACITY, arena))
 
 /**
  * Allocates a new vector using the provided `key_type`, `value_type`
@@ -188,10 +188,10 @@ function(__map_prebuilt_string_length, uint64) (void*);
 /**
  *
  * Same as #map_new_cap, but tiwh and arena allocator. */
-#define map_new_cap_arena(key_type, value_type, initial_capacity, allocator) (          \
+#define map_new_cap_arena(key_type, value_type, initial_capacity, arena) (              \
   __map_new(                                                                            \
       map_min_cap(initial_capacity),                                                    \
-      allocator,                                                                        \
+      arena,                                                                            \
       sizeof(key_type),                                                                 \
       sizeof(value_type)))
 

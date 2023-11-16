@@ -4,7 +4,7 @@ void test_char_pointer_arena (
 {
   char key_forge[16] = { 0 };
 
-  arena* scratch = arena_init(
+  struct arena* scratch = arena_init(
     map_estimated_bytesize(char*, char*, 100) +
     (100 * sizeof(key_forge)) +
     (100 * sizeof(key_forge)));

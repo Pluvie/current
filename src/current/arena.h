@@ -7,16 +7,24 @@
           /__/     \__\ | _| `._____||_______||__| \__| /__/     \__\ 
                                                                                       **/
 
-typedef struct arena arena;
-struct arena {
-  byte*   data;
-  int64   size;
-  int64   pos;
-  arena*  next;
+struct region {
+  byte* data;
+  int64 size;
+  int64 pos;
+  struct region* next;
 };
 
-function(arena_calloc, void*) (arena*, int64, int64);
-function(arena_destroy, void) (arena*);
-function(arena_init, arena*) (int64);
-function(arena_malloc, void*) (arena*, int64);
-function(arena_realloc, void*) (arena*, void*, int64);
+struct arena {
+  struct region* begin;
+  struct region* end;
+};
+
+#define ARENA_REGION_MIN_SIZE (8 * 1024)
+
+function(arena_calloc, void*) (struct arena*, int64, int64);
+function(arena_destroy, void) (struct arena*);
+function(arena_init, struct arena*) (int64);
+function(arena_malloc, void*) (struct arena*, int64);
+function(arena_realloc, void*) (struct arena*, void*, int64);
+function(arena_region_next, struct region*) (struct arena*, int64);
+function(arena_region_search, struct region*) (struct arena*, void*);

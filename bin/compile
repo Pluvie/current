@@ -1,9 +1,9 @@
 #!/bin/bash
 if [ "$1" == "benchmark" ]; then
-  gcc src/benchmark.c               \
+  gcc app/benchmark.c               \
     $(find src/current -name "*.c"  \
       | tr '\n' ' ')                \
-    $(find src/benchmark -name "*.c"\
+    $(find app/benchmark -name "*.c"\
       | tr '\n' ' ')                \
     -include "src/current.h"        \
     -include "def/benchmark.h"      \
@@ -12,12 +12,12 @@ if [ "$1" == "benchmark" ]; then
     -Werror                         \
     ${@:2}
 elif [ "$1" == "test" ]; then
-  gcc src/test.c                    \
+  gcc app/test.c                    \
     $(find src/current -name "*.c"  \
       | tr '\n' ' ')                \
     $(find def/test -name "*.c"     \
       | tr '\n' ' ')                \
-    $(find src/test -name "*.c"     \
+    $(find app/test -name "*.c"     \
       | tr '\n' ' ')                \
     -include "src/current.h"        \
     -include "def/test.h"           \

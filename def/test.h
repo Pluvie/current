@@ -7,7 +7,7 @@ struct user {
 };
 
 struct user* pointer_user_generator(int);
-struct user* pointer_user_generator_arena(int, arena*);
+struct user* pointer_user_generator_arena(int, struct arena*);
 struct user scalar_user_generator(int);
 struct user user_generator(int);
 void user_print (struct user);
@@ -17,6 +17,7 @@ bool user_ptr_compare (void*, void*);
 uint64 user_ptr_hash (void*);
 void user_ptr_print (struct user*);
 
+void test_arena(void);
 void test_char_pointer(void);
 void test_char_pointer_arena(void);
 void test_pointer_struct (void);
@@ -27,3 +28,4 @@ void test_scalar_int_arena(void);
 void test_scalar_struct(void);
 void test_scalar_struct_arena(void);
 void test_vector(void);
+void test_vector_arena(void);

@@ -29,11 +29,11 @@ struct user* pointer_user_generator (
 
 struct user* pointer_user_generator_arena (
     int i,
-    arena* allocator
+    struct arena* arena
 )
 {
   struct user user = user_generator(i);
-  struct user* user_pointer = arena_calloc(allocator, 1, sizeof(struct user));
+  struct user* user_pointer = arena_calloc(arena, 1, sizeof(struct user));
   memcpy(user_pointer, &user, sizeof(struct user));
   return user_pointer;
 }

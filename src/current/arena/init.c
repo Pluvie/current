@@ -1,18 +1,23 @@
-arena* arena_init (
+struct arena* arena_init (
     int64 size
 )
+/**
+ * This function shall initialize an arena of given *size*. */
 {
-  arena* current = malloc(sizeof(arena));
-  if (!current) return NULL;
-
-  current->pos = 0;
-  current->next = NULL;
-  current->data = malloc(size * sizeof(byte));
-  current->size = size;
-  if (!current->data) {
-    free(current);
+  void* memory = malloc(sizeof(struct arena) + sizeof(struct region) + size);
+  if (memory == NULL)
     return NULL;
-  }
 
-  return current;
+  struct arena* arena = (struct arena*) memory;
+  struct region* region = (struct region*) (arena + 1);
+  byte* data = (byte*) (region + 1);
+
+  arena->begin = region;
+  arena->end = region;
+  region->data = data;
+  region->size = size;
+  region->pos = 0;
+  region->next = NULL;
+
+  return arena;
 }

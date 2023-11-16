@@ -4,7 +4,7 @@ void test_pointer_struct_arena (
 {
   struct user* users[16] = { 0 };
 
-  arena* scratch = arena_init(
+  struct arena* scratch = arena_init(
     map_estimated_bytesize(struct user*, int, countof(users)) +
     (countof(users) * sizeof(struct user)));
 

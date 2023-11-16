@@ -4,7 +4,7 @@ void __vector_free (
 /**
  * Frees all memory used by the vector and its metadata. */
 {
-  if (vector_fp->allocator != NULL)
+  if (vector_fp->arena != NULL)
     return;
 
   free(vector_fp);

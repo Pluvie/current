@@ -1,14 +1,16 @@
 void arena_destroy (
-    arena* current
+    struct arena* arena
 )
 {
-  arena* next = current;
-  arena* last = current;
+  struct region* current = arena->begin;
+  struct region* next = arena->begin;
 
   do {
-    next = last->next;
-    free(last->data);
-    free(last);
-    last = next;
-  } while(next != NULL);
+    next = current->next;
+    if (current != arena->begin)
+      free(current);
+    current = next;
+  } while(current != NULL);
+
+  free(arena);
 }

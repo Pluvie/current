@@ -3,6 +3,7 @@ int main (
     char** argv
 )
 {
+  test_arena();
   test_scalar_int();
   test_scalar_int_arena();
   test_scalar_struct();
@@ -12,6 +13,7 @@ int main (
   test_pointer_struct_copy();
   test_char_pointer();
   test_char_pointer_arena();
-  //test_vector();
+  test_vector();
+  test_vector_arena();
   return 0;
 }

@@ -1,7 +1,7 @@
 void* __vector_new (
     uint64 initial_capacity,
     uint64 element_size,
-    arena* allocator
+    struct arena* arena
 )
 /**
  * This function shall create a new vector using the provided arguments:
@@ -14,12 +14,12 @@ void* __vector_new (
  * All these arguments are usually automatically calculated by the macro #vector_new
  * or #vector_new_cap. */
 {
-  void* vec = (allocator == NULL)
+  void* vec = (arena == NULL)
     ? calloc(1, vector_fp_size + (initial_capacity * element_size))
-    : arena_calloc(allocator, 1, vector_fp_size + (initial_capacity * element_size));
+    : arena_calloc(arena, 1, vector_fp_size + (initial_capacity * element_size));
 
   struct __vector_fp* vector_fp = vec;
-  vector_fp->allocator = allocator;
+  vector_fp->arena = arena;
   vector_fp->block = element_size;
   vector_fp->capacity = initial_capacity;
 

@@ -2,7 +2,7 @@ void test_scalar_int_arena (
     void
 )
 {
-  arena* scratch = arena_init(
+  struct arena* scratch = arena_init(
     map_estimated_bytesize(int, int, 100) +
     map_estimated_bytesize(int64, int64, 100));
 

@@ -16,7 +16,7 @@ void* __map_rehash (
  * keys and values position in the map. The length of the map will of course remain
  * unchanged, as this operation simply redistributes the map data across more space. */
 {
-  arena* allocator = map_fp->allocator;
+  struct arena* arena = map_fp->arena;
   uint64 capacity = map_fp->capacity;
   uint64 old_capacity = capacity;
   uint64 key_size = map_fp->key_size;
@@ -36,21 +36,21 @@ void* __map_rehash (
 
   /* Allocates an entire new map with the doubled capacity. In the map map_fp,
    * the info that will not change are copied over from the old map map_fp. */
-  map_fp = (allocator == NULL)
+  map_fp = (arena == NULL)
     ? calloc(1, map_fp_size + value_size + (capacity * value_size))
-    : arena_calloc(allocator, 1, map_fp_size + value_size + (capacity * value_size));
+    : arena_calloc(arena, 1, map_fp_size + value_size + (capacity * value_size));
   memcpy(map_fp, old_map_fp, map_fp_size);
   map_fp->length = 0;
   map_fp->capacity = capacity;
-  map_fp->keys = (allocator == NULL)
+  map_fp->keys = (arena == NULL)
     ? calloc(1, key_size * capacity)
-    : arena_calloc(allocator, 1, key_size * capacity);
-  map_fp->usage = (allocator == NULL)
+    : arena_calloc(arena, 1, key_size * capacity);
+  map_fp->usage = (arena == NULL)
     ? calloc(1, sizeof(bool) * capacity)
-    : arena_calloc(allocator, 1, sizeof(bool) * capacity);
-  map_fp->hashes = (allocator == NULL)
+    : arena_calloc(arena, 1, sizeof(bool) * capacity);
+  map_fp->hashes = (arena == NULL)
     ? calloc(1, sizeof(uint64) * capacity)
-    : arena_calloc(allocator, 1, sizeof(uint64) * capacity);
+    : arena_calloc(arena, 1, sizeof(uint64) * capacity);
   map_ptr = (byte*) map_fp + map_fp_size + value_size;
 
   void* key = NULL;
@@ -80,7 +80,7 @@ void* __map_rehash (
   }
 
   /* Frees the old pointers, everything has been copied over to the new map. */
-  if (allocator == NULL) {
+  if (arena == NULL) {
     free(old_keys);
     free(old_usage);
     free(old_hashes);
