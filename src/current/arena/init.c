@@ -4,6 +4,8 @@ struct arena* arena_init (
 /**
  * This function shall initialize an arena of given *size*. */
 {
+  size = size < ARENA_REGION_MIN_SIZE ? ARENA_REGION_MIN_SIZE : size;
+
   void* memory = malloc(sizeof(struct arena) + sizeof(struct region) + size);
   if (memory == NULL)
     return NULL;

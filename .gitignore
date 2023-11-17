@@ -2,6 +2,7 @@
 /reg
 /exe
 /lib
+/old
 
 !/**/.gitkeep
 *.gz

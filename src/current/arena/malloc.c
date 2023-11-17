@@ -5,6 +5,9 @@ void* arena_malloc (
 /**
  * This function shall allocate new *size* amount of bytes in the arena. */
 {
+  if (arena == NULL)
+    return malloc(size);
+
   struct region* last_region = arena->end;
   if (last_region->pos + size <= last_region->size) {
     byte* data = last_region->data + last_region->pos;

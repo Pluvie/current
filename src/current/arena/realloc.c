@@ -6,6 +6,9 @@ void* arena_realloc (
 /**
  * Reallocates the *memory* in the arena to a new *size*. */
 {
+  if (arena == NULL)
+    return realloc(memory, size);
+
   struct region* memory_region = arena_region_search(arena, memory);
   if (memory_region == NULL)
     return NULL;

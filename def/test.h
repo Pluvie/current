@@ -19,13 +19,13 @@ void user_ptr_print (struct user*);
 
 void test_arena(void);
 void test_char_pointer(void);
-void test_char_pointer_arena(void);
+void test_char_pointer_arena(struct arena*);
 void test_pointer_struct (void);
-void test_pointer_struct_arena (void);
+void test_pointer_struct_arena (struct arena*);
 void test_pointer_struct_copy (void);
 void test_scalar_int(void);
-void test_scalar_int_arena(void);
+void test_scalar_int_arena(struct arena*);
 void test_scalar_struct(void);
-void test_scalar_struct_arena(void);
+void test_scalar_struct_arena(struct arena*);
 void test_vector(void);
-void test_vector_arena(void);
+void test_vector_arena(struct arena*);
