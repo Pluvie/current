@@ -28,3 +28,4 @@ function(arena_malloc, void*) (struct arena*, int64);
 function(arena_realloc, void*) (struct arena*, void*, int64);
 function(arena_region_next, struct region*) (struct arena*, int64);
 function(arena_region_search, struct region*) (struct arena*, void*);
+function(arena_prealloc, void) (struct arena*, int64);

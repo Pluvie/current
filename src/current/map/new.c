@@ -6,27 +6,27 @@ void* __map_new (
 {
   uint64 key_size = config.key_size;
   uint64 value_size = config.value_size;
-  uint64 capacity = next_pow2(config.initial_capacity);
+  uint64 initial_capacity = config.initial_capacity;
+  struct __map_memsize memsize = __map_calc_memsize(
+    key_size, value_size, initial_capacity);
 
-  /* Doubles the map capacity if the initial capacity was already under load. */
-  if (((dec64) config.initial_capacity / (dec64) capacity) >= 0.7)
-    capacity *= 2;
+  uint64 capacity = memsize.capacity;
+  uint64 footprint = memsize.footprint;
 
-  int64 map_bytesize =
-    sizeof(struct __map_fp) +     /* Map fat pointer data. */
-    value_size +                  /* Zero value. */
-    (capacity * value_size) +     /* Values. */
-    (capacity * key_size) +       /* Keys. */
-    (capacity * sizeof(bool)) +   /* Usage. */
-    (capacity * sizeof(uint64));  /* Hashes. */
+  struct arena* arena = config.arena;
+  arena_prealloc(arena, footprint);
 
-  struct __map_fp* map_fp = arena_calloc(config.arena, 1, map_bytesize);
+  struct __map_fp* map_fp = arena_calloc(arena, 1,
+    sizeof(struct __map_fp) +   /* Map fp data. */
+    value_size +                /* Zero value. */
+    (capacity * value_size));   /* Values. */
+
   map_fp->length = 0;
   map_fp->capacity = capacity;
   map_fp->config = config;
-  map_fp->keys = (void*) ((byte*) map_fp + value_size + (capacity * value_size));
-  map_fp->usage = (bool*) ((byte*) map_fp->keys + (capacity * key_size));
-  map_fp->hashes = (uint64*) ((byte*) map_fp->usage + (capacity * sizeof(bool)));
+  map_fp->keys = arena_calloc(arena, capacity, key_size);
+  map_fp->usage = arena_calloc(arena, capacity, sizeof(bool));
+  map_fp->hashes = arena_calloc(arena, capacity, sizeof(uint64));
 
   /* Fat pointer technique. The returned pointer is offsetted by a precise amount,
    * in order to store the map data and zero value.

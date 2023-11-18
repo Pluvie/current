@@ -46,6 +46,14 @@ struct __map_fp {
 };
 
 /**
+ * Defines the memory size of a map, giving the resulting *capacity* and the total
+ * memory *footprint* in bytes of the map. */
+struct __map_memsize {
+  uint64  capacity;
+  uint64  footprint;
+};
+
+/**
  * Defines the result output of the function #__map_find. */
 enum __map_find_output {
   __Map_Find_Default  = 0,
@@ -62,6 +70,7 @@ enum __map_use_opmode {
 /**
  * Map function declarations. */
 
+function(__map_calc_memsize, struct __map_memsize) (uint64, uint64, uint64);
 function(__map_delete, void) (struct __map_fp*, void*, uint64);
 function(__map_find, int64) (struct __map_fp*, void*, uint64, enum __map_find_output);
 function(__map_free, void) (struct __map_fp*);
@@ -95,10 +104,10 @@ function(__map_prebuilt_string_length, uint64) (void*);
   (struct __map_fp*) (map_ptr - 1) - 1
 
 /**
- * Creates a new map, with the given *name*, *key_type* and *value_type*.
- * Extra configuration options may be passed using the macro variadic args. */
-#define map_new(name, key_type, value_type, ...)                                        \
-  map(key_type, value_type) name;                                                       \
+ * Initializes an already declared map, with the given *name*, *key_type* and
+ * *value_type*. Extra configuration options may be passed using the macro variadic
+ * args. */
+#define map_init(name, key_type, value_type, ...)                                       \
   {                                                                                     \
     struct __map_config config = {                                                      \
       .key_size = sizeof(key_type),                                                     \
@@ -106,6 +115,13 @@ function(__map_prebuilt_string_length, uint64) (void*);
       ##__VA_ARGS__ };                                                                  \
     name = __map_new(config);                                                           \
   }
+
+/**
+ * Creates a new map, with the given *name*, *key_type* and *value_type*.
+ * Extra configuration options may be passed using the macro variadic args. */
+#define map_new(name, key_type, value_type, ...)                                        \
+  map(key_type, value_type) name;                                                       \
+  map_init(name, key_type, value_type, ##__VA_ARGS__ )
 
 /**
  * Returns the vector capacity. */
@@ -161,18 +177,13 @@ function(__map_prebuilt_string_length, uint64) (void*);
 /**
  * Sets the value for the given key in the map. If the key is already present,
  * the value will be overwritten. */
-#define map_set_dbg(map_ptr, key, value) (                                                  \
+#define map_set(map_ptr, key, value) (                                                  \
   map_load(map_ptr, 1) >= 0.7                                                           \
     ? ((map_ptr = __map_rehash(map_ptr, map_fp(map_ptr))),                              \
       (*(map_ptr + (map_use(map_ptr, key, __Map_Use_Default))) = value),                \
       value)                                                                            \
     : ((*(map_ptr + (map_use(map_ptr, key, __Map_Use_Default))) = value),               \
       value))
-
-#define map_set(map_ptr, key, value) (                                                  \
-  map_load(map_ptr, 1) >= 0.7                                                           \
-    ? map_use(map_ptr, key, __Map_Use_Default)                                                                            \
-    : map_use(map_ptr, key, __Map_Use_Default))
 
 /**
  * Deletes the value for the given key in the map. */

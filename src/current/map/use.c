@@ -61,7 +61,6 @@ copied_key:
 standard_key:
   uint64 key_size = map_fp->config.key_size;
   void* key_location = (byte*) map_fp->keys + (offset * key_size);
-  fprintf(stderr, "using %li %p\n", offset, key_location);
   memcpy(key_location, key, key_size);
   return offset;
 }
