@@ -12,8 +12,8 @@ void* __map_new (
 
   struct arena* arena = config.arena;
   uint64 capacity = memsize.capacity;
-  uint64 footprint = memsize.footprint;
-  arena_prealloc(arena, footprint);
+  //uint64 footprint = memsize.footprint;
+  //arena_prealloc(arena, footprint);
 
   struct __map_fp* map_fp = arena_calloc(arena, 1,
     sizeof(struct __map_fp) +   /* Map fp data. */

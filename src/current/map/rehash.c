@@ -34,8 +34,8 @@ void* __map_rehash (
    * the info that will not change are copied over from the old map map_fp. */
   struct __map_memsize memsize = __map_calc_memsize(key_size, value_size, old_capacity);
   uint64 capacity = memsize.capacity;
-  uint64 footprint = memsize.footprint;
-  arena_prealloc(arena, footprint);
+  //uint64 footprint = memsize.footprint;
+  //arena_prealloc(arena, footprint);
 
   map_fp = arena_calloc(arena, 1,
     sizeof(struct __map_fp) +

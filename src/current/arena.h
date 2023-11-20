@@ -19,7 +19,7 @@ struct arena {
   struct region* end;
 };
 
-#define ARENA_REGION_MIN_SIZE (8 * 1024)
+#define ARENA_REGION_MIN_SIZE (32 * 1024)
 
 function(arena_calloc, void*) (struct arena*, int64, int64);
 function(arena_destroy, void) (struct arena*);
