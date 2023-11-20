@@ -10,10 +10,9 @@ void* __map_new (
   struct __map_memsize memsize = __map_calc_memsize(
     key_size, value_size, initial_capacity);
 
+  struct arena* arena = config.arena;
   uint64 capacity = memsize.capacity;
   uint64 footprint = memsize.footprint;
-
-  struct arena* arena = config.arena;
   arena_prealloc(arena, footprint);
 
   struct __map_fp* map_fp = arena_calloc(arena, 1,

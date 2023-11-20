@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <threads.h>
 
 struct user {
   uint32 id;

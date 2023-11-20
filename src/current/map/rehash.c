@@ -62,11 +62,17 @@ void* __map_rehash (
      * speeding up the rehashing a little bit. */
     hash = old_hashes[iter];
 
-    /* Finds the old key, calculates its new offset in the new map, and sets the
-     * key as used. */
-    key = (copy_keys)
-      ? ((void**) old_keys)[iter]
-      : (byte*) old_keys + (iter * key_size);
+    /* Finds the old key. */
+    if (copy_keys)
+      /* For copied keys, the `old_keys` array is a pointer of pointers. The pointer
+       * at `iter` position points to the key copy. */
+      key = ((void**) old_keys)[iter];
+    else
+      /* For standard keys, the `old_keys` is just an array of elements, each one of
+       * length `key_size` bytes. */
+      key = (byte*) old_keys + (iter * key_size);
+
+    /* Calculates the offset of the key in the new map, and sets it as used. */
     offset = __map_use(map_fp, key, hash, __Map_Use_Rehashing);
 
     /* Copies the value at the same offset from the old map to the new map. */

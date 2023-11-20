@@ -1,9 +1,11 @@
+thread_local struct arena* arena;
+
 int main (
     int argc,
     char** argv
 )
 {
-  struct arena* arena = arena_init(0);
+  arena = arena_init(0);
 
   //test_arena();
   //test_scalar_int();
