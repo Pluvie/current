@@ -8,12 +8,15 @@ struct user {
 };
 
 uint64 user_hash (void*);
+uint64 user_hash_ptr (void*);
 bool user_compare (void*, void*);
+bool user_compare_ptr (void*, void*);
 void user_print (struct user);
+void user_print_ptr (struct user*);
 
 struct user user_generator(int);
 struct user* user_generator_ptr(int);
-struct user* user_generator_ptr_arena(struct arena*, int);
+struct user* user_generator_ptr_arena(int, struct arena*);
 
 void test_arena(void);
 void test_map_char_pointer(void);

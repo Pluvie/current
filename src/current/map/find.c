@@ -48,9 +48,11 @@ search:
     goto not_used;
 
   /* The key is present, compares it with the provided *key* argument. */
-  current_key = (copied_keys)
-    ? ((void**) keys)[offset]
-    : ((byte*) keys + (key_size * offset));
+  if (copied_keys)
+    current_key = ((void**) keys)[offset];
+  else
+    current_key = (byte*) keys + (key_size * offset);
+
   if (compare(key, current_key))
     goto found;
 
