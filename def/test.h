@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <threads.h>
 
 struct user {
   uint32 id;
@@ -18,9 +17,11 @@ struct user user_generator(int);
 struct user* user_generator_ptr(int);
 struct user* user_generator_ptr_arena(int, struct arena*);
 
+uint32 string_generator(char*, uint32);
+
 void test_arena(void);
-void test_map_char_pointer(void);
-void test_map_char_pointer_arena(struct arena*);
+void test_map_pointer_char(void);
+void test_map_pointer_char_arena(struct arena*);
 void test_map_pointer_struct (void);
 void test_map_pointer_struct_arena (struct arena*);
 void test_map_pointer_struct_copy (void);

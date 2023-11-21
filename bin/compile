@@ -15,8 +15,6 @@ elif [ "$1" == "test" ]; then
   gcc app/test.c                    \
     $(find src/current -name "*.c"  \
       | tr '\n' ' ')                \
-    $(find def/test -name "*.c"     \
-      | tr '\n' ' ')                \
     $(find app/test -name "*.c"     \
       | tr '\n' ' ')                \
     -include "src/current.h"        \
