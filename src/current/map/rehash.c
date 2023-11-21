@@ -20,7 +20,6 @@ void* __map_rehash (
   uint64 old_capacity = map_fp->capacity;
   uint64 key_size = map_fp->config.key_size;
   uint64 value_size = map_fp->config.value_size;
-  bool copy_keys = map_fp->config.copy_keys;
 
   /* Keeps the old map_fp reference: it will be needed to copy the values over to the
    * newly allocated memory. */
@@ -62,17 +61,8 @@ void* __map_rehash (
      * speeding up the rehashing a little bit. */
     hash = old_hashes[iter];
 
-    /* Finds the old key. */
-    if (copy_keys)
-      /* For copied keys, the `old_keys` array is a pointer of pointers. The pointer
-       * at `iter` position points to the key copy. */
-      key = ((void**) old_keys)[iter];
-    else
-      /* For standard keys, the `old_keys` is just an array of elements, each one of
-       * length `key_size` bytes. */
-      key = (byte*) old_keys + (iter * key_size);
-
     /* Calculates the offset of the key in the new map, and sets it as used. */
+    key = (byte*) old_keys + (iter * key_size);
     offset = __map_use(map_fp, key, hash, __Map_Use_Rehashing);
 
     /* Copies the value at the same offset from the old map to the new map. */

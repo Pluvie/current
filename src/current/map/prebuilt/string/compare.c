@@ -13,5 +13,5 @@ bool __map_prebuilt_string_compare (
  * pointer of the map data. Thus, it is intepreted as a pointer to a char pointer. */
 {
   if (s1 == NULL || s2 == NULL) return false;
-  return strcmp((char*) s1, (char*) s2) == 0;
+  return strcmp(*(char**) s1, *(char**) s2) == 0;
 }

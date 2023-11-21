@@ -21,6 +21,7 @@ uint32 string_generator(char*, uint32);
 
 void test_arena(void);
 void test_map_pointer_char(void);
+void test_map_pointer_char_key_copy(void);
 void test_map_pointer_char_arena(struct arena*);
 void test_map_pointer_struct (void);
 void test_map_pointer_struct_arena (struct arena*);

@@ -65,13 +65,13 @@
 
 /**
  * Finds a key in the map. */
-#define map_find(map_ptr, key, presence)                                                \
-  __map_find(map_fp(map_ptr), key, map_hash(map_ptr, key), presence)
+#define map_find(map_ptr, key, find_output)                                             \
+  __map_find(map_fp(map_ptr), key, map_hash(map_ptr, key), find_output)
 
 /**
  * Sets as used a key in the map. */
-#define map_use(map_ptr, key, rehashing)                                                \
-  __map_use(map_fp(map_ptr), key, map_hash(map_ptr, key), rehashing)
+#define map_use(map_ptr, key, use_opmode)                                               \
+  __map_use(map_fp(map_ptr), key, map_hash(map_ptr, key), use_opmode)
 
 /**
  * Returns the map value associated to the given key. If the key is not present,
@@ -103,8 +103,8 @@
 /**
  * Loops through all the used indexes of the map. */
 #define map_each(map_ptr, key_type, value_type, iter_name)                              \
-  for (struct { key_type key; value_type value; uint64 counter; uint64 index; }         \
-      iter_name = { .counter = 0, .index = 0 };                                         \
+  for (struct { key_type key; value_type value; int64 counter; int64 index; }           \
+      iter_name = { .counter = 0, .index = -1 };                                        \
       iter_name.counter < map_capacity(map_ptr); iter_name.counter++)                   \
     if (iter_name.index++,                                                              \
         iter_name.key = map_key(map_ptr, key_type, iter_name.counter),                  \
@@ -122,6 +122,8 @@
         iter_name.hash = (map_fp(map_ptr))->hashes[iter_name.index],                    \
         iter_name.used = map_used(map_ptr, iter_name.index), true)
 
+/**
+ * Prints the map, using the provided printers for keys and values. */
 #define map_print(map_ptr, key_type, key_printer, value_type, value_printer)            \
   fprintf(stderr, "\n----\nMap: %p\n----\n", map_ptr);                                  \
   map_all(map_ptr, key_type, value_type, iter) {                                        \
@@ -131,3 +133,16 @@
     fprintf(stderr, "["); key_printer(iter.key); fprintf(stderr, "] ");                 \
     fprintf(stderr, "["); value_printer(iter.value); fprintf(stderr, "]\n");            \
   }
+
+/**
+ * This macro shall hex dump the map keys, in order to debug their content. */
+#define map_keys_hexdump(map_ptr) {                                                     \
+  byte* keys = (byte*) (map_fp(map_ptr))->keys;                                         \
+  uint64 key_size = (map_fp(map_ptr))->config.key_size;                                 \
+  uint64 keys_length = map_capacity(map_ptr) * key_size;                                \
+  fprintf(stderr, "\n-- Map %p | keys hexdump", map_ptr);                               \
+  for (int i = 0; i < keys_length; i++) {                                               \
+    if (i % key_size == 0) fprintf(stderr, "\n[%2li] ", i / key_size);                  \
+    fprintf(stderr, "%02x ", keys[i]);                                                  \
+  }                                                                                     \
+  fprintf(stderr, "\n--\n"); }

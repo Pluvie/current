@@ -7,7 +7,7 @@ uint64 __map_prebuilt_string_hash (
 {
   int character;
   uint64 hash = 5381;
-  char* str = (char*) key;
+  char* str = *(char**) key;
 
   while ('\0' != (character = *str++))
     hash = ((hash << 5) + hash) + character; /* hash * 33 + character */

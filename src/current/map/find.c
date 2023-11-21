@@ -33,7 +33,6 @@ int64 __map_find (
 
   uint64 key_size = map_fp->config.key_size;
   bool (*compare)(void*, void*) = map_fp->config.compare;
-  bool copied_keys = map_fp->config.copy_keys;
 
   void* keys = map_fp->keys;
   void* current_key = NULL;
@@ -48,11 +47,7 @@ search:
     goto not_used;
 
   /* The key is present, compares it with the provided *key* argument. */
-  if (copied_keys)
-    current_key = ((void**) keys)[offset];
-  else
-    current_key = (byte*) keys + (key_size * offset);
-
+  current_key = (byte*) keys + (key_size * offset);
   if (compare(key, current_key))
     goto found;
 
