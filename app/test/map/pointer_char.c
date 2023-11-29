@@ -2,6 +2,8 @@ void test_map_pointer_char (
     void
 )
 {
+  describe("[Map] Pointer Char");
+
   char forge[16] = { 0 };
   uint32 generated_string_length = 0;
   int iterations = 100;
@@ -21,11 +23,13 @@ void test_map_pointer_char (
 
   //map_print(pointer_char, char*, __map_prebuilt_string_print, char*, __map_prebuilt_string_print);
   map_each(pointer_char, char*, char*, iter)
-    assert(strcmp(iter.key, map_get(pointer_char, &iter.key)) == 0);
+    test(strcmp(iter.key, map_get(pointer_char, &iter.key)) == 0);
 
   map_each(pointer_char, char*, char*, iter) {
     free(iter.key);
     free(iter.value);
   }
   map_free(pointer_char);
+
+  success();
 }

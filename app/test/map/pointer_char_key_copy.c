@@ -2,6 +2,8 @@ void test_map_pointer_char_key_copy (
     void
 )
 {
+  describe("[Map] Pointer Char / Key Copy");
+
   char forge[16] = { 0 };
   int iterations = 100;
 
@@ -19,7 +21,9 @@ void test_map_pointer_char_key_copy (
 
   //map_print(pointer_char, char*, __map_prebuilt_string_print, char*, __map_prebuilt_string_print);
   map_each(pointer_char, char*, char*, iter)
-    assert(strcmp(forge, map_get(pointer_char, &iter.key)) == 0);
+    test(strcmp(forge, map_get(pointer_char, &iter.key)) == 0);
 
   map_free(pointer_char);
+
+  success();
 }

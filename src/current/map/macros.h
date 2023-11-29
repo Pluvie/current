@@ -13,6 +13,8 @@
       .key_size = sizeof(key_type),                                                     \
       .value_size = sizeof(value_type),                                                 \
       ##__VA_ARGS__ };                                                                  \
+    if (config.key_size_copy == 0)                                                      \
+      config.key_size_copy = config.key_size;                                           \
     name = __map_new(config);                                                           \
   }
 

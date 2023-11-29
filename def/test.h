@@ -1,4 +1,23 @@
-#include <assert.h>
+#define ANSI_COLOR_RED    "\x1b[31m"
+#define ANSI_COLOR_GREEN  "\x1b[32m"
+#define ANSI_COLOR_NONE   "\x1b[0m"
+
+#define describe(name) \
+  fprintf(stderr, "%-48s", name)
+
+#define test(condition) \
+  if (!(condition)) { fail(__func__, __LINE__, #condition ); }
+
+#define success() \
+  fprintf(stderr, ANSI_COLOR_GREEN); \
+  fprintf(stderr, "█\n"); \
+  fprintf(stderr, ANSI_COLOR_NONE)
+
+#define fail(func_name, line_num, message) \
+  fprintf(stderr, ANSI_COLOR_RED); \
+  fprintf(stderr, "█ %s -> %s:%i\n", message, func_name, line_num); \
+  fprintf(stderr, ANSI_COLOR_NONE); \
+  return
 
 struct user {
   uint32 id;

@@ -2,6 +2,8 @@ void test_map_scalar_struct (
     void
 )
 {
+  describe("[Map] Scalar Struct");
+
   int iterations = 26 * 3;
   struct user user = { 0 };
 
@@ -17,9 +19,11 @@ void test_map_scalar_struct (
   for (char c = 'a'; c <= 'z'; c++) {
     i = (int) c - 45;
     user = user_generator(i);
-    assert(map_get(scalar_struct, &user) == i);
+    test(map_get(scalar_struct, &user) == i);
   }
 
   //map_print(scalar_struct, struct user, user_print, int, __map_prebuilt_int32_print);
   map_free(scalar_struct);
+
+  success();
 }
