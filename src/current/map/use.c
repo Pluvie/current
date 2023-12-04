@@ -41,11 +41,11 @@ copy_key:
    * As a quality of life for the developer, it makes a copy of the key so that the
    * map does not depend on the lifetime of outside objects. */
   struct arena* arena = map_fp->config.arena;
-  uint64 (*key_size_func)(void*) = map_fp->config.key_size_func;
+  uint64 (*key_copy_size_func)(void*) = map_fp->config.key_copy_size_func;
   void (*key_copy_func)(void*, void*, uint64) = map_fp->config.key_copy_func;
-  uint64 key_length = (key_size_func == NULL)
-    ? map_fp->config.key_size_copy
-    : key_size_func(key);
+  uint64 key_length = (key_copy_size_func == NULL)
+    ? map_fp->config.key_copy_size
+    : key_copy_size_func(key);
   void* key_copy = arena_calloc(arena, 1, key_length);
 
   if (key_copy_func == NULL)

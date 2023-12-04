@@ -1,7 +1,9 @@
-void test_arena (
+void test_arena_memory (
     void
 )
 {
+  describe("[Arena] Memory");
+
   struct arena* scratch = arena_init(ARENA_REGION_MIN_SIZE);
 
   byte* it = arena_malloc(scratch, 1);
@@ -16,4 +18,5 @@ void test_arena (
   it = arena_malloc(scratch, 100);
 
   arena_destroy(scratch);
+  success();
 }

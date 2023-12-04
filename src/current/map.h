@@ -16,13 +16,13 @@ struct __map_config {
   uint64  (*hash)(void*);
   bool    (*compare)(void*, void*);
   bool    copy_keys;
-  uint64  key_size_copy;
-  uint64  (*key_size_func)(void*);
+  uint64  key_copy_size;
   void    (*key_copy_func)(void*, void*, uint64);
+  uint64  (*key_copy_size_func)(void*);
   bool    copy_values;
-  uint64  value_size_copy;
-  uint64  (*value_size_func)(void*);
+  uint64  value_copy_size;
   void    (*value_copy_func)(void*, void*, uint64);
+  uint64  (*value_copy_size_func)(void*);
   struct arena* arena;
 };
 

@@ -11,7 +11,7 @@ void test_map_pointer_char_key_copy (
     .hash = __map_prebuilt_string_hash,
     .compare = __map_prebuilt_string_compare,
     .copy_keys = true,
-    .key_size_func = __map_prebuilt_string_length);
+    .key_copy_size_func = __map_prebuilt_string_length);
 
   for (int i = 0; i < iterations; i++) {
     string_generator(forge, sizeof(forge));
