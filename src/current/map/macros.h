@@ -53,7 +53,7 @@
 /**
  * Returns `true` if the map has the given key, `false` otherwise. */
 #define map_has(map_ptr, key)                                                           \
-  (map_find(map_fp(map_ptr), key)) > 0)
+  (map_find(map_ptr, key, __Map_Find_Default) >= 0)
 
 /**
  * Retrieves the key at the given index using the given type. */
@@ -94,7 +94,7 @@
 
 /**
  * Deletes the value for the given key in the map. */
-#define map_delete(map_ptr, key)                                                        \
+#define map_del(map_ptr, key)                                                           \
   __map_delete(map_fp(map_ptr), key, map_hash(map_ptr, key))
 
 /**
@@ -128,6 +128,7 @@
  * Prints the map, using the provided printers for keys and values. */
 #define map_print(map_ptr, key_type, key_printer, value_type, value_printer)            \
   fprintf(stderr, "\n----\nMap: %p\n----\n", map_ptr);                                  \
+  fprintf(stderr, "index   hash                              used\n");                  \
   map_all(map_ptr, key_type, value_type, iter) {                                        \
     fprintf(stderr, "[%4li] ", iter.index);                                             \
     fprintf(stderr, "[%32li] ", iter.hash);                                             \

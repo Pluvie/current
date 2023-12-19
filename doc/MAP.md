@@ -46,7 +46,13 @@ can safely pass it around.
 
 ## Usage
 
-Using the `map(char*, int) my_map` defined above, you can:
+Using the
+
+```c
+map(char*, int) my_map
+```
+
+defined above, you can:
 
 ### Set
 

@@ -5,7 +5,7 @@
 
 ## Introduction
 
-__Current__ is a C library that provides a convenient implementation of generic `map`
+__Current__ is a C library that provides a convenient implementation of generic `map`,
 `set` and `vector` data structures.
 
 __Current__'s endeavor is to streamline and make as joyful as possible your work with
@@ -27,9 +27,9 @@ operate with these data structures as you are probably used from higher level la
 To be true to the C way, memory management of these objects is *manual*. However, they
 also come with an arena implementation, which will significantly help in managing the
 memory. If you are used to the classic `malloc`/`free` pairing, writing object
-constructors and destructory, we suggest that you give a try to the arena approach
-with __Current__ because we feel that it can be of significant help to the programmer.
-If not, the arena is completely optional.
+constructors and destructors, we strongly suggest that you give a try to the arena
+approach with __Current__ because we feel that it can be of significant help to the
+programmer. If not, the arena is completely optional.
 
 To read more on __Current__ map, set and vector usage, refer to each single section:
 

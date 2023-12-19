@@ -14,6 +14,10 @@ int64 __map_use (
 {
   int64 offset = __map_find(map_fp, key, hash, __Map_Find_Offset);
 
+  if (offset < 0)
+    /* Key not found, nothing to do. */
+    return offset;
+
   if (map_fp->usage[offset])
     /* The key is already used, nothing to do. */
     return offset;

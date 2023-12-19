@@ -2,7 +2,7 @@
  * Map function declarations. */
 
 function(__map_calc_memsize, struct __map_memsize) (uint64, uint64, uint64);
-function(__map_delete, void) (struct __map_fp*, void*, uint64);
+function(__map_delete, bool) (struct __map_fp*, void*, uint64);
 function(__map_find, int64) (struct __map_fp*, void*, uint64, enum __map_find_output);
 function(__map_free, void) (struct __map_fp*);
 function(__map_new, void*) (struct __map_config);
