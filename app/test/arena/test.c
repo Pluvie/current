@@ -2,7 +2,7 @@ void test_arena_memory (
     void
 )
 {
-  describe("[Arena] Memory");
+  describe("[Arena] (memory)");
 
   struct arena* scratch = arena_init(ARENA_REGION_MIN_SIZE);
 

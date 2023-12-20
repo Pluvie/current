@@ -8,8 +8,11 @@ int main (
   arena = arena_init(0);
   test_arena_memory();
 
-  test_map_scalar_int();
-  test_map_scalar_struct();
+  test_map__int32__int32();
+  test_map__int64__int64();
+  test_map__struct_user__int32();
+  test_map__struct_user_ptr__int32();
+
   test_map_pointer_struct();
   test_map_pointer_struct_key_copy();
   test_map_pointer_char();
