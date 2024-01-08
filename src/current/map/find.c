@@ -41,16 +41,18 @@ int64 __map_find (
   uint64 max_iter = capacity;
 
 search:
-  /* The key is not present, returns this offset only if the *presence* argument is
-   * set to `false`, otherwise returns `-1`. */
-  if (!map_fp->usage[offset])
+  /* The key has never been used, stops the search immediately. */
+  if (map_fp->statuses[offset] == __Map__Key_Status__Not_Used)
     goto not_used;
+  if (map_fp->statuses[offset] == __Map__Key_Status__Deleted)
+    goto next;
 
   /* The key is present, compares it with the provided *key* argument. */
   current_key = (byte*) keys + (key_size * offset);
   if (compare(key, current_key))
     goto found;
 
+next:
   iter++;
   offset++;
 

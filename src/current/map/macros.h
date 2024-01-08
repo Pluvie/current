@@ -63,7 +63,7 @@
 /**
  * Determines if the given index is used in the map. */
 #define map_used(map_ptr, index)                                                        \
-  ((map_fp(map_ptr))->usage)[index]
+  (((map_fp(map_ptr))->statuses)[index] == __Map__Key_Status__Used)
 
 /**
  * Finds a key in the map. */

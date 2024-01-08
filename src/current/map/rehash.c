@@ -26,7 +26,7 @@ void* __map_rehash (
   struct __map_fp* old_map_fp = map_fp;
   void* old_map_ptr = map_ptr;
   void* old_keys = map_fp->keys;
-  bool* old_usage = map_fp->usage;
+  uint8* old_statuses = map_fp->statuses;
   uint64* old_hashes = map_fp->hashes;
 
   /* Allocates an entire new map with the doubled capacity. In the map map_fp,
@@ -44,7 +44,7 @@ void* __map_rehash (
   map_fp->length = 0;
   map_fp->capacity = capacity;
   map_fp->keys = arena_calloc(arena, capacity, key_size);
-  map_fp->usage = arena_calloc(arena, capacity, sizeof(bool));
+  map_fp->statuses = arena_calloc(arena, capacity, sizeof(uint8));
   map_fp->hashes = arena_calloc(arena, capacity, sizeof(uint64));
   map_ptr = (byte*) map_fp + sizeof(struct __map_fp) + value_size;
 
@@ -55,7 +55,7 @@ void* __map_rehash (
   /* Loops through the old map and redistributes the keys and values. */
   for (uint64 iter = 0; iter < old_capacity; iter++) {
     /* The key was not used, it will be skipped. */
-    if (!old_usage[iter]) continue;
+    if (!old_statuses[iter]) continue;
 
     /* Reuses the stored hash of the key, so it will not have to be recalculated,
      * speeding up the rehashing a little bit. */
@@ -74,7 +74,7 @@ void* __map_rehash (
   /* Frees the old pointers, everything has been copied over to the new map. */
   if (arena == NULL) {
     free(old_keys);
-    free(old_usage);
+    free(old_statuses);
     free(old_hashes);
     free(old_map_fp);
   }

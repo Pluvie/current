@@ -40,7 +40,7 @@ struct __map_fp {
   uint64  length;
   uint64  capacity;
   void*   keys;
-  bool*   usage;
+  uint8*  statuses;
   uint64* hashes;
   struct __map_config config;
 };
@@ -51,6 +51,14 @@ struct __map_fp {
 struct __map_memsize {
   uint64  capacity;
   uint64  footprint;
+};
+
+/**
+ * Defines the possible key statuses of the map. */
+enum {
+  __Map__Key_Status__Not_Used = 0,
+  __Map__Key_Status__Used     = 1,
+  __Map__Key_Status__Deleted  = 2,
 };
 
 /**

@@ -25,7 +25,7 @@ void* __map_new (
   map_fp->capacity = capacity;
   map_fp->config = config;
   map_fp->keys = arena_calloc(arena, capacity, key_size);
-  map_fp->usage = arena_calloc(arena, capacity, sizeof(bool));
+  map_fp->statuses = arena_calloc(arena, capacity, sizeof(uint8));
   map_fp->hashes = arena_calloc(arena, capacity, sizeof(uint64));
 
   /* Fat pointer technique. The returned pointer is offsetted by a precise amount,

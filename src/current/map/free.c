@@ -15,7 +15,7 @@ void __map_free (
   }
 
   free(map_fp->keys);
-  free(map_fp->usage);
+  free(map_fp->statuses);
   free(map_fp->hashes);
   free(map_fp);
 }

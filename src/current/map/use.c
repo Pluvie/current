@@ -18,12 +18,12 @@ int64 __map_use (
     /* Key not found, nothing to do. */
     return offset;
 
-  if (map_fp->usage[offset])
+  if (map_fp->statuses[offset] == __Map__Key_Status__Used)
     /* The key is already used, nothing to do. */
     return offset;
 
-  /* Updates usage, hashes and length. */
-  map_fp->usage[offset] = true;
+  /* Updates statuses, hashes and length. */
+  map_fp->statuses[offset] = __Map__Key_Status__Used;
   map_fp->hashes[offset] = hash;
   map_fp->length++;
 

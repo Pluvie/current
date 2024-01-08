@@ -4,8 +4,8 @@ bool __map_delete (
     uint64 hash
 )
 /**
- * This function shall set as not used the provided *key* in the map, and shall
- * zero-out the corrisponding key and value.
+ * This function shall set as deleted the status of the provided *key* in the map, and
+ * shall zero-out the corrisponding key and value.
  *
  * The offset will be retrieved from the map `find` function.
  *
@@ -16,7 +16,7 @@ bool __map_delete (
     /* Key not found, nothing to do. */
     return false;
 
-  map_fp->usage[offset] = false;
+  map_fp->statuses[offset] = __Map__Key_Status__Deleted;
   map_fp->hashes[offset] = 0;
 
   uint64 key_size = map_fp->config.key_size;
