@@ -55,3 +55,5 @@ void test_map__int32__int32(void);
 void test_map__int64__int64(void);
 void test_map__struct_user__int32(void);
 void test_map__struct_user_ptr__int32(void);
+void test_map__key_copy__char_ptr__int32(void);
+void test_map__key_copy__char_ptr__char_ptr(void);
