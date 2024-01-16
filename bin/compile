@@ -1,30 +1,13 @@
 #!/bin/bash
-if [ "$1" == "benchmark" ]; then
-  gcc app/benchmark.c               \
-    $(find src/current -name "*.c"  \
-      | tr '\n' ' ')                \
-    $(find app/benchmark -name "*.c"\
-      | tr '\n' ' ')                \
-    -include "src/current.h"        \
-    -include "def/benchmark.h"      \
-    -Wall                           \
-    -Wno-unused-label               \
-    -Werror                         \
-    ${@:2}
-elif [ "$1" == "test" ]; then
-  gcc app/test.c                    \
-    $(find src/current -name "*.c"  \
-      | tr '\n' ' ')                \
-    $(find app/test -name "*.c"     \
-      | tr '\n' ' ')                \
-    -include "src/current.h"        \
-    -include "def/test.h"           \
-    -Wall                           \
-    -Wno-unused-label               \
-    -Werror                         \
-    -g                              \
-    ${@:2}
-else
-  echo "Unrecognized compilation output: $1."
-  echo "Supported outputs are: 'benchmark' or 'test'."
-fi
+gcc app/$1.c                      \
+  $(find src/current -name "*.c"  \
+    | tr '\n' ' ')                \
+  $(find app/$1 -name "*.c"       \
+    | tr '\n' ' ')                \
+  -include "src/current.h"        \
+  -include "app/$1.h"             \
+  -Wall                           \
+  -Wno-unused-label               \
+  -Werror                         \
+  -g                              \
+  ${@:2}

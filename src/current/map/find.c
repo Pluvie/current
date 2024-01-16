@@ -1,15 +1,16 @@
 int64 __map_find (
-    struct __map_fp* map_fp,
-    void* key,
-    uint64 hash,
+    void* key_address,
+    uint64 key_hash,
+    struct __map_fat_ptr* map_fat_ptr,
     enum __map_find_output find_output
 )
 /**
- * This function shall find the provided *key* in the map.
+ * This function shall find a key in the map, using the provided *key_address* and
+ * *key_hash*.
  *
- * The hash of the key has to be calculated in advance and provided to this function
- * in the *hash* argument. This is an optimization to speed up the rehash function,
- * because Current map implementation already stores all the hashed values of the keys.
+ * The *key_hash* has to be calculated in advance as an optimization to speed up the
+ * rehash function, because Current map implementation already stores all the hashed
+ * values of the keys.
  *
  * The argument *find_output* tweaks the returned value of this function, depending
  * on whether the key is found in the map. These are the possible outputs, where
@@ -28,28 +29,27 @@ int64 __map_find (
  * consists in keep looking ahead in the key array until an empty spot is found or the
  * number of iterations reaches the map capacity. */
 {
-  uint64 capacity = map_fp->capacity;
-  uint64 capped_hash = hash % capacity;
+  uint64 capacity = map_fat_ptr->capacity;
+  uint64 capped_hash = key_hash % capacity;
+  bool (*compare)(void*, void*) = map_fat_ptr->config.compare;
 
-  uint64 key_size = map_fp->config.key_size;
-  bool (*compare)(void*, void*) = map_fp->config.compare;
-
-  void* keys = map_fp->keys;
-  void* current_key = NULL;
   uint64 iter = 0;
   uint64 offset = capped_hash;
   uint64 max_iter = capacity;
 
+  struct __map_key* keys = map_fat_ptr->keys;
+  struct __map_key* current_key = keys + offset;
+
 search:
   /* The key has never been used, stops the search immediately. */
-  if (map_fp->statuses[offset] == __Map__Key_Status__Not_Used)
+  if (current_key->status == __Map__Key_Status__Not_Used)
     goto not_used;
-  if (map_fp->statuses[offset] == __Map__Key_Status__Deleted)
+  /* The key has been deleted, continue searching. */
+  if (current_key->status == __Map__Key_Status__Deleted)
     goto next;
 
   /* The key is present, compares it with the provided *key* argument. */
-  current_key = (byte*) keys + (key_size * offset);
-  if (compare(key, current_key))
+  if (compare(key_address, current_key->address))
     goto found;
 
 next:
@@ -64,6 +64,7 @@ next:
     goto not_found;
 
   /* Searches the next key. */
+  current_key = keys + offset;
   goto search;
 
 not_found:

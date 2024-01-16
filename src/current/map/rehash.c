@@ -1,6 +1,6 @@
 void* __map_rehash (
     void* map_ptr,
-    struct __map_fp* map_fp
+    struct __map_fat_ptr* map_fat_ptr
 )
 /**
  * This function shall extend a map and rehash all its keys.
@@ -16,54 +16,49 @@ void* __map_rehash (
  * keys and values position in the map. The length of the map will of course remain
  * unchanged, as this operation simply redistributes the map data across more space. */
 {
-  struct arena* arena = map_fp->config.arena;
-  uint64 old_capacity = map_fp->capacity;
-  uint64 key_size = map_fp->config.key_size;
-  uint64 value_size = map_fp->config.value_size;
+  struct arena* arena = map_fat_ptr->config.arena;
+  uint64 old_capacity = map_fat_ptr->capacity;
+  uint16 key_size = map_fat_ptr->config.key_size;
+  uint16 value_size = map_fat_ptr->config.value_size;
 
-  /* Keeps the old map_fp reference: it will be needed to copy the values over to the
-   * newly allocated memory. */
-  struct __map_fp* old_map_fp = map_fp;
+  /* Keeps the old map_fat_ptr reference: it will be needed to copy the values over to
+   * the newly allocated memory. */
+  struct __map_fat_ptr* old_map_fat_ptr = map_fat_ptr;
+  struct __map_key* old_keys = map_fat_ptr->keys;
   void* old_map_ptr = map_ptr;
-  void* old_keys = map_fp->keys;
-  uint8* old_statuses = map_fp->statuses;
-  uint64* old_hashes = map_fp->hashes;
 
-  /* Allocates an entire new map with the doubled capacity. In the map map_fp,
-   * the info that will not change are copied over from the old map map_fp. */
+  /* Allocates an entire new map with the doubled capacity. In the map map_fat_ptr,
+   * the info that will not change are copied over from the old map map_fat_ptr. */
   struct __map_memsize memsize = __map_calc_memsize(key_size, value_size, old_capacity);
   uint64 capacity = memsize.capacity;
-  //uint64 footprint = memsize.footprint;
-  //arena_prealloc(arena, footprint);
+  uint64 footprint = memsize.footprint;
+  if (arena != NULL)
+    arena_prealloc(arena, footprint);
 
-  map_fp = arena_calloc(arena, 1,
-    sizeof(struct __map_fp) +
+  map_fat_ptr = arena_calloc(arena, 1,
+    sizeof(struct __map_fat_ptr) +
     value_size +
     (capacity * value_size));
-  memcpy(map_fp, old_map_fp, sizeof(struct __map_fp));
-  map_fp->length = 0;
-  map_fp->capacity = capacity;
-  map_fp->keys = arena_calloc(arena, capacity, key_size);
-  map_fp->statuses = arena_calloc(arena, capacity, sizeof(uint8));
-  map_fp->hashes = arena_calloc(arena, capacity, sizeof(uint64));
-  map_ptr = (byte*) map_fp + sizeof(struct __map_fp) + value_size;
+  memcpy(map_fat_ptr, old_map_fat_ptr, sizeof(struct __map_fat_ptr));
+  map_fat_ptr->length = 0;
+  map_fat_ptr->capacity = capacity;
+  map_fat_ptr->keys = arena_calloc(arena, capacity, sizeof(struct __map_key));
+  map_ptr = (byte*) map_fat_ptr + sizeof(struct __map_fat_ptr) + value_size;
 
-  void* key = NULL;
-  uint64 hash = 0;
   int32 offset = -1;
+  struct __map_key* old_key = NULL;
 
   /* Loops through the old map and redistributes the keys and values. */
   for (uint64 iter = 0; iter < old_capacity; iter++) {
+    old_key = old_keys + iter;
+
     /* The key was not used, it will be skipped. */
-    if (!old_statuses[iter]) continue;
+    if (old_key->status != __Map__Key_Status__Used) continue;
 
-    /* Reuses the stored hash of the key, so it will not have to be recalculated,
+    /* Calculates the offset of the key in the new map, and sets it as used.
+     * Reuses the stored hash of the key, so it will not have to be recalculated,
      * speeding up the rehashing a little bit. */
-    hash = old_hashes[iter];
-
-    /* Calculates the offset of the key in the new map, and sets it as used. */
-    key = (byte*) old_keys + (iter * key_size);
-    offset = __map_use(map_fp, key, hash, __Map_Use_Rehashing);
+    offset = __map_use(old_key->address, old_key->hash, map_fat_ptr, __Map_Use_Rehashing);
 
     /* Copies the value at the same offset from the old map to the new map. */
     memcpy((byte*) map_ptr + (offset * value_size),
@@ -74,11 +69,9 @@ void* __map_rehash (
   /* Frees the old pointers, everything has been copied over to the new map. */
   if (arena == NULL) {
     free(old_keys);
-    free(old_statuses);
-    free(old_hashes);
-    free(old_map_fp);
+    free(old_map_fat_ptr);
   }
 
   /* Returns the fat pointer to the new map. */
-  return ((byte*) map_fp + sizeof(struct __map_fp) + value_size);
+  return ((byte*) map_fat_ptr + sizeof(struct __map_fat_ptr) + value_size);
 }

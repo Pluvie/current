@@ -1,7 +1,7 @@
 /**
  * Returns the map fat pointer from a map pointer. */
-#define map_fp(map_ptr)                                                                 \
-  (struct __map_fp*) (map_ptr - 1) - 1
+#define map_fat_ptr(map_ptr)                                                            \
+  ((struct __map_fat_ptr*) (map_ptr - 1) - 1)
 
 /**
  * Initializes an already declared map, with the given *name*, *key_type* and
@@ -10,8 +10,8 @@
 #define map_init(name, key_type, value_type, ...)                                       \
   {                                                                                     \
     struct __map_config config = {                                                      \
-      .key_size = sizeof(key_type),                                                     \
-      .value_size = sizeof(value_type),                                                 \
+      .key_size = (uint16) sizeof(key_type),                                            \
+      .value_size = (uint16) sizeof(value_type),                                        \
       ##__VA_ARGS__ };                                                                  \
     if (config.key_copy_size == 0)                                                      \
       config.key_copy_size = config.key_size;                                           \
@@ -28,12 +28,12 @@
 /**
  * Returns the vector capacity. */
 #define map_capacity(map_ptr)                                                           \
-  ((map_fp(map_ptr))->capacity)
+  ((map_fat_ptr(map_ptr))->capacity)
 
 /**
  * Returns the vector length. */
 #define map_length(map_ptr)                                                             \
-  ((map_fp(map_ptr))->length)
+  ((map_fat_ptr(map_ptr))->length)
 
 /**
  * Returns the memory footprint of a map. */
@@ -48,7 +48,7 @@
 /**
  * Computes the map hash for the given key. */
 #define map_hash(map_ptr, key)                                                          \
-  ((map_fp(map_ptr))->config.hash(key))
+  (map_fat_ptr(map_ptr)->config.hash(&(key)))
 
 /**
  * Returns `true` if the map has the given key, `false` otherwise. */
@@ -58,54 +58,59 @@
 /**
  * Retrieves the key at the given index using the given type. */
 #define map_key(map_ptr, type, index)                                                   \
-  ((type*) (map_fp(map_ptr))->keys)[index]
+  *((type*) (map_fat_ptr(map_ptr)->keys)[index].address)
 
 /**
  * Determines if the given index is used in the map. */
 #define map_used(map_ptr, index)                                                        \
-  (((map_fp(map_ptr))->statuses)[index] == __Map__Key_Status__Used)
+  ((map_fat_ptr(map_ptr)->keys)[index].status == __Map__Key_Status__Used)
 
 /**
  * Finds a key in the map. */
 #define map_find(map_ptr, key, find_output)                                             \
-  __map_find(map_fp(map_ptr), key, map_hash(map_ptr, key), find_output)
+  __map_find(&(key), map_hash(map_ptr, key), map_fat_ptr(map_ptr), find_output)
 
 /**
  * Sets as used a key in the map. */
 #define map_use(map_ptr, key, use_opmode)                                               \
-  __map_use(map_fp(map_ptr), key, map_hash(map_ptr, key), use_opmode)
+  __map_use(&(key), map_hash(map_ptr, key), map_fat_ptr(map_ptr), use_opmode)
 
 /**
  * Returns the map value associated to the given key. If the key is not present,
  * then the __zero value__ of the map value type is returned. */
 #define map_get(map_ptr, key)                                                           \
-  (*(map_ptr + (map_find(map_ptr, key, __Map_Find_Default))))
+  (map_ptr[map_find(map_ptr, key, __Map_Find_Default)])
 
 /**
  * Sets the value for the given key in the map. If the key is already present,
  * the value will be overwritten. */
 #define map_set(map_ptr, key, value) (                                                  \
   map_load(map_ptr, 1) >= 0.7                                                           \
-    ? ((map_ptr = __map_rehash(map_ptr, map_fp(map_ptr))),                              \
-      (*(map_ptr + (map_use(map_ptr, key, __Map_Use_Default))) = value),                \
-      value)                                                                            \
-    : ((*(map_ptr + (map_use(map_ptr, key, __Map_Use_Default))) = value),               \
-      value))
+    ? (                                                                                 \
+      map_ptr = __map_rehash(map_ptr, map_fat_ptr(map_ptr)),                            \
+      map_ptr[map_use(map_ptr, key, __Map_Use_Default)] = value,                        \
+      value                                                                             \
+    )                                                                                   \
+    : (                                                                                 \
+      map_ptr[map_use(map_ptr, key, __Map_Use_Default)] = value,                        \
+      value                                                                             \
+    )                                                                                   \
+  )
 
 /**
  * Deletes the value for the given key in the map. */
 #define map_del(map_ptr, key)                                                           \
-  __map_delete(map_fp(map_ptr), key, map_hash(map_ptr, key))
+  __map_delete(&(key), map_hash(map_ptr, key), map_fat_ptr(map_ptr))
 
 /**
  * Releases all memory regions used by the map. */
 #define map_free(map_ptr)                                                               \
-  (__map_free(map_fp(map_ptr)))
+  (__map_free(map_fat_ptr(map_ptr)))
 
 /**
  * Loops through all the used indexes of the map. */
 #define map_each(map_ptr, key_type, value_type, iter_name)                              \
-  for (struct { key_type key; value_type value; int64 counter; int64 index; }           \
+  (struct { key_type key; value_type value; int64 counter; int64 index; }               \
       iter_name = { .counter = 0, .index = -1 };                                        \
       iter_name.counter < map_capacity(map_ptr); iter_name.counter++)                   \
     if (iter_name.index++,                                                              \
@@ -116,12 +121,12 @@
 /**
  * Loops through all the indexes of the map, both used and not used. */
 #define map_all(map_ptr, key_type, value_type, iter_name)                               \
-  for (struct { key_type key; value_type value; bool used; uint64 hash; uint64 index; } \
+  (struct { key_type key; value_type value; bool used; uint64 hash; uint64 index; }     \
       iter_name =  { .index = 0 };                                                      \
       iter_name.index < map_capacity(map_ptr); iter_name.index++)                       \
     if (iter_name.key = map_key(map_ptr, key_type, iter_name.index),                    \
         iter_name.value = map_ptr[iter_name.index],                                     \
-        iter_name.hash = (map_fp(map_ptr))->hashes[iter_name.index],                    \
+        iter_name.hash = (map_fat_ptr(map_ptr))->hashes[iter_name.index],               \
         iter_name.used = map_used(map_ptr, iter_name.index), true)
 
 /**
@@ -129,7 +134,7 @@
 #define map_print(map_ptr, key_type, key_printer, value_type, value_printer)            \
   fprintf(stderr, "\n----\nMap: %p\n----\n", map_ptr);                                  \
   fprintf(stderr, "index   hash                              used\n");                  \
-  map_all(map_ptr, key_type, value_type, iter) {                                        \
+  for map_all(map_ptr, key_type, value_type, iter) {                                    \
     fprintf(stderr, "[%4li] ", iter.index);                                             \
     fprintf(stderr, "[%32li] ", iter.hash);                                             \
     iter.used ? fprintf(stderr, "[■] ") : fprintf(stderr, "[ ] ");                      \
@@ -140,8 +145,8 @@
 /**
  * This macro shall hex dump the map keys, in order to debug their content. */
 #define map_keys_hexdump(map_ptr) {                                                     \
-  byte* keys = (byte*) (map_fp(map_ptr))->keys;                                         \
-  uint64 key_size = (map_fp(map_ptr))->config.key_size;                                 \
+  byte* keys = (byte*) (map_fat_ptr(map_ptr))->keys;                                    \
+  uint64 key_size = (map_fat_ptr(map_ptr))->config.key_size;                            \
   uint64 keys_length = map_capacity(map_ptr) * key_size;                                \
   fprintf(stderr, "\n-- Map %p | keys hexdump", map_ptr);                               \
   for (int i = 0; i < keys_length; i++) {                                               \

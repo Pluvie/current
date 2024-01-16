@@ -29,20 +29,20 @@ void test_map__struct_user_ptr__int32 (
   /* For each `i`, set the map *key* equal to the user in the `users` array at position
    * equal to `i % countof(users)`, and the map *value* equal to `i`. */
   for (int i = 0; i < iterations; i++)
-    map_set(test_map, &users[i % countof(users)], i);
+    map_set(test_map, users[i % countof(users)], i);
 
   /* For each user in the `users` array verify that the map *key* equal to the user
    * is associated to the map *value* equal to `(countof(users) * 2) + i`. */
   for(int i = 0; i < countof(users); i++)
-    test(map_get(test_map, &users[i % countof(users)]) == (countof(users) * 2) + i);
+    test(map_get(test_map, users[i % countof(users)]) == (countof(users) * 2) + i);
 
   /* For each user in the `users` array verify that the map has a *key* equal to the user
    * then delete it and verify again that the map does not have that *key* anymore. */
   for(int i = 0; i < countof(users); i++)
     test(
-      map_has(test_map, &users[i % countof(users)]) &&
-      map_del(test_map, &users[i % countof(users)]) &&
-      !map_has(test_map, &users[i % countof(users)]));
+      map_has(test_map, users[i % countof(users)]) &&
+      map_del(test_map, users[i % countof(users)]) &&
+      !map_has(test_map, users[i % countof(users)]));
 
   /* Print map content, for debug purposes.
   map_print(test_map,

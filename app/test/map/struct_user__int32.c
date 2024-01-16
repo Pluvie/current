@@ -25,14 +25,14 @@ void test_map__struct_user__int32 (
    * equal to the generated user and the map *value* equal to `i`. */
   for (int i = 0; i < iterations; i++) {
     user = user_generator(i);
-    map_set(test_map, &user, i);
+    map_set(test_map, user, i);
   }
 
   /* For each `c` from 'a' to 'z', verify that the map *key* equal to the generated user
    * `c` is associated to the map *value* from 56 to 77. */
   for (char c = 'a'; c <= 'z'; c++) {
     user = user_generator((int) c - 45);
-    test(map_get(test_map, &user) == ((int) c - 45));
+    test(map_get(test_map, user) == ((int) c - 45));
   }
 
   /* For each `c` from 'a' to 'z', verify that the map has the *key* equal to the
@@ -41,9 +41,9 @@ void test_map__struct_user__int32 (
   for (char c = 'a'; c <= 'z'; c++) {
     user = user_generator((int) c - 45);
     test(
-      map_has(test_map, &user) &&
-      map_del(test_map, &user) &&
-      !map_has(test_map, &user));
+      map_has(test_map, user) &&
+      map_del(test_map, user) &&
+      !map_has(test_map, user));
   }
 
   /* Print map content, for debug purposes.

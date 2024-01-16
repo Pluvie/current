@@ -31,19 +31,19 @@ void test_map__char_ptr__char_ptr (
     char* value = calloc(generated_string_length + 1, sizeof(char));
     memcpy(key, forge, generated_string_length);
     memcpy(value, forge, generated_string_length);
-    map_set(test_map, &key, value);
+    map_set(test_map, key, value);
   }
 
   /* For each *key* in the map, verify that it is equal to its associated *value*. */
-  map_each(test_map, char*, char*, iter)
-    test(strcmp(iter.key, map_get(test_map, &iter.key)) == 0);
+  for map_each(test_map, char*, char*, iter)
+    test(strcmp(iter.key, map_get(test_map, iter.key)) == 0);
 
   /* For each *key* in the map, delete it and verify that the map does not have that
    * *key* anymore. */
-  map_each(test_map, char*, char*, iter) {
+  for map_each(test_map, char*, char*, iter) {
     test(
-      map_del(test_map, &iter.key) &&
-      !map_has(test_map, &iter.key));
+      map_del(test_map, iter.key) &&
+      !map_has(test_map, iter.key));
     /* Release the memory of the generated strings. */
     free(iter.key);
     free(iter.value);

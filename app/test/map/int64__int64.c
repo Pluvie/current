@@ -24,20 +24,20 @@ void test_map__int64__int64 (
 
   /* For each `i`, set the map *key* equal to `i` and the map *value* equal to `i`. */
   for (int64 i = base; i < base + iterations; i++)
-    map_set(test_map, &i, i);
+    map_set(test_map, i, i);
 
   /* For each `i`, verify that the map *key* equal to `i` is associated to the map
    * *value* equal to `i`. */
   for (int64 i = base; i < base + iterations; i++)
-    test(map_get(test_map, &i) == i);
+    test(map_get(test_map, i) == i);
 
   /* For each `i`, verify that the map has a *key* equal to `i`, then delete it, and
    * verify again that the map does not have that *key* anymore. */
   for (int64 i = base; i < base + iterations; i++)
     test(
-      map_has(test_map, &i) &&
-      map_del(test_map, &i) &&
-      !map_has(test_map, &i));
+      map_has(test_map, i) &&
+      map_del(test_map, i) &&
+      !map_has(test_map, i));
 
   /* Print map content, for debug purposes.
   map_print(test_map,

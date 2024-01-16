@@ -1,36 +1,40 @@
 int64 __map_use (
-    struct __map_fp* map_fp,
-    void* key,
-    uint64 hash,
+    void* key_address,
+    uint64 key_hash,
+    struct __map_fat_ptr* map_fat_ptr,
     enum __map_use_opmode use_opmode
 )
 /**
- * This function shall set as used the provided *key* in the map.
+ * This function shall set as used a key in the map, using the provided *key_address*
+ * and *key_hash*.
+ *
+ * The *key_hash* has to be calculated in advance as an optimization to speed up the
+ * rehash function, because Current map implementation already stores all the hashed
+ * values of the keys.
  *
  * The offset will be retrieved from the map `find` function.
  *
  * The *rehashing* argument is used only for copying key maps, in order to control
  * the duplication of keys: see more below. */
 {
-  int64 offset = __map_find(map_fp, key, hash, __Map_Find_Offset);
+  int64 offset = __map_find(key_address, key_hash, map_fat_ptr, __Map_Find_Offset);
 
   if (offset < 0)
     /* Key not found, nothing to do. */
     return offset;
 
-  if (map_fp->statuses[offset] == __Map__Key_Status__Used)
+  struct __map_key* key = map_fat_ptr->keys + offset;
+
+  if (key->status == __Map__Key_Status__Used)
     /* The key is already used, nothing to do. */
     return offset;
 
-  /* Updates statuses, hashes and length. */
-  map_fp->statuses[offset] = __Map__Key_Status__Used;
-  map_fp->hashes[offset] = hash;
-  map_fp->length++;
+  /* Updates key status, key hash and map length. */
+  key->status = __Map__Key_Status__Used;
+  key->hash = key_hash;
+  map_fat_ptr->length++;
 
-  uint64 key_size = map_fp->config.key_size;
-  void* key_location = (byte*) map_fp->keys + (offset * key_size);
-
-  if (map_fp->config.copy_keys)
+  if (map_fat_ptr->config.copy_keys)
     goto copy_key;
   else
     goto set_key;
@@ -44,22 +48,23 @@ copy_key:
   /* If not rehashing, this key is being seen for the first time in the map.
    * As a quality of life for the developer, it makes a copy of the key so that the
    * map does not depend on the lifetime of outside objects. */
-  struct arena* arena = map_fp->config.arena;
-  uint64 (*key_copy_size_func)(void*) = map_fp->config.key_copy_size_func;
-  void (*key_copy_func)(void*, void*, uint64) = map_fp->config.key_copy_func;
-  uint64 key_length = (key_copy_size_func == NULL)
-    ? map_fp->config.key_copy_size
+  struct arena* arena = map_fat_ptr->config.arena;
+  uint16 (*key_copy_size_func)(void*) = map_fat_ptr->config.key_copy_size_func;
+  void (*key_copy_func)(void*, void*, uint64) = map_fat_ptr->config.key_copy_func;
+  uint16 key_size = (key_copy_size_func == NULL)
+    ? map_fat_ptr->config.key_copy_size
     : key_copy_size_func(key);
-  void* key_copy = arena_calloc(arena, 1, key_length);
+  void* key_copy_address = arena_calloc(arena, 1, key_size);
 
   if (key_copy_func == NULL)
-    memcpy(key_copy, *(byte**) key, key_length);
+    memcpy(key_copy_address, key_address, key_size);
   else
-    key_copy_func(key_copy, key, key_length);
+    key_copy_func(key_copy_address, key_address, key_size);
 
-  key = &key_copy;
+  key->address = key_copy_address;
+  return offset;
 
 set_key:
-  memcpy(key_location, key, key_size);
+  key->address = key_address;
   return offset;
 }

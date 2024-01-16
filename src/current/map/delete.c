@@ -1,30 +1,28 @@
 bool __map_delete (
-    struct __map_fp* map_fp,
-    void* key,
-    uint64 hash
+    void* key_address,
+    uint64 key_hash,
+    struct __map_fat_ptr* map_fat_ptr
 )
 /**
- * This function shall set as deleted the status of the provided *key* in the map, and
- * shall zero-out the corrisponding key and value.
+ * This function shall set as deleted a key in the map, and shall zero-out the
+ * corrisponding value.
  *
  * The offset will be retrieved from the map `find` function.
  *
  * Returns true if the key was found and successfully deleted, false otherwise. */
 {
-  int64 offset = __map_find(map_fp, key, hash, __Map_Find_Default);
+  int64 offset = __map_find(key_address, key_hash, map_fat_ptr, __Map_Find_Default);
   if (offset < 0)
     /* Key not found, nothing to do. */
     return false;
 
-  map_fp->statuses[offset] = __Map__Key_Status__Deleted;
-  map_fp->hashes[offset] = 0;
+  struct __map_key* key = map_fat_ptr->keys + offset;
+  key->status = __Map__Key_Status__Deleted;
+  key->hash = 0;
+  key->address = NULL;
 
-  uint64 key_size = map_fp->config.key_size;
-  void* key_location = (byte*) map_fp->keys + (offset * key_size);
-  memset(key_location, '\0', key_size);
-
-  uint64 value_size = map_fp->config.value_size;
-  void* values = (byte*) (map_fp + 1) + value_size;
+  uint16 value_size = map_fat_ptr->config.value_size;
+  void* values = (byte*) (map_fat_ptr + 1) + value_size;
   void* value_location = (byte*) values + (offset * value_size);
   memset(value_location, '\0', value_size);
 
