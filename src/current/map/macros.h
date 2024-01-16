@@ -51,14 +51,26 @@
   (map_fat_ptr(map_ptr)->config.hash(&(key)))
 
 /**
+ * Retrieves the map stored hash for the given key offset. */
+#define map_hash_stored(map_ptr, offset)                                                \
+  ((map_fat_ptr(map_ptr)->keys)[offset].hash)
+
+/**
  * Returns `true` if the map has the given key, `false` otherwise. */
 #define map_has(map_ptr, key)                                                           \
   (map_find(map_ptr, key, __Map_Find_Default) >= 0)
 
 /**
+ * Retrieves the key address at the given index. */
+#define map_key_address(map_ptr, index)                                                 \
+  ((map_fat_ptr(map_ptr)->keys)[index].address)
+
+/**
  * Retrieves the key at the given index using the given type. */
-#define map_key(map_ptr, type, index)                                                   \
-  *((type*) (map_fat_ptr(map_ptr)->keys)[index].address)
+#define map_key(map_ptr, type, index) (                                                 \
+  (map_key_address(map_ptr, index) == NULL)                                             \
+    ? (type) 0                                                                          \
+    : *((type*) map_key_address(map_ptr, index)))
 
 /**
  * Determines if the given index is used in the map. */
@@ -120,13 +132,16 @@
 
 /**
  * Loops through all the indexes of the map, both used and not used. */
-#define map_all(map_ptr, key_type, value_type, iter_name)                               \
-  (struct { key_type key; value_type value; bool used; uint64 hash; uint64 index; }     \
-      iter_name =  { .index = 0 };                                                      \
-      iter_name.index < map_capacity(map_ptr); iter_name.index++)                       \
+#define map_all(map_ptr, key_type, value_type, iter_name) (                             \
+    struct {                                                                            \
+      key_type key; value_type value; bool used; uint64 hash; uint64 index;             \
+    } iter_name = { 0 };                                                                \
+    iter_name.index < map_capacity(map_ptr);                                            \
+    iter_name.index++                                                                   \
+  )                                                                                     \
     if (iter_name.key = map_key(map_ptr, key_type, iter_name.index),                    \
         iter_name.value = map_ptr[iter_name.index],                                     \
-        iter_name.hash = (map_fat_ptr(map_ptr))->hashes[iter_name.index],               \
+        iter_name.hash = map_hash_stored(map_ptr, iter_name.index),                     \
         iter_name.used = map_used(map_ptr, iter_name.index), true)
 
 /**

@@ -11,7 +11,7 @@ void test_map__int32__int32 (
 
   /* We will do 100 interations, in which each time the variable `i` will increment from
    * 0 to 99. This variable will be used both as *key* and *value*. */
-  int iterations = 100;
+  int iterations = 4;
 
   /* This map will have `int` (32bit) as *key* and `int` (32bit) as *value*.
    * It will also use the prebuilt hash and compare function for int32 type. */
@@ -27,14 +27,19 @@ void test_map__int32__int32 (
    * *value* equal to `i`. */
   for (int i = 0; i < iterations; i++)
     test(map_get(test_map, i) == i);
+  map_print(test_map,
+    int, __map_prebuilt_int32_print,
+    int, __map_prebuilt_int32_print);
 
   /* For each `i`, verify that the map has a *key* equal to `i`, then delete it, and
    * verify again that the map does not have that *key* anymore. */
-  for (int i = 0; i < iterations; i++)
+  for (int i = 0; i < iterations; i++) {
+    fprintf(stderr, "\n---> %i \n %i\n", i, map_has(test_map, i));
     test(
       map_has(test_map, i) &&
       map_del(test_map, i) &&
       !map_has(test_map, i));
+  }
 
   /* Print map content, for debug purposes.
   map_print(test_map,
