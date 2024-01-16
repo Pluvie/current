@@ -30,15 +30,6 @@ enum __map_use_opmode {
 };
 
 /**
- * Defines a map key, which holds the address where the actual key content is in memory,
- * the key hash integer value and other key metadata. */
-struct __map_key {
-  void*   address;
-  uint64  hash;
-  enum __map_key_status status;
-};
-
-/**
  * Defines the map configuration options. */
 struct __map_config {
   uint64  initial_capacity;
@@ -70,7 +61,9 @@ struct __map_config {
 struct __map_fat_ptr {
   uint64  length;
   uint64  capacity;
-  struct __map_key*   keys;
+  byte*   keys;
+  uint64* hashes;
+  enum __map_key_status* statuses;
   struct __map_config config;
 };
 

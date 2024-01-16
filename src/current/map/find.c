@@ -29,6 +29,7 @@ int64 __map_find (
  * consists in keep looking ahead in the key array until an empty spot is found or the
  * number of iterations reaches the map capacity. */
 {
+  uint16 key_size = map_fat_ptr->config.key_size;
   uint64 capacity = map_fat_ptr->capacity;
   uint64 capped_hash = key_hash % capacity;
   bool (*compare)(void*, void*) = map_fat_ptr->config.compare;
@@ -37,19 +38,20 @@ int64 __map_find (
   uint64 offset = capped_hash;
   uint64 max_iter = capacity;
 
-  struct __map_key* keys = map_fat_ptr->keys;
-  struct __map_key* current_key = keys + offset;
+  byte* keys = map_fat_ptr->keys;
+  byte* current_key_address = keys + (offset * key_size);
+  enum __map_key_status current_key_status = map_fat_ptr->statuses[offset];
 
 search:
   /* The key has never been used, stops the search immediately. */
-  if (current_key->status == __Map__Key_Status__Not_Used)
+  if (current_key_status == __Map__Key_Status__Not_Used)
     goto not_used;
   /* The key has been deleted, continue searching. */
-  if (current_key->status == __Map__Key_Status__Deleted)
+  if (current_key_status == __Map__Key_Status__Deleted)
     goto next;
 
-  /* The key is present, compares it with the provided *key* argument. */
-  if (compare(key_address, current_key->address))
+  /* The current key is present, compares it with the provided key. */
+  if (compare(key_address, current_key_address))
     goto found;
 
 next:
@@ -64,7 +66,8 @@ next:
     goto not_found;
 
   /* Searches the next key. */
-  current_key = keys + offset;
+  current_key_address = keys + (offset * key_size);
+  current_key_status = map_fat_ptr->statuses[offset];
   goto search;
 
 not_found:

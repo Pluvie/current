@@ -23,15 +23,17 @@ int64 __map_use (
     /* Key not found, nothing to do. */
     return offset;
 
-  struct __map_key* key = map_fat_ptr->keys + offset;
+  uint16 key_size = map_fat_ptr->config.key_size;
+  void* found_key_address = (byte*) map_fat_ptr->keys + (offset * key_size);
+  enum __map_key_status found_key_status = map_fat_ptr->statuses[offset];
 
-  if (key->status == __Map__Key_Status__Used)
+  if (found_key_status == __Map__Key_Status__Used)
     /* The key is already used, nothing to do. */
     return offset;
 
   /* Updates key status, key hash and map length. */
-  key->status = __Map__Key_Status__Used;
-  key->hash = key_hash;
+  map_fat_ptr->statuses[offset] = __Map__Key_Status__Used;
+  map_fat_ptr->hashes[offset] = key_hash;
   map_fat_ptr->length++;
 
   if (map_fat_ptr->config.copy_keys)
@@ -51,20 +53,19 @@ copy_key:
   struct arena* arena = map_fat_ptr->config.arena;
   uint16 (*key_copy_size_func)(void*) = map_fat_ptr->config.key_copy_size_func;
   void (*key_copy_func)(void*, void*, uint64) = map_fat_ptr->config.key_copy_func;
-  uint16 key_size = (key_copy_size_func == NULL)
+  uint16 key_copy_size = (key_copy_size_func == NULL)
     ? map_fat_ptr->config.key_copy_size
-    : key_copy_size_func(key);
-  void* key_copy_address = arena_calloc(arena, 1, key_size);
+    : key_copy_size_func(key_address);
+  byte* key_copy = arena_calloc(arena, 1, key_copy_size);
 
   if (key_copy_func == NULL)
-    memcpy(key_copy_address, key_address, key_size);
+    memcpy(key_copy, key_address, key_copy_size);
   else
-    key_copy_func(key_copy_address, key_address, key_size);
+    key_copy_func(key_copy, key_address, key_copy_size);
 
-  key->address = key_copy_address;
-  return offset;
+  key_address = &key_copy;
 
 set_key:
-  key->address = key_address;
+  memcpy(found_key_address, key_address, key_size);
   return offset;
 }

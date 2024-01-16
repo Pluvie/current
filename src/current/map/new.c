@@ -26,7 +26,9 @@ void* __map_new (
   map_fat_ptr->length = 0;
   map_fat_ptr->capacity = capacity;
   map_fat_ptr->config = config;
-  map_fat_ptr->keys = arena_calloc(arena, capacity, sizeof(struct __map_key));
+  map_fat_ptr->keys = arena_calloc(arena, capacity, key_size);
+  map_fat_ptr->hashes = arena_calloc(arena, capacity, sizeof(uint64));
+  map_fat_ptr->statuses = arena_calloc(arena, capacity, sizeof(enum __map_key_status));
 
   /* Fat pointer technique. The returned pointer is offsetted by a precise amount,
    * in order to store the map data and zero value.

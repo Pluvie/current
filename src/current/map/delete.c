@@ -16,10 +16,11 @@ bool __map_delete (
     /* Key not found, nothing to do. */
     return false;
 
-  struct __map_key* key = map_fat_ptr->keys + offset;
-  key->status = __Map__Key_Status__Deleted;
-  key->hash = 0;
-  key->address = NULL;
+  void* found_key_address = map_fat_ptr->keys + offset;
+  map_fat_ptr->statuses[offset] = __Map__Key_Status__Deleted;
+  map_fat_ptr->hashes[offset] = 0;
+  map_fat_ptr->length--;
+  memset(found_key_address, '\0', map_fat_ptr->config.key_size);
 
   uint16 value_size = map_fat_ptr->config.value_size;
   void* values = (byte*) (map_fat_ptr + 1) + value_size;

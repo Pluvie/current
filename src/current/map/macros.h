@@ -53,7 +53,7 @@
 /**
  * Retrieves the map stored hash for the given key offset. */
 #define map_hash_stored(map_ptr, offset)                                                \
-  ((map_fat_ptr(map_ptr)->keys)[offset].hash)
+  ((map_fat_ptr(map_ptr)->hashes)[offset])
 
 /**
  * Returns `true` if the map has the given key, `false` otherwise. */
@@ -61,21 +61,14 @@
   (map_find(map_ptr, key, __Map_Find_Default) >= 0)
 
 /**
- * Retrieves the key address at the given index. */
-#define map_key_address(map_ptr, index)                                                 \
-  ((map_fat_ptr(map_ptr)->keys)[index].address)
-
-/**
  * Retrieves the key at the given index using the given type. */
-#define map_key(map_ptr, type, index) (                                                 \
-  (map_key_address(map_ptr, index) == NULL)                                             \
-    ? (type) 0                                                                          \
-    : *((type*) map_key_address(map_ptr, index)))
+#define map_key(map_ptr, type, index)                                                   \
+  (((type*) (map_fat_ptr(map_ptr))->keys)[index])
 
 /**
  * Determines if the given index is used in the map. */
 #define map_used(map_ptr, index)                                                        \
-  ((map_fat_ptr(map_ptr)->keys)[index].status == __Map__Key_Status__Used)
+  ((map_fat_ptr(map_ptr)->statuses)[index] == __Map__Key_Status__Used)
 
 /**
  * Finds a key in the map. */
@@ -160,7 +153,7 @@
 /**
  * This macro shall hex dump the map keys, in order to debug their content. */
 #define map_keys_hexdump(map_ptr) {                                                     \
-  byte* keys = (byte*) (map_fat_ptr(map_ptr))->keys;                                    \
+  byte* keys = (map_fat_ptr(map_ptr))->keys;                                    \
   uint64 key_size = (map_fat_ptr(map_ptr))->config.key_size;                            \
   uint64 keys_length = map_capacity(map_ptr) * key_size;                                \
   fprintf(stderr, "\n-- Map %p | keys hexdump", map_ptr);                               \

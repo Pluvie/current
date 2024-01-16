@@ -15,5 +15,7 @@ void __map_free (
   }
 
   free(map_fat_ptr->keys);
+  free(map_fat_ptr->hashes);
+  free(map_fat_ptr->statuses);
   free(map_fat_ptr);
 }

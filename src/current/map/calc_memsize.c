@@ -15,10 +15,12 @@ struct __map_memsize __map_calc_memsize (
     capacity *= 2;
 
   uint64 footprint =
-    sizeof(struct __map_fat_ptr) +          /* Map fat pointer data. */
-    value_size +                            /* Zero value. */
-    (capacity * value_size) +               /* Values. */
-    (capacity * sizeof(struct __map_key));  /* Keys. */
+    sizeof(struct __map_fat_ptr) +              /* Map fat pointer data. */
+    value_size +                                /* Zero value. */
+    (capacity * value_size) +                   /* Values. */
+    (capacity * key_size) +                     /* Keys. */
+    (capacity * sizeof(uint64)) +               /* Hashes. */
+    (capacity * sizeof(enum __map_key_status)); /* Usage. */
 
   struct __map_memsize memsize = {
     .capacity = capacity,
