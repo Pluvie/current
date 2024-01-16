@@ -39,21 +39,15 @@ struct user* user_generator_ptr_arena(int, struct arena*);
 uint32 string_generator(char*, uint32);
 
 void test_arena_memory(void);
-void test_map_pointer_char(void);
-void test_map_pointer_char_key_copy(void);
-void test_map_pointer_char_arena(struct arena*);
-void test_map_pointer_struct_arena (struct arena*);
-void test_map_pointer_struct_key_copy (void);
-void test_map_pointer_struct_key_copy_arena (void);
-void test_map_scalar_int_arena(struct arena*);
-void test_map_scalar_struct_arena(struct arena*);
-void test_vector(void);
-void test_vector_arena(struct arena*);
 
 void test_map__char_ptr__char_ptr(void);
 void test_map__int32__int32(void);
 void test_map__int64__int64(void);
 void test_map__struct_user__int32(void);
 void test_map__struct_user_ptr__int32(void);
+void test_map__key_copy__int32__int32(void);
 void test_map__key_copy__char_ptr__int32(void);
 void test_map__key_copy__char_ptr__char_ptr(void);
+
+void test_vector(void);
+void test_vector_arena(struct arena*);

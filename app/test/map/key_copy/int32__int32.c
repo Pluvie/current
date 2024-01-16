@@ -1,13 +1,15 @@
-void test_map__int32__int32 (
+void test_map__key_copy__int32__int32 (
     void
 )
 /**
  * This function shall test map operations on a map with:
  *   key:     `int32`
  *   value:   `int32`
+ *
+ * With the key copy feature enabled.
  */
 {
-  describe("[Map] (int32, int32)");
+  describe("[Map][KeyCopy] (int32, int32)");
 
   /* We will do 100 interations, in which each time the variable `i` will increment from
    * 0 to 99. This variable will be used both as *key* and *value*. */
@@ -17,7 +19,8 @@ void test_map__int32__int32 (
    * It will also use the prebuilt hash and compare function for int32 type. */
   map_new(test_map, int, int,
     .hash = __map_prebuilt_int32_hash,
-    .compare = __map_prebuilt_int32_compare);
+    .compare = __map_prebuilt_int32_compare,
+    .copy_keys = true);
 
   /* For each `i`, set the map *key* equal to `i` and the map *value* equal to `i`. */
   for (int i = 0; i < iterations; i++)

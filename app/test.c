@@ -14,6 +14,7 @@ int main (
   //test_map__struct_user_ptr__int32();
   //test_map__char_ptr__char_ptr();
 
+  test_map__key_copy__int32__int32();
   //test_map__key_copy__char_ptr__int32();
   //test_map__key_copy__char_ptr__char_ptr();
   ///test_map_pointer_struct_key_copy();
