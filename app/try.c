@@ -13,8 +13,11 @@ void test_u64 ()
 {
   struct map* test_map = map(u64, char*);
   u64 key = 1UL << 44;
+  u64 key2 = 1UL << 43;
   char* value = "abc";
+  char* value2 = "def";
   map_set(test_map, &key, &value);
+  map_set(test_map, &key2, &value2);
   map_pretty_print(test_map);
   map_get(test_map, &key);
   map_free(test_map);

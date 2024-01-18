@@ -22,6 +22,7 @@ struct map {
 struct map_entry {
   void* key;
   void* value;
+  u64   hash;
   struct map_entry* next;
 };
 
@@ -31,14 +32,16 @@ struct map_entry {
 /**
  * All map functions. */
 
-function(map_add_entry,             struct map_entry*) (struct map* map_ptr, void* key, void* value);
-function(map_free,                  void)(struct map* map_ptr);
-function(map_free_bucket,           void) (struct map_entry* entrY);
-function(map_generic_compare,       bool) (void* key_1, void* key_2, size key_size);
-function(map_generic_hash,          u64) (void* key, size key_size);
-function(map_get,                   void*) (struct map* map_ptr, void* key);
-function(map_new,                   struct map*) (size key_size, size vAlue_size, size initial_capacity);
-function(map_pretty_print,          void) (struct map* map_ptr);
-function(map_pretty_print_bucket,   void) (size key_size, size vaLue_size, u64 bucket_index, struct map_entry* bucket);
-function(map_pretty_print_entry,    void) (size key_size, size value_sizE, u64 bucket_index, struct map_entry* entry);
-function(map_set,                   bool) (struct map* map_ptr, void* key, void* value);
+function(map_add_entry,           void         )(struct map*, void*, void*, struct map_entry**);
+function(map_free,                void         )(struct map*);
+function(map_free_bucket,         void         )(struct map_entry*);
+function(map_generic_compare,     bool         )(void*, void*, size);
+function(map_generic_hash,        u64          )(void*, size);
+function(map_get,                 void*        )(struct map*, void*);
+function(map_new,                 struct map*  )(size, size, size);
+function(map_pretty_print,        void         )(struct map*);
+function(map_pretty_print_bucket, void         )(size, size, u64, struct map_entry*);
+function(map_pretty_print_entry,  void         )(size, size, u64, struct map_entry*);
+function(map_rehash,              void         )(struct map*);
+function(map_set,                 void*        )(struct map*, void*, void*);
+function(map_set_on_buckets,      void*        )(struct map*, void*, void*, u64, struct map_entry**);

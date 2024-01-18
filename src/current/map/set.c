@@ -1,34 +1,17 @@
-bool map_set (
+void* map_set (
     struct map* map_ptr,
     void* key,
     void* value
+/**
+ * This function shall set corresponding *key* with the provided *value* in the map.
+ *
+ * If the *key* is already present in the map, its value shall be replaced, otherwise
+ * a new entry shall be added.
+ *
+ * The function will return the provided *value*. */
 )
 {
   size key_size = map_ptr->key_size;
   u64 hash = map_ptr->hash(key, key_size) % map_ptr->capacity;
-  struct map_entry* entry = map_ptr->buckets[hash];
-  if (entry != NULL)
-    goto search_entry;
-
-  map_ptr->buckets[hash] = map_add_entry(map_ptr, key, value);
-  return true;
-
-search_entry:
-  bool (*compare)(void*, void*, size) = map_ptr->compare;
-
-compare_key:
-  if (compare(entry->key, key, key_size)) {
-    entry->value = value;
-    return false;
-  }
-
-  if (entry->next == NULL)
-    goto append_entry;
-
-  entry = entry->next;
-  goto compare_key;
-
-append_entry:
-  entry->next = map_add_entry(map_ptr, key, value);
-  return true;
+  return map_set_on_buckets(map_ptr, key, value, hash, map_ptr->buckets);
 }
