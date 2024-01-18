@@ -1,12 +1,12 @@
-int64 __map_find (
+int64 __map_get_key_offset (
     void* key_address,
     uint64 key_hash,
     struct __map_fat_ptr* map_fat_ptr,
     enum __map_find_output find_output
 )
 /**
- * This function shall find a key in the map, using the provided *key_address* and
- * *key_hash*.
+ * This function shall get the offset of a key in the map, using the provided
+ * *key_address* and *key_hash*.
  *
  * The *key_hash* has to be calculated in advance as an optimization to speed up the
  * rehash function, because Current map implementation already stores all the hashed
@@ -18,11 +18,9 @@ int64 __map_find (
  *
  *  - `__Map_Find_Default` returns:
  *    - `-1` if not found.
- *    - `-1` if found but not used.
  *    - `offset` if found.
  *  - `__Map_Find_Offset` returns
  *    - `offset` if not found.
- *    - `offset` if found but not used.
  *    - `offset` if found.
  *
  * This funcion shall handle hash collisions using the linear probing technique, which
@@ -45,7 +43,7 @@ int64 __map_find (
 search:
   /* The key has never been used, stops the search immediately. */
   if (current_key_status == __Map__Key_Status__Not_Used)
-    goto not_used;
+    goto not_found;
   /* The key has been deleted, continue searching. */
   if (current_key_status == __Map__Key_Status__Deleted)
     goto next;
@@ -71,13 +69,6 @@ next:
   goto search;
 
 not_found:
-  switch (find_output) {
-  case __Map_Find_Offset:
-    return offset;
-  default:
-    return -1;
-  }
-not_used:
   switch (find_output) {
   case __Map_Find_Offset:
     return offset;

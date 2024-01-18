@@ -14,15 +14,17 @@
 #ifndef CURRENT_H
 #define CURRENT_H
 
+#include <errno.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "current/preamble.h"
-#include "current/arena.h"
+//#include "current/arena.h"
 #include "current/map.h"
-#include "current/vector.h"
+//#include "current/vector.h"
 
 #endif

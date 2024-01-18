@@ -9,5 +9,4 @@ gcc app/$1.c                      \
   -Wall                           \
   -Wno-unused-label               \
   -Werror                         \
-  -g                              \
   ${@:2}

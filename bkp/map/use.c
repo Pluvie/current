@@ -1,12 +1,12 @@
-int64 __map_use (
+int64 __map_set_key_status (
     void* key_address,
     uint64 key_hash,
     struct __map_fat_ptr* map_fat_ptr,
     enum __map_use_opmode use_opmode
 )
 /**
- * This function shall set as used a key in the map, using the provided *key_address*
- * and *key_hash*.
+ * This function shall set the status of a key in the map, using the provided
+ * *key_address* and *key_hash*.
  *
  * The *key_hash* has to be calculated in advance as an optimization to speed up the
  * rehash function, because Current map implementation already stores all the hashed
