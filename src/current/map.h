@@ -32,7 +32,7 @@ u64 map_generic_hash (
     void* key
 )
 {
-  return (u64) key / 8;
+  return (u64) key / 2;
 }
 
 bool map_generic_compare (
@@ -152,16 +152,33 @@ void map_pretty_print_bucket (
     struct map_entry* entry
 )
 {
-  if (entry == NULL) {
-    fprintf(stderr, "[%4li] [%18p] [%18p]\n", bucket_index, NULL, NULL);
-    return;
-  }
+  fprintf(stderr, "[%4li] [ ", bucket_index);
+  if (entry == NULL) goto print_empty_entry;
 
-  fprintf(stderr, "[%4li] [%18p] [%18p]\n", bucket_index, entry->key, entry->value);
-  //for (size b = 0; b < key_size; b++)
-  //  fprintf(stderr, "", entry->
+  byte* key = (byte*) entry->key;
+  byte* value = (byte*) entry->value;
+
+  for (size i = 0; i < key_size; i++)
+    fprintf(stderr, "%02x ", key[i]);
+  fprintf(stderr, "] [ ");
+
+  for (size i = 0; i < value_size; i++)
+    fprintf(stderr, "%02x ", value[i]);
+  fprintf(stderr, "]\n");
+
   if (entry->next != NULL)
     map_pretty_print_bucket(key_size, value_size, bucket_index, entry->next);
+
+  return;
+
+print_empty_entry:
+  for (size i = 0; i < key_size; i++)
+    fprintf(stderr, "-- ");
+  fprintf(stderr, "] [ ");
+
+  for (size i = 0; i < value_size; i++)
+    fprintf(stderr, "-- ");
+  fprintf(stderr, "]\n");
 }
 
 void map_pretty_print (

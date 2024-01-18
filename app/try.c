@@ -9,6 +9,7 @@ int main (
   i32 value = 7;
   map_set(test_map, &key, &value);
   map_pretty_print(test_map);
+  map_get(test_map, &key);
   map_free(test_map);
   return 0;
 }
