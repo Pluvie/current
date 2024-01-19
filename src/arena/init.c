@@ -1,12 +1,14 @@
 struct arena* arena_init (
-    int64 size
+    u64 capacity
 )
 /**
- * This function shall initialize an arena of given *size*. */
+ * This function shall initialize an arena of given *capacity*. */
 {
-  size = size < ARENA_REGION_MIN_SIZE ? ARENA_REGION_MIN_SIZE : size;
+  capacity = capacity < ARENA_REGION_MIN_CAPACITY
+    ? ARENA_REGION_MIN_CAPACITY
+    : capacity;
 
-  void* memory = malloc(sizeof(struct arena) + sizeof(struct region) + size);
+  void* memory = malloc(sizeof(struct arena) + sizeof(struct region) + capacity);
   if (memory == NULL)
     return NULL;
 
@@ -17,8 +19,8 @@ struct arena* arena_init (
   arena->begin = region;
   arena->end = region;
   region->data = data;
-  region->size = size;
-  region->pos = 0;
+  region->capacity = capacity;
+  region->position = 0;
   region->next = NULL;
 
   return arena;

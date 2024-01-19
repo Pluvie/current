@@ -17,7 +17,8 @@ void test_u64 ()
   for (u32 i = 0; i < countof(keys) - 1; i++)
     map_set(test_map, &(keys[i]), &(values[i]));
   map_pretty_print(test_map);
-  map_del(test_map, &(keys[0]));
+  map_del(test_map, &(keys[2]));
+  map_del(test_map, &(keys[4]));
   fprintf(stderr, "\n\n");
   map_pretty_print(test_map);
   map_free(test_map);

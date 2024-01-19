@@ -14,6 +14,9 @@ void* map_set_on_buckets (
  *
  * The function will return the provided *value*. */
 {
+  if (key == NULL)
+    return NULL;
+
   u64 capped_hash = hash % map_ptr->capacity;
   size key_size = map_ptr->key_size;
   struct map_entry* entry = buckets[capped_hash];

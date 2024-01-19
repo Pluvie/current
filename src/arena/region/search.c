@@ -14,7 +14,7 @@ struct region* arena_region_search (
 
   do {
     range[0] = current->data;
-    range[1] = current->data + current->size;
+    range[1] = current->data + current->capacity;
 
     if (memptr >= range[0] && memptr <= range[1])
       return current;

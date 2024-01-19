@@ -11,6 +11,9 @@ void* map_set (
  *
  * The function will return the provided *value*. */
 {
+  if (key == NULL)
+    return NULL;
+
   u64 hash = map_ptr->hash(key, map_ptr->key_size);
   return map_set_on_buckets(map_ptr, key, value, hash, map_ptr->buckets);
 }

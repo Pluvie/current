@@ -9,8 +9,8 @@
 
 struct region {
   byte* data;
-  int64 size;
-  int64 pos;
+  u64   capacity;
+  u64   position;
   struct region* next;
 };
 
@@ -19,7 +19,7 @@ struct arena {
   struct region* end;
 };
 
-#define ARENA_REGION_MIN_SIZE (32 * 1024)
+#define ARENA_REGION_MIN_CAPACITY (32 * 1024)
 
 function(arena_calloc, void*) (struct arena*, int64, int64);
 function(arena_destroy, void) (struct arena*);

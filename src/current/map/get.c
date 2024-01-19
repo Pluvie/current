@@ -7,6 +7,9 @@ void* map_get (
  *
  * If the key is not present in the map, `NULL` shall be returned. */
 {
+  if (key == NULL)
+    return NULL;
+
   size key_size = map_ptr->key_size;
   u64 hash = map_ptr->hash(key, key_size) % map_ptr->capacity;
   bool (*compare)(void*, void*, size) = map_ptr->compare;
