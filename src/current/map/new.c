@@ -3,6 +3,8 @@ struct map* map_new (
     size value_size,
     size initial_capacity
 )
+/**
+ * This function shall create a new empty map. */
 {
   struct map* map_ptr = calloc(1, sizeof(struct map));
   map_ptr->key_size = key_size;

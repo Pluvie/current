@@ -14,8 +14,11 @@ void test_u64 ()
   struct map* test_map = map(u64, char*);
   u64 keys[] = { 0, 1, 2, 3, 4, 5 };
   char* values[] = { "a", "b", "c", "d", "e", "f" };
-  for (u32 i = 0; i < countof(keys); i++)
+  for (u32 i = 0; i < countof(keys) - 1; i++)
     map_set(test_map, &(keys[i]), &(values[i]));
+  map_pretty_print(test_map);
+  map_del(test_map, &(keys[0]));
+  fprintf(stderr, "\n\n");
   map_pretty_print(test_map);
   map_free(test_map);
 }

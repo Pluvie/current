@@ -4,6 +4,8 @@ void map_pretty_print_entry (
     u64 bucket_index,
     struct map_entry* entry
 )
+/**
+ * Pretty prints an entry of the map. */
 {
   fprintf(stderr, "[%4li] [ ", bucket_index);
   if (entry == NULL) goto print_empty_entry;

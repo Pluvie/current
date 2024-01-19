@@ -3,7 +3,7 @@ u64 map_generic_hash (
     size key_size
 )
 /**
- * This function returns a hash value based on [djb2 algorithm]
+ * This function returns a generic hash value based on [djb2 algorithm]
  * (http://www.cse.yorku.ca/~oz/hash.html). */
 {
   u64 hash = 5381;
