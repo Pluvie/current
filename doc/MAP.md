@@ -1,36 +1,21 @@
 # Map
 
-A `map` describes an association of objects. The associated objects are called *key*s
-and *value*s. For each object of type *key* there is zero or one object of type *value*.
+A `map` is an unordered collection of pairs { *key*, *value* }.
+For each given *key*, there can be only one value: in other words, a map cannot hold two
+pairs with the same *key*.
 
-The map can get, set, or delete an association of a *key* and a *value*. All these
-operations are done in constant time. This is achieved with the use of a hash function
--- this is why this data structure is often referred as "hashmap". To know more on how
-a map works, [refer to this article](https://benhoyt.com/writings/hash-table-in-c/).
+The map can get, set, or delete a { *key*, *value* } pair. All these operations are done
+in constant time. This is achieved with the use of a hash function -- this is why this
+data structure is often referred as "hashmap". To know more on how a map works,
+[refer to this article](https://benhoyt.com/writings/hash-table-in-c/).
 
 In __Current__, a map can be declared like this:
 
 ```c
-map(char*, int) my_map;
+struct map* my_map = map(char*, int);
 ```
 
-The key type is `char*`, and the value type is `int`. The map __must__ be provided a
-hash and compare function to work:
-
-```c
-map_init(my_map, char*, int,
-  .hash = my_string_hash_func,
-  .compare = my_string_compare_func);
-```
-
-You can avoid the double step of declaring and initializing by using `map_new`, which
-will do the same thing in one step:
-
-```c
-map_new(my_map, char*, int,
-  .hash = my_string_hash_func,
-  .compare = my_string_compare_func);
-```
+The key type is `char*`, and the value type is `int`.
 
 ## Initialization
 

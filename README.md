@@ -9,7 +9,7 @@ __Current__ is a C library that provides a convenient implementation of generic 
 `set` and `vector` data structures.
 
 __Current__'s endeavor is to streamline and make as joyful as possible your work with
-those data structures in C. This of course does not come without limits, however
+those data structures in C. This, of course, does not come without limits, however
 our hope is that you'll find it as useful and enjoyable as we do.
 
 ## Installation
