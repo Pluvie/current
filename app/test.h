@@ -3,7 +3,7 @@
 #define ANSI_COLOR_NONE   "\x1b[0m"
 
 #define describe(description)                                                           \
-  fprintf(stderr, "[%s]\n", description)
+  fprintf(stderr, "\n[%s]\n", description)
 
 #define test(test_case)                                                                 \
   for (struct { const char* m; i8 i; } t = { .m = test_case, .i = 0 }; t.i < 1; t.i++)
@@ -26,3 +26,5 @@
   fprintf(stderr, "%s (%s:%i)\n", message, location_name, line_num);                    \
   fprintf(stderr, ANSI_COLOR_NONE);                                                     \
   break
+
+function( test_arena,     void  )(  void  );
