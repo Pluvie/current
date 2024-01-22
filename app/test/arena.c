@@ -2,7 +2,8 @@ void test_arena()
 {
   describe("Arena");
 
-  test("on init, it should allocate the provided amount of bytes") {
+  test("on init, it must create a region with the provided amount of bytes "\
+       "of capacity") {
     struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY + 1);
     assert(arena != NULL);
     assert(arena->begin != NULL);
@@ -14,8 +15,8 @@ void test_arena()
     success();
   }
 
-  test("on init, it should allocate the minimum amount of bytes if the provided "\
-       "capacity is inferior to the minimum") {
+  test("on init, if the provided amount of bytes of capacity is inferior to the "\
+       "minimum, it must create a region with the minimum amount of bytes of capacity") {
     struct arena* arena = arena_init(8);
     assert(arena != NULL);
     assert(arena->begin != NULL);
@@ -27,7 +28,7 @@ void test_arena()
     success();
   }
 
-  test("on malloc, it should allocate the provided amount of bytes") {
+  test("on malloc, it must allocate the provided amount of bytes") {
     struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
     byte* data = arena_malloc(arena, 1024);
     assert(data != NULL);
@@ -38,8 +39,8 @@ void test_arena()
     success();
   }
 
-  test("on malloc, it should allocate the provided amount of bytes by just advancing "\
-       "the position if there is enough space in the region") {
+  test("on malloc, if there is enough space in the region, it must allocate the "\
+       "provided amount of bytes by just advancing the region position") {
     struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
     byte* data = arena_malloc(arena, 1024);
     assert(data != NULL);
@@ -54,8 +55,8 @@ void test_arena()
     success();
   }
 
-  test("on malloc, it should allocate the provided amount of bytes on a new region "\
-       "if the requested amount is greater than the end region remaining space") {
+  test("on malloc, if there is not enough space in the region, it must allocate the "\
+       "provided amount of bytes on a new region") {
     struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
     byte* data = arena_malloc(arena, ARENA_REGION_MIN_CAPACITY);
     assert(data != NULL);
@@ -74,7 +75,7 @@ void test_arena()
     success();
   }
 
-  test("on calloc, it should allocate the provided amount of bytes, and set them "\
+  test("on calloc, it must allocate the provided amount of bytes, and set them "\
        "all to 0") {
     struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
     byte* data = arena_calloc(arena, 2, 1024);
@@ -88,7 +89,7 @@ void test_arena()
     success();
   }
 
-  test("on realloc, it should reallocate the provided memory to the new amount of "\
+  test("on realloc, it must reallocate the provided memory to the new amount of "\
        "bytes, copying the memory content") {
     struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
     byte* data = arena_malloc(arena, 1024);
@@ -109,9 +110,9 @@ void test_arena()
     success();
   }
 
-  test("on realloc, it should reallocate the provided memory to the new amount of "\
-       "bytes, using a new region if there is not enough space in the end region, "\
-       "and copying the memory content") {
+  test("on realloc, if there is not enough space in the region, it must reallocate "\
+       "the provided memory to the new amount of bytes in a new region, and copy "\
+       "the memory content") {
     struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
     byte* data = arena_malloc(arena, 1024);
     assert(data != NULL);
