@@ -28,3 +28,4 @@
   break
 
 function( test_arena,     void  )(  void  );
+function( test_map,       void  )(  void  );

@@ -1,12 +1,3 @@
-void test_arena ()
-{
-  struct arena* test_arena = arena_init(ARENA_REGION_MIN_CAPACITY);
-  arena_malloc(test_arena, 1024);
-  byte* data = arena_malloc(test_arena, 1024 * 8);
-  data = arena_realloc(test_arena, data, 1024 * 12);
-  arena_destroy(test_arena);
-}
-
 void test_i32 ()
 {
   struct map* test_map = map(i32, i32);
@@ -38,9 +29,7 @@ int main (
     char** argv
 )
 {
-  //fprintf(stderr, "ciao!\n");
   //test_i32();
   //test_u64();
-  test_arena();
   return 0;
 }

@@ -4,6 +4,7 @@ int main (
 )
 {
   test_arena();
+  test_map();
   fprintf(stderr, "\n");
   return 0;
 }
