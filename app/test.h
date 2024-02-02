@@ -21,7 +21,7 @@
   fprintf(stderr, ANSI_COLOR_RED);                                                      \
   fprintf(stderr, "█ ");                                                                \
   fprintf(stderr, ANSI_COLOR_NONE);                                                     \
-  fprintf(stderr, "%s :", t.m);                                                         \
+  fprintf(stderr, "%s : ", t.m);                                                        \
   fprintf(stderr, ANSI_COLOR_RED);                                                      \
   fprintf(stderr, "%s (%s:%i)\n", message, location_name, line_num);                    \
   fprintf(stderr, ANSI_COLOR_NONE);                                                     \

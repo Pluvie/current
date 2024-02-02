@@ -17,6 +17,16 @@ void test_map()
     success();
   }
 
+  test("`map_arena()` must create a new map allocated in the provided arena") {
+    struct arena* arena = arena_init(1024);
+    assert(arena->end->position == 0);
+    struct map* test_map = map_arena(i32, i32, arena);
+    assert(test_map->capacity == MAP_DEFAULT_CAPACITY);
+    assert(arena->end->position > 0);
+    map_free(test_map);
+    success();
+  }
+
   test("`map_set()` must set the provided key with the provided value") {
     struct map* test_map = map(i32, i32);
     i32 key = 3;
@@ -78,6 +88,36 @@ void test_map()
     struct map* test_map = map(i32, i32);
     i32 key = 3;
     assert(map_get(test_map, &key) == NULL);
+    map_free(test_map);
+    success();
+  }
+
+  test("`map_del()` must delete the value of the provided key") {
+    struct map* test_map = map(i32, i32);
+    i32 key = 3;
+    i32 value = 7;
+    map_set(test_map, &key, &value);
+    assert(*((i32*) map_get(test_map, &key)) == value);
+    map_del(test_map, &key);
+    assert(map_get(test_map, &key) == NULL);
+    map_free(test_map);
+    success();
+  }
+
+  test("`map_has()` must return `true` if provided key is present in the map") {
+    struct map* test_map = map(i32, i32);
+    i32 key = 3;
+    i32 value = 7;
+    map_set(test_map, &key, &value);
+    assert(map_has(test_map, &key) == true);
+    map_free(test_map);
+    success();
+  }
+
+  test("`map_has()` must return `false` if provided key is not present in the map") {
+    struct map* test_map = map(i32, i32);
+    i32 key = 3;
+    assert(map_has(test_map, &key) == false);
     map_free(test_map);
     success();
   }

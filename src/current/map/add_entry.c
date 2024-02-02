@@ -18,13 +18,15 @@ void map_add_entry (
  * `MAP_MAXIMUM_LOAD_FACTOR` threshold, then this function shall trigger a rehash,
  * invoking the #map_rehash function. */
 {
-  struct map_entry* entry = calloc(1, sizeof(struct map_entry));
+  struct arena* arena = map_ptr->arena;
+  struct map_entry* entry = arena_calloc(arena, 1, sizeof(struct map_entry));
   entry->key = key;
   entry->value = value;
   entry->hash = hash;
   *add_location = entry;
 
   map_ptr->length++;
-  if (((d64) map_ptr->length / (d64) map_ptr->capacity) >= MAP_MAXIMUM_LOAD_FACTOR)
+  d64 map_load = (d64) map_ptr->length / (d64) map_ptr->capacity;
+  if (map_load >= MAP_MAXIMUM_LOAD_FACTOR)
     map_rehash(map_ptr);
 }

@@ -1,4 +1,4 @@
-void* map_set_on_buckets (
+void* map_set_with_buckets (
     struct map* map_ptr,
     void* key,
     void* value,

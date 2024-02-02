@@ -27,7 +27,7 @@ next_entry:
   if (old_entry == NULL)
     goto next_bucket;
 
-  map_set_on_buckets(
+  map_set_with_buckets(
     map_ptr, old_entry->key, old_entry->value, old_entry->hash, new_buckets);
 
   if (old_entry->next == NULL)
