@@ -68,6 +68,16 @@ enum map_flags {
 };
 
 /**
+ * Defines a macro to enable the provided flag in the map. */
+#define map_flag_enable(map_ptr, flag) \
+  map_ptr->flags |= (flag)
+
+/**
+ * Defines a macro to disable the provided flag in the map. */
+#define map_flag_disable(map_ptr, flag) \
+  map_ptr->flags &= ~(flag)
+
+/**
  * All map function definitions. */
 function( map_add_entry,            void          )(  struct map*, void*, void*, u64, struct map_entry**    );
 function( map_del,                  void*         )(  struct map*, void*                                    );

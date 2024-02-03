@@ -32,22 +32,33 @@ void test_map()
     i32 key = 3;
     i32 value = 7;
     map_set(test_map, &key, &value);
+
     u64 capped_hash = test_map->hash(&key, test_map->key_size) % test_map->capacity;
     struct map_entry* entry = test_map->buckets[capped_hash];
-    /**
-     * Suppose that `capped_hash` is `3`: the map will look like this:
-     *
-     * [   0] [ -- -- -- -- ] [ -- -- -- -- ]
-     * [   1] [ -- -- -- -- ] [ -- -- -- -- ]
-     * [   2] [ -- -- -- -- ] [ -- -- -- -- ]
-     * [   3] [ 03 00 00 00 ] [ 07 00 00 00 ]     <- This is where `entry` points at.
-     * [   4] [ -- -- -- -- ] [ -- -- -- -- ]
-     * [   5] [ -- -- -- -- ] [ -- -- -- -- ]
-     * [   6] [ -- -- -- -- ] [ -- -- -- -- ]
-     * [   7] [ -- -- -- -- ] [ -- -- -- -- ]
-     */
+
+    assert(entry->key == &key);
     assert(entry->value == &value);
-    assert(*((i32*)entry->value) == value);
+    assert(*((i32*) entry->key) == key);
+    assert(*((i32*) entry->value) == value);
+    map_free(test_map);
+    success();
+  }
+
+  test("`map_set()` must set the provided key with the provided value, and make a "
+       "copy of the key if the `Map_Flag__Copy_Keys` flag is enabled") {
+    struct map* test_map = map(i32, i32);
+    map_flag_enable(test_map, Map_Flag__Copy_Keys);
+    i32 key = 3;
+    i32 value = 7;
+    map_set(test_map, &key, &value);
+
+    u64 capped_hash = test_map->hash(&key, test_map->key_size) % test_map->capacity;
+    struct map_entry* entry = test_map->buckets[capped_hash];
+
+    assert(entry->key != &key);
+    assert(entry->value == &value);
+    assert(*((i32*) entry->key) == key);
+    assert(*((i32*) entry->value) == value);
     map_free(test_map);
     success();
   }
@@ -57,18 +68,21 @@ void test_map()
     struct map* test_map = map(i32, i32);
     i32 key = 3;
     i32 value = 7;
-
     map_set(test_map, &key, &value);
+
     u64 capped_hash = test_map->hash(&key, test_map->key_size) % test_map->capacity;
     struct map_entry* entry = test_map->buckets[capped_hash];
+
     assert(entry->value == &value);
     assert(*((i32*)entry->value) == value);
 
     value = 9;
     map_set(test_map, &key, &value);
+    assert(entry->key == &key);
     assert(entry->value == &value);
-    assert(*((i32*)entry->value) != 7);
-    assert(*((i32*)entry->value) == value);
+    assert(*((i32*) entry->key) == key);
+    assert(*((i32*) entry->value) != 7);
+    assert(*((i32*) entry->value) == value);
 
     map_free(test_map);
     success();
