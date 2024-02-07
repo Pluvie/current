@@ -37,7 +37,7 @@ next_entry:
   goto next_entry;
 
 next_bucket:
-  map_free_bucket(map_ptr->buckets[index]);
+  map_free_bucket(map_ptr, map_ptr->buckets[index]);
   index++;
   if (index >= old_capacity)
     goto assign_new_buckets;

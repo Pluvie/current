@@ -23,7 +23,7 @@ void* map_set_with_buckets (
   if (entry != NULL)
     goto search_entry;
 
-  map_add_entry(map_ptr, key, value, hash, buckets + capped_hash);
+  map_entry_add(map_ptr, key, value, hash, buckets + capped_hash);
   return value;
 
 search_entry:
@@ -42,6 +42,6 @@ compare_key:
   goto compare_key;
 
 append_entry:
-  map_add_entry(map_ptr, key, value, hash, &(entry->next));
+  map_entry_add(map_ptr, key, value, hash, &(entry->next));
   return value;
 }

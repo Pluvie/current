@@ -1,4 +1,4 @@
-void map_add_entry (
+void map_entry_add (
     struct map* map_ptr,
     void* key,
     void* value,
@@ -20,7 +20,12 @@ void map_add_entry (
 {
   struct arena* arena = map_ptr->arena;
   struct map_entry* entry = arena_calloc(arena, 1, sizeof(struct map_entry));
-  entry->key = key;
+
+  if (map_ptr->flags & Map_Flag__Copy_Keys)
+    map_entry_key_copy(map_ptr, entry, key);
+  else
+    entry->key = key;
+
   entry->value = value;
   entry->hash = hash;
   *add_location = entry;
