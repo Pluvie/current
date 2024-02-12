@@ -12,6 +12,8 @@ void map_free_bucket (
 
   if (map_ptr->flags & Map_Flag__Copy_Keys)
     free(entry->key);
+  if (map_ptr->flags & Map_Flag__Copy_Values)
+    free(entry->value);
 
   free(entry);
 }

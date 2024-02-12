@@ -22,6 +22,9 @@ struct arena {
   struct region* end;
 };
 
+#define arena_new() \
+  arena_init(ARENA_REGION_MIN_CAPACITY)
+
 #define ARENA_REGION_MIN_CAPACITY (32 * 1024)
 
 function( arena_calloc,           void*           )(  struct arena*, u64, u64     );

@@ -31,7 +31,7 @@ search_entry:
 
 compare_key:
   if (compare(entry->key, key, key_size)) {
-    entry->value = value;
+    map_entry_value_set(map_ptr, entry, value);
     return value;
   }
 

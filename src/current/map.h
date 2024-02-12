@@ -12,7 +12,13 @@
  * and *value_type*. The *init_params* struct allows to specify additional initialization
  * parameters. */
 #define map(key_type, value_type, init_params) \
-  map_new(sizeof(key_type), sizeof(value_type), init_params)
+  map_new(strcmp(#key_type, "char*")          == 0 || \
+          strcmp(#key_type, "const char*")    == 0 ?  \
+            0 : sizeof(key_type),                     \
+          strcmp(#value_type, "char*")        == 0 || \
+          strcmp(#value_type, "const char*")  == 0 ?  \
+            0 : sizeof(value_type),                   \
+          init_params)
 
 /**
  * Defines the defaul initial capacity of a map, if not specified by the programmer. */
@@ -87,19 +93,21 @@ struct map_parameters {
 
 /**
  * All map function definitions. */
-function( map_del,                  void*         )(  struct map*, void*                                    );
-function( map_entry_add,            void          )(  struct map*, void*, void*, u64, struct map_entry**    );
-function( map_entry_key_copy,       void          )(  struct map*, struct map_entry*, void*                 );
-function( map_free,                 void          )(  struct map*                                           );
-function( map_free_bucket,          void          )(  struct map*, struct map_entry*                        );
-function( map_generic_compare,      bool          )(  void*, void*, size                                    );
-function( map_generic_hash,         u64           )(  void*, size                                           );
-function( map_get,                  void*         )(  struct map*, void*                                    );
-function( map_has,                  bool          )(  struct map*, void*                                    );
-function( map_new,                  struct map*   )(  size, size, struct map_parameters*                    );
-function( map_pretty_print,         void          )(  struct map*                                           );
-function( map_pretty_print_bucket,  void          )(  size, size, u64, struct map_entry*                    );
-function( map_pretty_print_entry,   void          )(  size, size, u64, struct map_entry*                    );
-function( map_rehash,               void          )(  struct map*                                           );
-function( map_set,                  void*         )(  struct map*, void*, void*                             );
-function( map_set_with_buckets,     void*         )(  struct map*, void*, void*, u64, struct map_entry**    );
+function( map_del,                  void*             )(  struct map*, void*                                    );
+function( map_entry_add,            void              )(  struct map*, void*, void*, u64, struct map_entry**    );
+function( map_entry_key_set,        void              )(  struct map*, struct map_entry*, void*                 );
+function( map_entry_value_set,      void              )(  struct map*, struct map_entry*, void*                 );
+function( map_free,                 void              )(  struct map*                                           );
+function( map_free_bucket,          void              )(  struct map*, struct map_entry*                        );
+function( map_generic_compare,      bool              )(  void*, void*, size                                    );
+function( map_generic_hash,         u64               )(  void*, size                                           );
+function( map_get,                  void*             )(  struct map*, void*                                    );
+function( map_get_entry,            struct map_entry* )(  struct map*, void*                                    );
+function( map_has,                  bool              )(  struct map*, void*                                    );
+function( map_new,                  struct map*       )(  size, size, struct map_parameters*                    );
+function( map_pretty_print,         void              )(  struct map*                                           );
+function( map_pretty_print_bucket,  void              )(  size, size, u64, struct map_entry*                    );
+function( map_pretty_print_entry,   void              )(  size, size, u64, struct map_entry*                    );
+function( map_rehash,               void              )(  struct map*                                           );
+function( map_set,                  void*             )(  struct map*, void*, void*                             );
+function( map_set_with_buckets,     void*             )(  struct map*, void*, void*, u64, struct map_entry**    );
