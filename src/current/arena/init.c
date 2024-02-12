@@ -8,7 +8,7 @@ struct arena* arena_init (
     ? ARENA_REGION_MIN_CAPACITY
     : capacity;
 
-  void* memory = malloc(sizeof(struct arena) + sizeof(struct region) + capacity);
+  void* memory = calloc(1, sizeof(struct arena) + sizeof(struct region) + capacity);
   if (memory == NULL)
     return NULL;
 
@@ -18,10 +18,9 @@ struct arena* arena_init (
 
   arena->begin = region;
   arena->end = region;
+  arena->total_size = capacity;
   region->data = data;
   region->capacity = capacity;
-  region->position = 0;
-  region->next = NULL;
 
   return arena;
 }

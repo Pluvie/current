@@ -24,5 +24,9 @@ struct region* arena_region_next (
   arena->end->next = region;
   arena->end = region;
 
+  arena->number_of_allocs++;
+  arena->number_of_regions++;
+  arena->total_size += region->capacity;
+
   return region;
 }

@@ -108,6 +108,30 @@ void test_arena()
     success();
   }
 
+  test("`realloc()` must reallocate the provided memory to the new amount of bytes, "\
+       "copying the memory content, but avoiding overflow if the remaining region "\
+       "capacity is less than the amount of memory to copy") {
+    struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
+    arena_malloc(arena, ARENA_REGION_MIN_CAPACITY - 1024);
+    u64 starting_position = ARENA_REGION_MIN_CAPACITY - 1024;
+
+    byte* data = arena_malloc(arena, 128);
+    assert(data != NULL);
+    memset(data, 77, 128);
+
+    arena_malloc(arena, 256);
+    assert(arena->begin->position ==  starting_position + 128 + 256);
+
+    data = arena_realloc(arena, data, 128 * 2);
+    assert(data != NULL);
+    assert(arena->begin == arena->end);
+    assert(arena->begin->position == starting_position + 128 + 256 + 256);
+    for (u64 i = 0; i < 128; i++)
+      assert(data[i] == 77);
+    arena_destroy(arena);
+    success();
+  }
+
   test("`realloc()` must reallocate the provided memory to the new amount of bytes in "\
        "a new region, and copy the memory content, if there is not enough space in "\
        "the last region") {

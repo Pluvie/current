@@ -15,6 +15,9 @@ struct region {
 };
 
 struct arena {
+  u64 total_size;
+  u64 number_of_allocs;
+  u64 number_of_regions;
   struct region* begin;
   struct region* end;
 };
