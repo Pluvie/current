@@ -3,8 +3,8 @@ int main (
     char** argv
 )
 {
-  test_arena();
-  test_map();
-  fprintf(stderr, "\n");
+  //test_arena();
+  //test_map();
+  map_alloc_default_capacity();
   return 0;
 }

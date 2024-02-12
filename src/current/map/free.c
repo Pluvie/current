@@ -10,5 +10,4 @@ void map_free (
   for (i64 i = 0; i < map_ptr->capacity; i++)
     map_free_bucket(map_ptr, map_ptr->buckets[i]);
   free(map_ptr->buckets);
-  free(map_ptr);
 }
