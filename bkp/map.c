@@ -285,51 +285,51 @@ void test_map()
 //    success();
 //  }
 
-  test("`map_get()` must retrieve the value of the provided key") {
-    struct map* test_map = map(i32, i32, NULL);
-    i32 key = 3;
-    i32 value = 7;
-    map_set(test_map, &key, &value);
-    assert(*((i32*) map_get(test_map, &key)) == value);
-    map_free(test_map);
-    success();
-  }
+//  test("`map_get()` must retrieve the value of the provided key") {
+//    struct map* test_map = map(i32, i32, NULL);
+//    i32 key = 3;
+//    i32 value = 7;
+//    map_set(test_map, &key, &value);
+//    assert(*((i32*) map_get(test_map, &key)) == value);
+//    map_free(test_map);
+//    success();
+//  }
 
-  test("`map_get()` must return a NULL pointer if the provided key is not present") {
-    struct map* test_map = map(i32, i32, NULL);
-    i32 key = 3;
-    assert(map_get(test_map, &key) == NULL);
-    map_free(test_map);
-    success();
-  }
+//  test("`map_get()` must return a NULL pointer if the provided key is not present") {
+//    struct map* test_map = map(i32, i32, NULL);
+//    i32 key = 3;
+//    assert(map_get(test_map, &key) == NULL);
+//    map_free(test_map);
+//    success();
+//  }
+//
+//  test("`map_del()` must delete the value of the provided key") {
+//    struct map* test_map = map(i32, i32, NULL);
+//    i32 key = 3;
+//    i32 value = 7;
+//    map_set(test_map, &key, &value);
+//    assert(*((i32*) map_get(test_map, &key)) == value);
+//    map_del(test_map, &key);
+//    assert(map_get(test_map, &key) == NULL);
+//    map_free(test_map);
+//    success();
+//  }
 
-  test("`map_del()` must delete the value of the provided key") {
-    struct map* test_map = map(i32, i32, NULL);
-    i32 key = 3;
-    i32 value = 7;
-    map_set(test_map, &key, &value);
-    assert(*((i32*) map_get(test_map, &key)) == value);
-    map_del(test_map, &key);
-    assert(map_get(test_map, &key) == NULL);
-    map_free(test_map);
-    success();
-  }
-
-  test("`map_has()` must return `true` if provided key is present in the map") {
-    struct map* test_map = map(i32, i32, NULL);
-    i32 key = 3;
-    i32 value = 7;
-    map_set(test_map, &key, &value);
-    assert(map_has(test_map, &key) == true);
-    map_free(test_map);
-    success();
-  }
-
-  test("`map_has()` must return `false` if provided key is not present in the map") {
-    struct map* test_map = map(i32, i32, NULL);
-    i32 key = 3;
-    assert(map_has(test_map, &key) == false);
-    map_free(test_map);
-    success();
-  }
+//  test("`map_has()` must return `true` if provided key is present in the map") {
+//    struct map* test_map = map(i32, i32, NULL);
+//    i32 key = 3;
+//    i32 value = 7;
+//    map_set(test_map, &key, &value);
+//    assert(map_has(test_map, &key) == true);
+//    map_free(test_map);
+//    success();
+//  }
+//
+//  test("`map_has()` must return `false` if provided key is not present in the map") {
+//    struct map* test_map = map(i32, i32, NULL);
+//    i32 key = 3;
+//    assert(map_has(test_map, &key) == false);
+//    map_free(test_map);
+//    success();
+//  }
 }

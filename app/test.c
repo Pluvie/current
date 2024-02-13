@@ -22,6 +22,12 @@ int main (
   map_set_copy_value();
   map_set_rehash_trigger();
   map_set_rehash_avoid_double_copy();
+  map_get_retrieve_value();
+  map_get_return_null();
+  map_del_remove_entry();
+  map_del_do_nothing();
+  map_has_true_if_key_present();
+  map_has_false_if_key_not_present();
 
   return 0;
 }

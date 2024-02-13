@@ -84,6 +84,7 @@ function( map_entry_key_set,        void              )(  struct map*, struct ma
 function( map_entry_value_set,      void              )(  struct map*, struct map_entry*, void*                 );
 function( map_free,                 void              )(  struct map*                                           );
 function( map_free_bucket,          void              )(  struct map*, struct map_entry*                        );
+function( map_free_entry,           void              )(  struct map*, struct map_entry*                        );
 function( map_generic_compare,      bool              )(  void*, void*, size                                    );
 function( map_generic_hash,         u64               )(  void*, size                                           );
 function( map_get,                  void*             )(  struct map*, void*                                    );

@@ -15,14 +15,14 @@
  * ```c
  * test(map_alloc_provided_capacity) {                    // wrap the test with `test()`
  *                                                        //
- *   given("a map(i32, i32)")                             // set the scope with `given()`
- *     struct map map_ptr = map(i32, i32);                //
+ *   given("a map(i32, i32)")                             // set the subject with
+ *     struct map map_ptr = map(i32, i32);                // `given()`
  *                                                        //
  *   when("the provided capacity is a power of 2")        // conditions can be expressed
  *     map_ptr.capacity = 1 << 4;                         // with `when()`
  *                                                        //
- *   calling("map_alloc()")                               // function calls can be
- *     map_alloc(&map_ptr);                               // expressed by `calling()`
+ *   calling("map_alloc()")                               // the function to be tested
+ *     map_alloc(&map_ptr);                               // is defined with `calling()`
  *                                                        //
  *   must("allocate the map with the provided capacity")  // the end result can be
  *     verify(map_ptr.capacity == 16);                    // enforced with `must()`
@@ -33,7 +33,7 @@
  * ```
  *
  * This (very) simple framework should give you the basic tools to write test functions
- * in a natural and readable fashion. */
+ * in a natural and readable way. */
 
 #define test(test_function_name)                                                        \
   void test_function_name(void)
@@ -99,3 +99,9 @@ test_function( map_set_copy_value );
 test_function( map_set_reuse_value_copy_if_key_present );
 test_function( map_set_rehash_trigger );
 test_function( map_set_rehash_avoid_double_copy );
+test_function( map_get_retrieve_value );
+test_function( map_get_return_null );
+test_function( map_del_remove_entry );
+test_function( map_del_do_nothing );
+test_function( map_has_true_if_key_present );
+test_function( map_has_false_if_key_not_present );
