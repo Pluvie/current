@@ -1,7 +1,39 @@
-#define ASCII_ESC         27
-#define ANSI_COLOR_RED    "\x1b[31m"
-#define ANSI_COLOR_GREEN  "\x1b[32m"
-#define ANSI_COLOR_NONE   "\x1b[0m"
+/**
+ * Various constants and helpers to print on the console. */
+
+#define ASCII_ESC                 27
+#define ANSI_COLOR_RED            "\x1b[31m"
+#define ANSI_COLOR_GREEN          "\x1b[32m"
+#define ANSI_COLOR_NONE           "\x1b[0m"
+#define VT100_SAVE_CURSOR_POS     fprintf(stderr, "%c7", ASCII_ESC)
+#define VT100_RESTORE_CURSOR_POS  fprintf(stderr, "%c8", ASCII_ESC)
+
+/**
+ * Test framework macros.
+ *
+ * Example:
+ * ```c
+ * test(map_alloc_provided_capacity) {                    // wrap the test with `test()`
+ *                                                        //
+ *   given("a map(i32, i32)")                             // set the scope with `given()`
+ *     struct map map_ptr = map(i32, i32);                //
+ *                                                        //
+ *   when("the provided capacity is a power of 2")        // conditions can be expressed
+ *     map_ptr.capacity = 1 << 4;                         // with `when()`
+ *                                                        //
+ *   calling("map_alloc()")                               // function calls can be
+ *     map_alloc(&map_ptr);                               // expressed by `calling()`
+ *                                                        //
+ *   must("allocate the map with the provided capacity")  // the end result can be
+ *     verify(map_ptr.capacity == 16);                    // enforced with `must()`
+ *                                                        //
+ *   success()                                            // closing operations can be
+ *     map_free(&map_ptr);                                // done after `success()`
+ * }                                                      //
+ * ```
+ *
+ * This (very) simple framework should give you the basic tools to write test functions
+ * in a natural and readable fashion. */
 
 #define test(test_function_name)                                                        \
   void test_function_name(void)
@@ -10,7 +42,7 @@
   void test_function_name(void);
 
 #define success()                                                                       \
-  fprintf(stderr, "%c8", ASCII_ESC);                                                    \
+  VT100_RESTORE_CURSOR_POS;                                                             \
   fprintf(stderr, ANSI_COLOR_GREEN);                                                    \
   fprintf(stderr, "█ ");                                                                \
   fprintf(stderr, ANSI_COLOR_NONE);                                                     \
@@ -18,7 +50,8 @@
 end_test:
 
 #define given(description)                                                              \
-  fprintf(stderr, "%c7  given " description, ASCII_ESC);
+  VT100_SAVE_CURSOR_POS;                                                                \
+  fprintf(stderr, "  given " description);
 
 #define when(description)                                                               \
   fprintf(stderr, ", when " description);
@@ -36,7 +69,7 @@ end_test:
   if (!(condition)) { fail(__FILE__, __LINE__, #condition ); }
 
 #define fail(location_name, line_num, message)                                          \
-  fprintf(stderr, "%c8", ASCII_ESC);                                                    \
+  VT100_RESTORE_CURSOR_POS;                                                             \
   fprintf(stderr, ANSI_COLOR_RED);                                                      \
   fprintf(stderr, "█ ");                                                                \
   fprintf(stderr, ANSI_COLOR_NONE);                                                     \
@@ -46,6 +79,9 @@ end_test:
   fprintf(stderr, ANSI_COLOR_NONE);                                                     \
   fprintf(stderr, "\n");                                                                \
   goto end_test;
+
+/**
+ * Test functions (cases). */
 
 test_function( map_correct_key_size );
 test_function( map_correct_value_size );
@@ -61,3 +97,5 @@ test_function( map_set_copy_key );
 test_function( map_set_avoid_copying_key_if_present );
 test_function( map_set_copy_value );
 test_function( map_set_reuse_value_copy_if_key_present );
+test_function( map_set_rehash_trigger );
+test_function( map_set_rehash_avoid_double_copy );

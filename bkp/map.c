@@ -209,81 +209,81 @@ void test_map()
 //    success();
 //  }
 
-  test("`map_set()` must trigger a rehash if, by adding a new entry, causes the load "\
-       "factor of the map to surpass the threshold") {
-    struct map* test_map = map(i32, i32, NULL);
-    i32 numbers[] = { 0, 1, 2, 3, 4, 5 };
+//  test("`map_set()` must trigger a rehash if, by adding a new entry, causes the load "\
+//       "factor of the map to surpass the threshold") {
+//    struct map* test_map = map(i32, i32, NULL);
+//    i32 numbers[] = { 0, 1, 2, 3, 4, 5 };
+//
+//    for (u32 i = 0; i < 5; i++)
+//      map_set(test_map, &numbers[i], &numbers[i]);
+//    for (u32 i = 0; i < 5; i++)
+//      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
+//    assert(test_map->capacity == 8);
+//
+//    map_set(test_map, &numbers[5], &numbers[5]);
+//    assert(test_map->capacity == 16);
+//    for (u32 i = 0; i < countof(numbers); i++)
+//      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
+//
+//    map_free(test_map);
+//    success();
+//  }
 
-    for (u32 i = 0; i < 5; i++)
-      map_set(test_map, &numbers[i], &numbers[i]);
-    for (u32 i = 0; i < 5; i++)
-      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
-    assert(test_map->capacity == 8);
-
-    map_set(test_map, &numbers[5], &numbers[5]);
-    assert(test_map->capacity == 16);
-    for (u32 i = 0; i < countof(numbers); i++)
-      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
-
-    map_free(test_map);
-    success();
-  }
-
-  test("`map_rehash()` must avoid making a copy of each entry key, even if the "\
-       "`Map_Flag__Copy_Key` flag is enabled") {
-    struct map_parameters test_map_params = { .flags = Map_Flag__Copy_Keys };
-    struct map* test_map = map(i32, i32, &test_map_params);
-    i32 numbers[] = { 0, 1, 2, 3, 4, 5 };
-    void* key_addresses[5] = { 0 };
-
-    for (u32 i = 0; i < 5; i++)
-      map_set(test_map, &numbers[i], &numbers[i]);
-    for (u32 i = 0; i < 5; i++) {
-      key_addresses[i] = map_get_entry(test_map, &numbers[i])->key;
-      assert(key_addresses[i] != &numbers[i]);
-      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
-    }
-    assert(test_map->capacity == 8);
-
-    map_set(test_map, &numbers[5], &numbers[5]);
-    assert(test_map->capacity == 16);
-    for (u32 i = 0; i < countof(numbers); i++) {
-      if (i < 5)
-        assert(map_get_entry(test_map, &numbers[i])->key == key_addresses[i]);
-      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
-    }
-
-    map_free(test_map);
-    success();
-  }
-
-  test("`map_rehash()` must avoid making a copy of each entry value, even if the "\
-       "`Map_Flag__Copy_Values` flag is enabled") {
-    struct map_parameters test_map_params = { .flags = Map_Flag__Copy_Values };
-    struct map* test_map = map(i32, i32, &test_map_params);
-    i32 numbers[] = { 0, 1, 2, 3, 4, 5 };
-    void* value_addresses[5] = { 0 };
-
-    for (u32 i = 0; i < 5; i++)
-      map_set(test_map, &numbers[i], &numbers[i]);
-    for (u32 i = 0; i < 5; i++) {
-      value_addresses[i] = map_get(test_map, &numbers[i]);
-      assert(value_addresses[i] != &numbers[i]);
-      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
-    }
-    assert(test_map->capacity == 8);
-
-    map_set(test_map, &numbers[5], &numbers[5]);
-    assert(test_map->capacity == 16);
-    for (u32 i = 0; i < countof(numbers); i++) {
-      if (i < 5)
-        assert(map_get(test_map, &numbers[i]) == value_addresses[i]);
-      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
-    }
-
-    map_free(test_map);
-    success();
-  }
+//  test("`map_rehash()` must avoid making a copy of each entry key, even if the "\
+//       "`Map_Flag__Copy_Key` flag is enabled") {
+//    struct map_parameters test_map_params = { .flags = Map_Flag__Copy_Keys };
+//    struct map* test_map = map(i32, i32, &test_map_params);
+//    i32 numbers[] = { 0, 1, 2, 3, 4, 5 };
+//    void* key_addresses[5] = { 0 };
+//
+//    for (u32 i = 0; i < 5; i++)
+//      map_set(test_map, &numbers[i], &numbers[i]);
+//    for (u32 i = 0; i < 5; i++) {
+//      key_addresses[i] = map_get_entry(test_map, &numbers[i])->key;
+//      assert(key_addresses[i] != &numbers[i]);
+//      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
+//    }
+//    assert(test_map->capacity == 8);
+//
+//    map_set(test_map, &numbers[5], &numbers[5]);
+//    assert(test_map->capacity == 16);
+//    for (u32 i = 0; i < countof(numbers); i++) {
+//      if (i < 5)
+//        assert(map_get_entry(test_map, &numbers[i])->key == key_addresses[i]);
+//      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
+//    }
+//
+//    map_free(test_map);
+//    success();
+//  }
+//
+//  test("`map_rehash()` must avoid making a copy of each entry value, even if the "\
+//       "`Map_Flag__Copy_Values` flag is enabled") {
+//    struct map_parameters test_map_params = { .flags = Map_Flag__Copy_Values };
+//    struct map* test_map = map(i32, i32, &test_map_params);
+//    i32 numbers[] = { 0, 1, 2, 3, 4, 5 };
+//    void* value_addresses[5] = { 0 };
+//
+//    for (u32 i = 0; i < 5; i++)
+//      map_set(test_map, &numbers[i], &numbers[i]);
+//    for (u32 i = 0; i < 5; i++) {
+//      value_addresses[i] = map_get(test_map, &numbers[i]);
+//      assert(value_addresses[i] != &numbers[i]);
+//      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
+//    }
+//    assert(test_map->capacity == 8);
+//
+//    map_set(test_map, &numbers[5], &numbers[5]);
+//    assert(test_map->capacity == 16);
+//    for (u32 i = 0; i < countof(numbers); i++) {
+//      if (i < 5)
+//        assert(map_get(test_map, &numbers[i]) == value_addresses[i]);
+//      assert(*((i32*) map_get(test_map, &numbers[i])) == numbers[i]);
+//    }
+//
+//    map_free(test_map);
+//    success();
+//  }
 
   test("`map_get()` must retrieve the value of the provided key") {
     struct map* test_map = map(i32, i32, NULL);

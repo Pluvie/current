@@ -27,6 +27,11 @@ void map_entry_add (
   *add_location = entry;
 
   map_ptr->length++;
+
+  /* Skips load check if already rehashing. */
+  if (map_ptr->flags & Map_Flag__Rehashing)
+    return;
+
   d64 map_load = (d64) map_ptr->length / (d64) map_ptr->capacity;
   if (map_load >= MAP_MAXIMUM_LOAD_FACTOR)
     map_rehash(map_ptr);

@@ -60,8 +60,9 @@ struct map_entry {
  * Defines all the flags used to tweak and configure the map behaviour. */
 enum map_flags {
   Map_Flag__None        = 0,
-  Map_Flag__Copy_Keys   = 1 << 0,
-  Map_Flag__Copy_Values = 1 << 1,
+  Map_Flag__Rehashing   = 1 << 0,
+  Map_Flag__Copy_Keys   = 1 << 1,
+  Map_Flag__Copy_Values = 1 << 2,
 };
 
 /**

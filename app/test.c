@@ -3,8 +3,9 @@ int main (
     char** argv
 )
 {
-  //test_arena();
-  //test_map();
+  // arena tests here
+  // arena_correct_init();
+
   map_correct_key_size();
   map_correct_value_size();
   map_default_flags();
@@ -19,5 +20,8 @@ int main (
   map_set_avoid_copying_key_if_present();
   map_set_reuse_value_copy_if_key_present();
   map_set_copy_value();
+  map_set_rehash_trigger();
+  map_set_rehash_avoid_double_copy();
+
   return 0;
 }

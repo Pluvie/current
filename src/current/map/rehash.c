@@ -21,11 +21,9 @@ void map_rehash (
   struct map_entry* old_entry = NULL;
   struct map_entry** new_buckets = calloc(new_capacity, sizeof(struct map_entry*));
 
-  /* Temporarily disables the `Map_Flag__Copy_Keys` and the `Map_Flag__Copy_Values`
-   * flags, to prevent copying the keys and values during the rehash. */
-  u32 original_map_flags = map_ptr->flags;
-  map_flag_disable(map_ptr, Map_Flag__Copy_Keys);
-  map_flag_disable(map_ptr, Map_Flag__Copy_Values);
+  /* Temporarily enables the `Map_Flag__Rehashing` which prevents copying the keys
+   * and values during the rehash, to avoid double copies. */
+  map_flag_enable(map_ptr, Map_Flag__Rehashing);
 
   u64 index = 0;
   old_entry = map_ptr->buckets[index];
@@ -58,7 +56,5 @@ next_bucket:
 assign_new_buckets:
   free(map_ptr->buckets);
   map_ptr->buckets = new_buckets;
-
-  /* Restore original flags. */
-  map_ptr->flags = original_map_flags;
+  map_flag_disable(map_ptr, Map_Flag__Rehashing);
 }
