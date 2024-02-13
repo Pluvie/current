@@ -1,5 +1,5 @@
 void map_pretty_print (
-    struct map* map_ptr
+    struct map* map
 )
 /**
  * This function shall pretty print the map, showing all entries in the map grouped
@@ -7,7 +7,7 @@ void map_pretty_print (
  *
  * For each entry, this function shall print the bytes of its key and value. */
 {
-  for (u64 i = 0; i < map_ptr->capacity; i++)
+  for (u64 i = 0; i < map->capacity; i++)
     map_pretty_print_bucket(
-      map_ptr->key_size, map_ptr->value_size, i, map_ptr->buckets[i]);
+      map->key_size, map->value_size, i, map->buckets[i]);
 }

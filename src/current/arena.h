@@ -22,14 +22,14 @@ struct arena {
   struct region* end;
 };
 
-#define arena_new() \
-  arena_init(ARENA_REGION_MIN_CAPACITY)
+#define arena_init() \
+  { 0 }
 
 #define ARENA_REGION_MIN_CAPACITY (32 * 1024)
 
 function( arena_calloc,           void*           )(  struct arena*, u64, u64     );
 function( arena_destroy,          void            )(  struct arena*               );
-function( arena_init,             struct arena*   )(  u64                         );
+function( arena_alloc,            void            )(  struct arena*               );
 function( arena_malloc,           void*           )(  struct arena*, u64          );
 function( arena_realloc,          void*           )(  struct arena*, void*, u64   );
 function( arena_region_next,      struct region*  )(  struct arena*, u64          );

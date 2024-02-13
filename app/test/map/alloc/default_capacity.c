@@ -1,16 +1,16 @@
 test(map_alloc_default_capacity) {
 
-  given("a map(i32, i32)")
-    struct map map_ptr = map(i32, i32);
+  given("a map")
+    struct map map = map_init(i32, i32);
   
   when("no capacity is provided")
   
   calling("map_alloc()")
-    map_alloc(&map_ptr);
+    map_alloc(&map);
   
   must("allocate the map with the default capacity")
-    verify(map_ptr.capacity == MAP_DEFAULT_CAPACITY);
+    verify(map.capacity == MAP_DEFAULT_CAPACITY);
 
   success()
-    map_free(&map_ptr);
+    map_free(&map);
 }

@@ -1,13 +1,13 @@
 void map_free (
-    struct map* map_ptr
+    struct map* map
 )
 /**
  * This function shall free the memory used by the map and all its buckets. */
 {
-  if (map_ptr->arena != NULL)
+  if (map->arena != NULL)
     return;
 
-  for (i64 i = 0; i < map_ptr->capacity; i++)
-    map_free_bucket(map_ptr, map_ptr->buckets[i]);
-  free(map_ptr->buckets);
+  for (i64 i = 0; i < map->capacity; i++)
+    map_free_bucket(map, map->buckets[i]);
+  free(map->buckets);
 }

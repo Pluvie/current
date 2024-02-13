@@ -15,20 +15,20 @@
  * ```c
  * test(map_alloc_provided_capacity) {                    // wrap the test with `test()`
  *                                                        //
- *   given("a map(i32, i32)")                             // set the subject with
- *     struct map map_ptr = map(i32, i32);                // `given()`
+ *   given("a map")                                       // set the subject with
+ *     struct map map = map_init(i32, i32);               // `given()`
  *                                                        //
  *   when("the provided capacity is a power of 2")        // conditions can be expressed
- *     map_ptr.capacity = 1 << 4;                         // with `when()`
+ *     map.capacity = 1 << 4;                             // with `when()`
  *                                                        //
  *   calling("map_alloc()")                               // the function to be tested
- *     map_alloc(&map_ptr);                               // is defined with `calling()`
+ *     map_alloc(&map);                                   // is defined with `calling()`
  *                                                        //
  *   must("allocate the map with the provided capacity")  // the end result can be
- *     verify(map_ptr.capacity == 16);                    // enforced with `must()`
+ *     verify(map.capacity == 16);                        // enforced with `must()`
  *                                                        //
  *   success()                                            // closing operations can be
- *     map_free(&map_ptr);                                // done after `success()`
+ *     map_free(&map);                                    // done after `success()`
  * }                                                      //
  * ```
  *

@@ -10,10 +10,10 @@
 /**
  * Defines the `map` macro to declare and create a new map with the given *key_type*
  * and *value_type*. */
-#define map(key_type, value_type)     \
-  { .key_size = sizeof(key_type),     \
-    .value_size = sizeof(value_type), \
-    .hash = map_generic_hash,         \
+#define map_init(key_type, value_type)  \
+  { .key_size = sizeof(key_type),       \
+    .value_size = sizeof(value_type),   \
+    .hash = map_generic_hash,           \
     .compare = map_generic_compare }
 
 /**
@@ -67,13 +67,13 @@ enum map_flags {
 
 /**
  * Defines a macro to enable the provided flag in the map. */
-#define map_flag_enable(map_ptr, flag) \
-  (map_ptr)->flags |= (flag)
+#define map_flag_enable(map, flag) \
+  (map)->flags |= (flag)
 
 /**
  * Defines a macro to disable the provided flag in the map. */
-#define map_flag_disable(map_ptr, flag) \
-  (map_ptr)->flags &= ~(flag)
+#define map_flag_disable(map, flag) \
+  (map)->flags &= ~(flag)
 
 /**
  * All map function definitions. */

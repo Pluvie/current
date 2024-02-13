@@ -1,5 +1,5 @@
 void map_rehash (
-    struct map* map_ptr
+    struct map* map
 )
 /**
  * This function shall double the map capacity and shall reposition all entries in their
@@ -13,20 +13,20 @@ void map_rehash (
  * Increasing the capacity and redistributing the entries across ampler buckets shall
  * avoid the overcrowdinge of linked lists, which will allow more direct hash access. */
 {
-  u64 old_capacity = map_ptr->capacity;
+  u64 old_capacity = map->capacity;
   u64 new_capacity = old_capacity * 2;
 
-  map_ptr->length = 0;
-  map_ptr->capacity = new_capacity;
+  map->length = 0;
+  map->capacity = new_capacity;
   struct map_entry* old_entry = NULL;
   struct map_entry** new_buckets = calloc(new_capacity, sizeof(struct map_entry*));
 
   /* Temporarily enables the `Map_Flag__Rehashing` which prevents copying the keys
    * and values during the rehash, to avoid double copies. */
-  map_flag_enable(map_ptr, Map_Flag__Rehashing);
+  map_flag_enable(map, Map_Flag__Rehashing);
 
   u64 index = 0;
-  old_entry = map_ptr->buckets[index];
+  old_entry = map->buckets[index];
   /* Starting from the first entry of the first bucket, the following cycle will pass
    * over every entry in the map, and will set its corresponding key and value in the
    * new buckets, thus effectively redistributing the load. */
@@ -36,7 +36,7 @@ next_entry:
     goto next_bucket;
 
   map_set_with_buckets(
-    map_ptr, old_entry->key, old_entry->value, old_entry->hash, new_buckets);
+    map, old_entry->key, old_entry->value, old_entry->hash, new_buckets);
 
   if (old_entry->next == NULL)
     goto next_bucket;
@@ -45,16 +45,16 @@ next_entry:
   goto next_entry;
 
 next_bucket:
-  map_free_bucket(map_ptr, map_ptr->buckets[index]);
+  map_free_bucket(map, map->buckets[index]);
   index++;
   if (index >= old_capacity)
     goto assign_new_buckets;
 
-  old_entry = map_ptr->buckets[index];
+  old_entry = map->buckets[index];
   goto next_entry;
 
 assign_new_buckets:
-  free(map_ptr->buckets);
-  map_ptr->buckets = new_buckets;
-  map_flag_disable(map_ptr, Map_Flag__Rehashing);
+  free(map->buckets);
+  map->buckets = new_buckets;
+  map_flag_disable(map, Map_Flag__Rehashing);
 }

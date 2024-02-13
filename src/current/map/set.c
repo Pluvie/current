@@ -1,5 +1,5 @@
 void* map_set (
-    struct map* map_ptr,
+    struct map* map,
     void* key,
     void* value
 )
@@ -14,6 +14,6 @@ void* map_set (
   if (key == NULL)
     return NULL;
 
-  u64 hash = map_ptr->hash(key, map_ptr->key_size);
-  return map_set_with_buckets(map_ptr, key, value, hash, map_ptr->buckets);
+  u64 hash = map->hash(key, map->key_size);
+  return map_set_with_buckets(map, key, value, hash, map->buckets);
 }

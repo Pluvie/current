@@ -1,19 +1,19 @@
 test(map_set_reuse_value_copy_if_key_present) {
 
-  given("a map(i32, i32)")
-    struct map map_ptr = map(i32, i32);
-    map_alloc(&map_ptr);
+  given("a map")
+    struct map map = map_init(i32, i32);
+    map_alloc(&map);
 
   when("the `Map_Flag__Copy_Values` is enabled")
-    map_flag_enable(&map_ptr, Map_Flag__Copy_Values);
+    map_flag_enable(&map, Map_Flag__Copy_Values);
 
   when("a key is already present in the map")
     i32 key = 3;
     i32 value = 7;
-    map_set(&map_ptr, &key, &value);
+    map_set(&map, &key, &value);
 
-    u64 capped_hash = map_ptr.hash(&key, map_ptr.key_size) % map_ptr.capacity;
-    struct map_entry* entry = map_ptr.buckets[capped_hash];
+    u64 capped_hash = map.hash(&key, map.key_size) % map.capacity;
+    struct map_entry* entry = map.buckets[capped_hash];
     void* value_copy_addr = entry->value;
     verify(entry->key == &key);
     verify(entry->value != &value);
@@ -22,7 +22,7 @@ test(map_set_reuse_value_copy_if_key_present) {
 
   calling("map_set() on the same key");
     value = 9;
-    map_set(&map_ptr, &key, &value);
+    map_set(&map, &key, &value);
   
   must("avoid making another copy of the value and instead reuse the already "\
        "allocated memory")
@@ -33,5 +33,5 @@ test(map_set_reuse_value_copy_if_key_present) {
     verify(*((i32*) entry->value) == value);
 
   success()
-    map_free(&map_ptr);
+    map_free(&map);
 }

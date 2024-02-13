@@ -11,6 +11,4 @@ void arena_destroy (
       free(current);
     current = next;
   } while(current != NULL);
-
-  free(arena);
 }

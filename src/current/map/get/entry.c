@@ -1,5 +1,5 @@
 struct map_entry* map_get_entry (
-    struct map* map_ptr,
+    struct map* map,
     void* key
 )
 /**
@@ -10,10 +10,10 @@ struct map_entry* map_get_entry (
   if (key == NULL)
     return NULL;
 
-  size key_size = map_ptr->key_size;
-  u64 hash = map_ptr->hash(key, key_size) % map_ptr->capacity;
-  bool (*compare)(void*, void*, size) = map_ptr->compare;
-  struct map_entry* entry = map_ptr->buckets[hash];
+  size key_size = map->key_size;
+  u64 hash = map->hash(key, key_size) % map->capacity;
+  bool (*compare)(void*, void*, size) = map->compare;
+  struct map_entry* entry = map->buckets[hash];
 
 compare_key:
   if (entry == NULL)

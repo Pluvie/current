@@ -1,5 +1,5 @@
 void map_entry_add (
-    struct map* map_ptr,
+    struct map* map,
     void* key,
     void* value,
     u64 hash,
@@ -18,21 +18,21 @@ void map_entry_add (
  * `MAP_MAXIMUM_LOAD_FACTOR` threshold, then this function shall trigger a rehash,
  * invoking the #map_rehash function. */
 {
-  struct arena* arena = map_ptr->arena;
+  struct arena* arena = map->arena;
   struct map_entry* entry = arena_calloc(arena, 1, sizeof(struct map_entry));
 
-  map_entry_key_set(map_ptr, entry, key);
-  map_entry_value_set(map_ptr, entry, value);
+  map_entry_key_set(map, entry, key);
+  map_entry_value_set(map, entry, value);
   entry->hash = hash;
   *add_location = entry;
 
-  map_ptr->length++;
+  map->length++;
 
   /* Skips load check if already rehashing. */
-  if (map_ptr->flags & Map_Flag__Rehashing)
+  if (map->flags & Map_Flag__Rehashing)
     return;
 
-  d64 map_load = (d64) map_ptr->length / (d64) map_ptr->capacity;
+  d64 map_load = (d64) map->length / (d64) map->capacity;
   if (map_load >= MAP_MAXIMUM_LOAD_FACTOR)
-    map_rehash(map_ptr);
+    map_rehash(map);
 }

@@ -1,5 +1,5 @@
 void map_entry_value_set (
-    struct map* map_ptr,
+    struct map* map,
     struct map_entry* entry,
     void* value
 )
@@ -9,10 +9,10 @@ void map_entry_value_set (
  * If the map has the copy value flag enabled, then this function shall make a copy of
  * the provided *value* and store that copy in the provided *entry*. */
 {
-  if (map_ptr->flags & Map_Flag__Rehashing)
+  if (map->flags & Map_Flag__Rehashing)
     goto do_not_copy;
 
-  if (map_ptr->flags & Map_Flag__Copy_Values)
+  if (map->flags & Map_Flag__Copy_Values)
     goto do_copy;
 
 do_not_copy:
@@ -20,7 +20,7 @@ do_not_copy:
   return;
 
 do_copy:
-  size value_size = map_ptr->value_size;
+  size value_size = map->value_size;
 
   /* The entry *value* is not `NULL`, therefore it was already copied in a previous
    * call of #map_entry_value_set. Even if the `Map_Flag__Copy_Values` is enabled, we
@@ -29,7 +29,7 @@ do_copy:
   if (entry->value != NULL)
     goto reuse_memory;
 
-  void* value_copy = arena_calloc(map_ptr->arena, 1, value_size);
+  void* value_copy = arena_calloc(map->arena, 1, value_size);
   memcpy(value_copy, value, value_size);
   entry->value = value_copy;
   return;

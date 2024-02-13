@@ -1,17 +1,17 @@
 test(map_set_correct_key_value) {
 
-  given("a map(i32, i32)")
-    struct map map_ptr = map(i32, i32);
-    map_alloc(&map_ptr);
+  given("a map")
+    struct map map = map_init(i32, i32);
+    map_alloc(&map);
 
   calling("map_set()");
     i32 key = 3;
     i32 value = 7;
-    map_set(&map_ptr, &key, &value);
+    map_set(&map, &key, &value);
   
   must("set the provided key with the provided value")
-    u64 capped_hash = map_ptr.hash(&key, map_ptr.key_size) % map_ptr.capacity;
-    struct map_entry* entry = map_ptr.buckets[capped_hash];
+    u64 capped_hash = map.hash(&key, map.key_size) % map.capacity;
+    struct map_entry* entry = map.buckets[capped_hash];
 
     verify(entry->key == &key);
     verify(entry->value == &value);
@@ -19,5 +19,5 @@ test(map_set_correct_key_value) {
     verify(*((i32*) entry->value) == value);
 
   success()
-    map_free(&map_ptr);
+    map_free(&map);
 }

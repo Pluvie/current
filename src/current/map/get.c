@@ -1,5 +1,5 @@
 void* map_get (
-    struct map* map_ptr,
+    struct map* map,
     void* key
 )
 /**
@@ -7,7 +7,7 @@ void* map_get (
  *
  * If the key is not present in the map, `NULL` shall be returned. */
 {
-  struct map_entry* entry = map_get_entry(map_ptr, key);
+  struct map_entry* entry = map_get_entry(map, key);
 
   if (entry == NULL)
     return NULL;
