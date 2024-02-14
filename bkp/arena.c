@@ -74,18 +74,18 @@ void test_arena()
 //    success();
 //  }
 
-  test("`calloc()` must allocate the provided amount of bytes, and set them all to 0") {
-    struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
-    byte* data = arena_calloc(arena, 2, 1024);
-    assert(data != NULL);
-    assert(arena->begin->capacity == ARENA_REGION_MIN_CAPACITY);
-    assert(arena->begin->position == 2048);
-    assert(arena->begin->data == data);
-    for (u64 i = 0; i < 2048; i++)
-      assert(data[i] == 0);
-    arena_destroy(arena);
-    success();
-  }
+//  test("`calloc()` must allocate the provided amount of bytes, and set them all to 0") {
+//    struct arena* arena = arena_init(ARENA_REGION_MIN_CAPACITY);
+//    byte* data = arena_calloc(arena, 2, 1024);
+//    assert(data != NULL);
+//    assert(arena->begin->capacity == ARENA_REGION_MIN_CAPACITY);
+//    assert(arena->begin->position == 2048);
+//    assert(arena->begin->data == data);
+//    for (u64 i = 0; i < 2048; i++)
+//      assert(data[i] == 0);
+//    arena_destroy(arena);
+//    success();
+//  }
 
   test("`realloc()` must reallocate the provided memory to the new amount of bytes, "\
        "copying the memory content") {

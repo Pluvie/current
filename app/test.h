@@ -41,6 +41,19 @@
 #define test_function(test_function_name)                                               \
   void test_function_name(void);
 
+#define test_run(test_function_name)                                                    \
+  VT100_SAVE_CURSOR_POS;                                                                \
+  fprintf(stderr, "  "#test_function_name);                                             \
+  test_function_name()
+
+#define given(description)
+#define when(description)
+#define calling(description)
+#define must(description)
+
+#define verify(condition)                                                               \
+  if (!(condition)) { fail(__FILE__, __LINE__, #condition ); }
+
 #define success()                                                                       \
   VT100_RESTORE_CURSOR_POS;                                                             \
   fprintf(stderr, ANSI_COLOR_GREEN);                                                    \
@@ -48,25 +61,6 @@
   fprintf(stderr, ANSI_COLOR_NONE);                                                     \
   fprintf(stderr, "\n");                                                                \
 end_test:
-
-#define given(description)                                                              \
-  VT100_SAVE_CURSOR_POS;                                                                \
-  fprintf(stderr, "  given " description);
-
-#define when(description)                                                               \
-  fprintf(stderr, ", when " description);
-
-#define calling(description)                                                            \
-  fprintf(stderr, ", calling " description);
-
-#define must(description)                                                               \
-  fprintf(stderr, " must " description);
-
-#define describe(description)                                                           \
-  fprintf(stderr, "\n[%s]\n", description)
-
-#define verify(condition)                                                               \
-  if (!(condition)) { fail(__FILE__, __LINE__, #condition ); }
 
 #define fail(location_name, line_num, message)                                          \
   VT100_RESTORE_CURSOR_POS;                                                             \
@@ -88,6 +82,8 @@ test_function( arena_alloc_allocate_begin_region );
 test_function( arena_alloc_provided_capacity );
 test_function( arena_malloc_allocate_by_advancing_position );
 test_function( arena_malloc_allocate_in_next_region );
+test_function( arena_calloc_allocate_at_zero );
+test_function( arena_realloc_reallocate_same_region );
 
 test_function( map_correct_key_size );
 test_function( map_correct_value_size );
