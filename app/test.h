@@ -83,6 +83,12 @@ end_test:
 /**
  * Test functions (cases). */
 
+test_function( arena_init_on_stack );
+test_function( arena_alloc_allocate_begin_region );
+test_function( arena_alloc_provided_capacity );
+test_function( arena_malloc_allocate_by_advancing_position );
+test_function( arena_malloc_allocate_in_next_region );
+
 test_function( map_correct_key_size );
 test_function( map_correct_value_size );
 test_function( map_default_flags );

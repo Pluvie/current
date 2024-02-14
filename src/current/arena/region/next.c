@@ -3,13 +3,9 @@ struct region* arena_region_next (
     u64 amount
 )
 /**
- * Allocates the next region, with given *capacity* of data, in the arena. */
+ * Allocates the next region, with given *amount* of data, in the arena. */
 {
-  u64 capacity = amount < ARENA_REGION_MIN_CAPACITY
-    ? ARENA_REGION_MIN_CAPACITY
-    : amount;
-
-  void* memory = malloc(sizeof(struct region) + capacity);
+  void* memory = malloc(sizeof(struct region) + amount);
   if (memory == NULL)
     return NULL;
 
@@ -17,7 +13,7 @@ struct region* arena_region_next (
   byte* data = (byte*) (region + 1);
 
   region->data = data;
-  region->capacity = capacity;
+  region->capacity = amount;
   region->position = amount;
   region->next = NULL;
 
@@ -26,7 +22,7 @@ struct region* arena_region_next (
 
   arena->number_of_allocs++;
   arena->number_of_regions++;
-  arena->total_size += region->capacity;
+  arena->total_capacity += region->capacity;
 
   return region;
 }

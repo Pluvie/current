@@ -1,15 +1,11 @@
-void arena_alloc (
-    struct arena* arena
+void* arena_alloc (
+    struct arena* arena,
+    u64 capacity
 )
 /**
- * This function shall allocate an arena of given *capacity*. */
+ * This function shall allocate the begin region of an arena, with the provided
+ * *capacity*. */
 {
-  size capacity = arena->capacity;
-  if (capacity < ARENA_REGION_MIN_CAPACITY)
-    capacity = ARENA_REGION_MIN_CAPACITY;
-
-  arena->capacity = capacity;
-
   void* memory = calloc(1, sizeof(struct region) + capacity);
   if (memory == NULL)
     return NULL;
@@ -19,9 +15,10 @@ void arena_alloc (
 
   arena->begin = region;
   arena->end = region;
-  arena->total_size = capacity;
+  arena->total_capacity = capacity;
+
   region->data = data;
   region->capacity = capacity;
 
-  return arena;
+  return data;
 }

@@ -3,8 +3,11 @@ int main (
     char** argv
 )
 {
-  // arena tests here
-  // arena_correct_init();
+  arena_init_on_stack();
+  arena_alloc_allocate_begin_region();
+  arena_alloc_provided_capacity();
+  arena_malloc_allocate_by_advancing_position();
+  arena_malloc_allocate_in_next_region();
 
   map_correct_key_size();
   map_correct_value_size();
