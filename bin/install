@@ -1,6 +1,0 @@
-#!/bin/bash
-bin/compile current               &&
-bin/uninstall > /dev/null         &&
-cp lib/libcurrent.so /usr/lib     &&
-cp -r def/current* /usr/include   &&
-echo "Current installed successfully."

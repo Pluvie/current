@@ -1,0 +1,3 @@
+#!/bin/bash
+bin/compile $1 -o exe/$1
+echo

@@ -1,23 +1,19 @@
-void benchmark_generic (
-    void
+int main (
+    int argc,
+    char** argv
 )
 {
-  fprintf(stderr, "Generic\n");
+  int result = 0;
 
-  map(int, int) benchmark = map_new(int, int);
-  int round_capped = 0;
-  for (int round = 0; round < BENCHMARK_ROUNDS; round++) {
-    round_capped = (round % MAX_KEY_LENGTH) + 1;
-    //fprintf(stderr, ">> [%i] %i\n", round, round_capped);
-    map_set(benchmark, &round_capped, round);
+  for (int a = 0; a < 1000; a++) {
+    for (int i = 0; i < 100000; i++) {
+      for (int j = 0; j < 100; j++) {
+        result = i;
+      }
+    }
   }
 
-  map_debug(benchmark, int, int, "%i", "%i");
-  int test = 4;
-  fprintf(stderr, "TESTTT >>> %i: %i\n", test, map_get(benchmark, &test));
-  fprintf(stderr, "TESTTT >>> %i: %i\n", test, benchmark[4]);
+  fprintf(stderr, "done: %i\n", result);
 
-  map_print(benchmark, int, __map_identity_print, int, __map_identity_print);
-
-  map_free(benchmark);
+  return 0;
 }

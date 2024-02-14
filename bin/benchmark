@@ -1,5 +1,23 @@
 #!/bin/bash
-bin/compile current &&
-bin/compile benchmark -o exe/benchmark  &&
-exe/benchmark ${@:1}
+echo "Compiling C."
+bin/compile benchmark/generic -o exe/benchmark/generic-c -O3
+bin/compile benchmark/insert -o exe/benchmark/insert-c -O3
+bin/compile benchmark/lookup -o exe/benchmark/lookup-c -O3
+
+echo "Compiling Go."
+go build -o exe/benchmark/generic-go app/benchmark/generic.go
+go build -o exe/benchmark/insert-go app/benchmark/insert.go
+go build -o exe/benchmark/lookup-go app/benchmark/lookup.go
+
+echo
+echo "Running C."
+#\time -v exe/benchmark/generic-c
+\time -v exe/benchmark/insert-c
+#\time -v exe/benchmark/lookup-c
+
+echo
+echo "Running Go."
+#\time -v exe/benchmark/generic-go
+\time -v exe/benchmark/insert-go
+#\time -v exe/benchmark/lookup-go
 echo

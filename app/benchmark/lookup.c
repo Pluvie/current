@@ -1,48 +1,21 @@
-struct user {
-  uint32 id;
-  uint32 age;
-  char name[32];
-};
-
-uint32 user_hash (
-    void* user
+int main (
+    int argc,
+    char** argv
 )
 {
-  return ((struct user*) user)->id;
-}
+  u64 result = 0;
+  struct map map = map_init(i32, i32);
+  map_alloc(&map);
 
-bool user_compare (
-    void* u1,
-    void* u2
-)
-{
-  if (u1 == NULL || u2 == NULL) return false;
-  return ((struct user*) u1)->id == ((struct user*) u2)->id;
-}
+  for (u64 a = 0; a < 10; a++) {
+    for (u64 i = 0; i < 100000; i++) {
+      for (u64 j = 0; j < 100; j++) {
+        map_set(&map, &j, &i);
+        result = *(i32*) map_get(&map, &j);
+      }
+    }
+  }
 
-void user_print (
-    struct user user
-)
-{
-  fprintf(stderr, "{%i, %i, %s}", user.id, user.age, user.name);
-}
-
-void benchmark_lookup (
-    void
-)
-{
-  fprintf(stderr, "Lookup\n");
-
-  map(struct user, int) user_ages = map_new(struct user, int);
-  map_config(user_ages, user_hash, user_compare);
-  
-  struct user toni = { .id = 11, .age = 33, .name = "Toni" };
-  map_set(user_ages, &toni, toni.age);
-  fprintf(stderr, ">>> %i\n", map_get(user_ages, &toni));
-
-  map_print(user_ages, struct user, user_print, int, __map_identity_print);
-
-  fprintf(stderr, "CHECK: %i\n", user_ages[0] == 0);
-  
-  map_free(user_ages);
+  fprintf(stderr, "done: %li\n", result);
+  return 0;
 }

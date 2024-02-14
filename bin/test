@@ -1,8 +1,0 @@
-#!/bin/bash
-bin/compile test -g -o exe/test  &&
-valgrind                    \
-  --track-origins=yes       \
-  --leak-check=full         \
-  --show-leak-kinds=all     \
-  exe/test ${@:1}
-echo
