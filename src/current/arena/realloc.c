@@ -91,12 +91,13 @@ void* arena_realloc (
    * */
   else {
     amount_to_copy = (memory_region->data + memory_region->capacity) - (byte*) memory;
-    if (amount_to_copy > memory_region->capacity)
-      amount_to_copy = memory_region->capacity;
+    struct region* end_region = arena->end;
+    if (amount_to_copy > end_region->capacity)
+      amount_to_copy = end_region->capacity;
     goto exec_copy;
   }
 
 exec_copy:
-  memmove(new_memory, memory, amount_to_copy);
+  memcpy(new_memory, memory, amount_to_copy);
   return new_memory;
 }

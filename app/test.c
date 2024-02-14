@@ -9,7 +9,11 @@ int main (
   test_run( arena_malloc_allocate_by_advancing_position );
   test_run( arena_malloc_allocate_in_next_region );
   test_run( arena_calloc_allocate_at_zero );
+  test_run( arena_realloc_copy_reallocated_memory );
   test_run( arena_realloc_reallocate_same_region );
+  test_run( arena_realloc_no_copy_overlap_same_region );
+  test_run( arena_realloc_reallocate_end_region );
+  test_run( arena_realloc_no_copy_overlap_old_region );
 
   test_run( map_correct_key_size );
   test_run( map_correct_value_size );

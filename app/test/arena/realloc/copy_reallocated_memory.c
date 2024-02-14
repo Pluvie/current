@@ -1,4 +1,4 @@
-test(arena_realloc_reallocate_same_region) {
+test(arena_realloc_copy_reallocated_memory) {
 
   given("an arena")
     struct arena arena = arena_init();
@@ -7,15 +7,14 @@ test(arena_realloc_reallocate_same_region) {
   when("some allocated memory is present in the end region");
     arena_malloc(&arena, 32);
     byte* data = arena_malloc(&arena, 16);
-
-  when("there is enough space in the end region");
-    verify(arena.end->position == 48);
+    memset(data, '\7', 16);
   
   calling("arena_realloc() on the previously allocated memory")
     data = arena_realloc(&arena, data, 32);
   
-  must("reallocate the memory with the provided amount in the same region")
-    verify(arena.end->position == 80);
+  must("reallocate the memory with the provided amount and copy its content")
+    for (u64 i = 0; i < 16; i++)
+      verify(data[i] == '\7');
 
   success()
     arena_destroy(&arena);

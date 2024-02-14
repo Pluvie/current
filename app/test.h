@@ -46,10 +46,10 @@
   fprintf(stderr, "  "#test_function_name);                                             \
   test_function_name()
 
-#define given(description)
-#define when(description)
-#define calling(description)
-#define must(description)
+#define given(description)    fprintf(stderr, " "); fprintf(stderr, "%c\b", ASCII_ESC);
+#define when(description)     fprintf(stderr, " "); fprintf(stderr, "%c\b", ASCII_ESC);
+#define calling(description)  fprintf(stderr, " "); fprintf(stderr, "%c\b", ASCII_ESC);
+#define must(description)     fprintf(stderr, " "); fprintf(stderr, "%c\b", ASCII_ESC);
 
 #define verify(condition)                                                               \
   if (!(condition)) { fail(__FILE__, __LINE__, #condition ); }
@@ -83,7 +83,11 @@ test_function( arena_alloc_provided_capacity );
 test_function( arena_malloc_allocate_by_advancing_position );
 test_function( arena_malloc_allocate_in_next_region );
 test_function( arena_calloc_allocate_at_zero );
+test_function( arena_realloc_copy_reallocated_memory );
 test_function( arena_realloc_reallocate_same_region );
+test_function( arena_realloc_no_copy_overlap_same_region );
+test_function( arena_realloc_reallocate_end_region );
+test_function( arena_realloc_no_copy_overlap_old_region );
 
 test_function( map_correct_key_size );
 test_function( map_correct_value_size );
