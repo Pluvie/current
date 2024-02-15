@@ -1,4 +1,4 @@
-u64 map_generic_hash (
+inline u64 map_hash (
     void* key,
     size key_size
 )

@@ -27,10 +27,9 @@ void* map_set_with_buckets (
   return value;
 
 search_entry:
-  bool (*compare)(void*, void*, size) = map->compare;
 
 compare_key:
-  if (compare(entry->key, key, key_size)) {
+  if (map_compare(entry->key, key, key_size)) {
     map_entry_value_set(map, entry, value);
     return value;
   }

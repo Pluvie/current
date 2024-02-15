@@ -14,6 +14,6 @@ void* map_set (
   if (key == NULL)
     return NULL;
 
-  u64 hash = map->hash(key, map->key_size);
+  u64 hash = map_hash(key, map->key_size);
   return map_set_with_buckets(map, key, value, hash, map->buckets);
 }

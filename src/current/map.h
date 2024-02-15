@@ -12,9 +12,7 @@
  * and *value_type*. */
 #define map_init(key_type, value_type)  \
   { .key_size = sizeof(key_type),       \
-    .value_size = sizeof(value_type),   \
-    .hash = map_generic_hash,           \
-    .compare = map_generic_compare }
+    .value_size = sizeof(value_type) }
 
 /**
  * Defines the defaul initial capacity of a map, if not specified by the programmer. */
@@ -38,8 +36,6 @@ struct map {
   u64   capacity;
   size  key_size;
   size  value_size;
-  u64   (*hash)(void*, size);
-  bool  (*compare)(void*, void*, size);
   u32   flags;
   struct arena* arena;
   struct map_entry** buckets;
@@ -78,6 +74,7 @@ enum map_flags {
 /**
  * All map function definitions. */
 function( map_alloc,                void              )(  struct map*                                           );
+function( map_compare,              bool              )(  void*, void*, size                                    );
 function( map_del,                  void*             )(  struct map*, void*                                    );
 function( map_entry_add,            void              )(  struct map*, void*, void*, u64, struct map_entry**    );
 function( map_entry_key_set,        void              )(  struct map*, struct map_entry*, void*                 );
@@ -85,11 +82,10 @@ function( map_entry_value_set,      void              )(  struct map*, struct ma
 function( map_free,                 void              )(  struct map*                                           );
 function( map_free_bucket,          void              )(  struct map*, struct map_entry*                        );
 function( map_free_entry,           void              )(  struct map*, struct map_entry*                        );
-function( map_generic_compare,      bool              )(  void*, void*, size                                    );
-function( map_generic_hash,         u64               )(  void*, size                                           );
 function( map_get,                  void*             )(  struct map*, void*                                    );
 function( map_get_entry,            struct map_entry* )(  struct map*, void*                                    );
 function( map_has,                  bool              )(  struct map*, void*                                    );
+function( map_hash,                 u64               )(  void*, size                                           );
 function( map_pretty_print,         void              )(  struct map*                                           );
 function( map_pretty_print_bucket,  void              )(  size, size, u64, struct map_entry*                    );
 function( map_pretty_print_entry,   void              )(  size, size, u64, struct map_entry*                    );

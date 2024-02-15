@@ -3,20 +3,21 @@ int main (
     char** argv
 )
 {
-  u64 result = 0;
+  i32 result = 0;
   struct map map = map_init(i32, i32);
-  map.capacity = 300000;
+  map.capacity = 1024;
   map_flag_enable(&map, Map_Flag__Copy_Keys);
   map_flag_enable(&map, Map_Flag__Copy_Values);
   map_alloc(&map);
 
-  for (u64 i = 0; i < 300000; i++) {
-    for (u64 j = 0; j < 1000; j++) {
-      map_set(&map, &i, &j);
+  for (i32 i = 0; i < 300000; i++) {
+    for (i32 j = 0; j < 1000; j++) {
+      map_set(&map, &j, &i);
     }
-    result = i;
   }
 
-  fprintf(stderr, "done: %li\n", result);
+  int key = 999;
+  result = *(i32*) map_get(&map, &key);
+  fprintf(stderr, "done: %i\n", result);
   return 0;
 }

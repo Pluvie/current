@@ -1,12 +1,8 @@
 #!/bin/bash
-gcc app/$1.c                      \
-  $(find src/current -name "*.c"  \
-    | tr '\n' ' ')                \
-  $(find app/$1 -name "*.c"       \
-    | tr '\n' ' ')                \
-  -include "src/current.h"        \
-  -include "app/$1.h"             \
-  -Wall                           \
-  -Wno-unused-label               \
-  -Werror                         \
+gcc app/$1.c                \
+  src/current.c             \
+  -include "src/current.h"  \
+  -Wall                     \
+  -Wno-unused-label         \
+  -Werror                   \
   ${@:2}

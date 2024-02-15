@@ -1,4 +1,4 @@
-bool map_generic_compare (
+inline bool map_compare (
     void* key_1,
     void* key_2,
     size key_size

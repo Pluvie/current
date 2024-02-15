@@ -12,14 +12,13 @@ bool map_has (
     return NULL;
 
   size key_size = map->key_size;
-  u64 hash = map->hash(key, key_size) % map->capacity;
-  bool (*compare)(void*, void*, size) = map->compare;
+  u64 hash = map_hash(key, key_size) % map->capacity;
   struct map_entry* entry = map->buckets[hash];
 
 compare_key:
   if (entry == NULL)
     return false;
-  if (compare(entry->key, key, key_size))
+  if (map_compare(entry->key, key, key_size))
     return true;
 
   entry = entry->next;

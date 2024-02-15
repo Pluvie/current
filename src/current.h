@@ -25,6 +25,5 @@
 #include "current/preamble.h"
 #include "current/arena.h"
 #include "current/map.h"
-//#include "current/vector.h"
 
 #endif

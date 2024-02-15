@@ -12,8 +12,7 @@ void* map_del (
     return NULL;
 
   size key_size = map->key_size;
-  u64 hash = map->hash(key, key_size) % map->capacity;
-  bool (*compare)(void*, void*, size) = map->compare;
+  u64 hash = map_hash(key, key_size) % map->capacity;
   struct map_entry* entry = map->buckets[hash];
   struct map_entry* previous_entry = NULL;
   void* deleted_value = NULL;
@@ -21,7 +20,7 @@ void* map_del (
 compare_key:
   if (entry == NULL)
     return NULL;
-  if (compare(entry->key, key, key_size)) {
+  if (map_compare(entry->key, key, key_size)) {
     deleted_value = entry->value;
     goto delete_entry;
   }
