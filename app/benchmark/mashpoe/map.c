@@ -1,5 +1,3 @@
-#include "./insert-lib.h"
-
 //
 //  map.h
 //
@@ -400,22 +398,3 @@ void hashmap_iterate(hashmap* m, hashmap_callback c, void* user_ptr)
 	fflush(stdout);
 }*/
 
-int main (
-    int argc,
-    char** argv
-)
-{
-  uintptr_t result = 0;
-  hashmap* map = hashmap_create();
-
-  for (int i = 0; i < 300000; i++) {
-    for (int j = 0; j < 1000; j++) {
-      hashmap_set(map, (char*) &j, sizeof(j), i);
-    }
-  }
-
-  int key = 999;
-  hashmap_get(map, (char*) &key, sizeof(key), &result);
-  fprintf(stderr, "done: %i\n", (int) result);
-  return 0;
-}

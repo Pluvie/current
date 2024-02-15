@@ -1,30 +1,23 @@
 #!/bin/bash
-echo "Compiling C."
-#bin/compile benchmark/generic -o exe/benchmark/generic-c -O3
-bin/compile benchmark/insert -o exe/benchmark/insert-c -O3
-#bin/compile benchmark/lookup -o exe/benchmark/lookup-c -O3
-
-echo "Compiling C lib."
-bin/compile benchmark/insert-lib -o exe/benchmark/insert-c-lib -O3
-
-echo "Compiling Go."
-#go build -o exe/benchmark/generic-go app/benchmark/generic.go
-go build -o exe/benchmark/insert-go app/benchmark/insert.go
-#go build -o exe/benchmark/lookup-go app/benchmark/lookup.go
+echo "Compiling."
+bin/compile benchmark/current -o exe/benchmark/current -O3
+bin/compile benchmark/mashpoe -o exe/benchmark/mashpoe -O3
+bin/compile benchmark/tidwall -o exe/benchmark/tidwall -O3
+go build -o exe/benchmark/go app/benchmark/go.go
 
 echo
-echo "Running C."
-#\time -v exe/benchmark/generic-c
-\time -v exe/benchmark/insert-c
-#\time -v exe/benchmark/lookup-c
+echo "Running C Current."
+\time -v exe/benchmark/current
 
 echo
-echo "Running C lib."
-\time -v exe/benchmark/insert-c-lib
+echo "Running C Mashpoe."
+\time -v exe/benchmark/mashpoe
+
+echo
+echo "Running C Tidwall."
+\time -v exe/benchmark/tidwall
 
 echo
 echo "Running Go."
-#\time -v exe/benchmark/generic-go
-\time -v exe/benchmark/insert-go
-#\time -v exe/benchmark/lookup-go
+\time -v exe/benchmark/go
 echo

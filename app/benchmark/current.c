@@ -1,6 +1,16 @@
+void insert(void);
+
 int main (
     int argc,
     char** argv
+)
+{
+  insert();
+  return 0;
+}
+
+void insert (
+    void
 )
 {
   i32 result = 0;
@@ -19,5 +29,4 @@ int main (
   int key = 999;
   result = *(i32*) map_get(&map, &key);
   fprintf(stderr, "done: %i\n", result);
-  return 0;
 }

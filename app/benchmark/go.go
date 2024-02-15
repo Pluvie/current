@@ -5,6 +5,10 @@ import (
 )
 
 func main() {
+  insert();
+}
+
+func insert() {
   m := make(map[int]int)
   result := 0
 
