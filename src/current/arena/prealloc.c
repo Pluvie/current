@@ -15,9 +15,13 @@ void* arena_prealloc (
   if (available_space >= amount)
     return last_region->data + last_region->position;
 
-  struct region* region = arena_region_next(arena, amount);
+allocate_new_region:
+  struct region* region = arena_region_alloc(arena, amount);
   if (region == NULL)
     return NULL;
+
+  arena->end->next = region;
+  arena->end = region;
 
   return region->data;
 }

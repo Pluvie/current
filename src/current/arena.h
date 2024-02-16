@@ -33,5 +33,6 @@ function( arena_destroy,          void            )(  struct arena*             
 function( arena_malloc,           void*           )(  struct arena*, u64          );
 function( arena_prealloc,         void*           )(  struct arena*, u64          );
 function( arena_realloc,          void*           )(  struct arena*, void*, u64   );
+function( arena_region_alloc,     struct region*  )(  struct arena*, u64          );
 function( arena_region_next,      struct region*  )(  struct arena*, u64          );
 function( arena_region_search,    struct region*  )(  struct arena*, void*        );

@@ -3,26 +3,17 @@ struct region* arena_region_next (
     u64 amount
 )
 /**
- * Allocates the next region, with given *amount* of data, in the arena. */
+ * Allocates the next region, with given *amount* of data, in the arena, and marks
+ * its position to the *amount* -- which means that the region is full. */
 {
-  void* memory = malloc(sizeof(struct region) + amount);
-  if (memory == NULL)
+  struct region* region = arena_region_alloc(arena, amount);
+  if (region == NULL)
     return NULL;
-
-  struct region* region = (struct region*) memory;
-  byte* data = (byte*) (region + 1);
-
-  region->data = data;
-  region->capacity = amount;
-  region->position = amount;
-  region->next = NULL;
 
   arena->end->next = region;
   arena->end = region;
 
-  arena->number_of_allocs++;
-  arena->number_of_regions++;
-  arena->total_capacity += region->capacity;
+  region->position = amount;
 
   return region;
 }

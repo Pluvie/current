@@ -39,12 +39,12 @@ void capacity (
 {
   i32* result = 0;
   struct arena arena = arena_init();
-  arena_alloc(&arena, 8388608 * sizeof(i32) * 2);
+  arena_alloc(&arena, 0);
   struct map map = map_init(i32, i32);
   map.capacity = 3000000;
   map.arena = &arena;
-  map_flag_enable(&map, Map_Flag__Copy_Keys);
-  map_flag_enable(&map, Map_Flag__Copy_Values);
+  //map_flag_enable(&map, Map_Flag__Copy_Keys);
+  //map_flag_enable(&map, Map_Flag__Copy_Values);
   map_alloc(&map);
 
   for (i32 i = 0; i < 3000000; i++) {

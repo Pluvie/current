@@ -6,12 +6,11 @@ void* arena_alloc (
  * This function shall allocate the begin region of an arena, with the provided
  * *capacity*. */
 {
-  void* memory = calloc(1, sizeof(struct region) + capacity);
-  if (memory == NULL)
+  struct region* region = arena_region_alloc(arena, capacity);
+  if (region == NULL)
     return NULL;
 
-  struct region* region = (struct region*) (memory);
-  byte* data = (byte*) (region + 1);
+  byte* data = region->data;
 
   arena->begin = region;
   arena->end = region;

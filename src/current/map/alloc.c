@@ -13,13 +13,18 @@ void map_alloc (
   if ((d64) map->capacity / (d64) initial_capacity >= MAP_MAXIMUM_LOAD_FACTOR)
     initial_capacity *= 2;
 
-  if (arena == NULL)
-    goto set_capacity_and_alloc;
-
-  fprintf(stderr, "arena!!\n");
-
-set_capacity_and_alloc:
-  fprintf(stderr, "alloc %li\n", initial_capacity);
   map->capacity = initial_capacity;
+
+  if (arena == NULL)
+    goto alloc_buckets_only;
+
+  size footprint =
+    (initial_capacity * sizeof(struct map_entry*)) +
+    (initial_capacity * sizeof(struct map_entry)) +
+    (initial_capacity * map->key_size) +
+    (initial_capacity * map->value_size);
+  arena_prealloc(arena, footprint);
+
+alloc_buckets_only:
   map->buckets = arena_calloc(arena, initial_capacity, sizeof(struct map_entry*));
 }

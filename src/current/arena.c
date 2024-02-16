@@ -5,11 +5,12 @@
  * If the compiler sees all the single .c files as a single entity (this file) it is
  * able to do inlining optimizations. */
 
+#include "./arena/alloc.c"
 #include "./arena/calloc.c"
-#include "./arena/region/search.c"
-#include "./arena/region/next.c"
-#include "./arena/prealloc.c"
-#include "./arena/realloc.c"
 #include "./arena/destroy.c"
 #include "./arena/malloc.c"
-#include "./arena/alloc.c"
+#include "./arena/prealloc.c"
+#include "./arena/realloc.c"
+#include "./arena/region/alloc.c"
+#include "./arena/region/next.c"
+#include "./arena/region/search.c"
