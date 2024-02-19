@@ -20,9 +20,13 @@ void map_alloc (
 
   size footprint =
     (initial_capacity * sizeof(struct map_entry*)) +
-    (initial_capacity * sizeof(struct map_entry)) +
-    (initial_capacity * map->key_size) +
-    (initial_capacity * map->value_size);
+    (initial_capacity * sizeof(struct map_entry));
+
+  if (map->flags & Map_Flag__Copy_Keys)
+    footprint += (initial_capacity * map->key_size);
+  if (map->flags & Map_Flag__Copy_Values)
+    footprint += (initial_capacity * map->value_size);
+
   arena_prealloc(arena, footprint);
 
 alloc_buckets_only:
