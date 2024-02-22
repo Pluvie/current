@@ -17,10 +17,6 @@ typedef ptrdiff_t     size;
 typedef size_t        usize;
 
 /**
- * Alias for strings. */
-#define string char*
-
-/**
  * Useful general macros. */
 #define function(name, type)  type name
 #define countof(name)         (sizeof(name) / sizeof(*(name)))
