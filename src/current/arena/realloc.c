@@ -8,6 +8,8 @@ void* arena_realloc (
 {
   if (arena == NULL)
     return realloc(memory, amount);
+  if (memory == NULL)
+    return arena_malloc(arena, amount);
 
   struct region* memory_region = arena_region_search(arena, memory);
   if (memory_region == NULL)
