@@ -17,7 +17,7 @@ inline void* map_set_with_buckets (
   if (key == NULL)
     return NULL;
 
-  u64 capped_hash = hash % map->capacity;
+  u64 capped_hash = map_capped_hash(hash, map->capacity);
   size key_size = map->key_size;
   struct map_entry* entry = buckets[capped_hash];
   if (entry != NULL)

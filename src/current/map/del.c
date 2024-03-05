@@ -12,8 +12,9 @@ void* map_del (
     return NULL;
 
   size key_size = map->key_size;
-  u64 hash = map_hash(key, key_size) % map->capacity;
-  struct map_entry* entry = map->buckets[hash];
+  u64 hash = map_hash(key, key_size);
+  u64 capped_hash = map_capped_hash(hash, map->capacity);
+  struct map_entry* entry = map->buckets[capped_hash];
   struct map_entry* previous_entry = NULL;
   void* deleted_value = NULL;
 
@@ -31,7 +32,7 @@ compare_key:
 
 delete_entry:
   if (previous_entry == NULL)
-    map->buckets[hash] = entry->next;
+    map->buckets[capped_hash] = entry->next;
   else
     previous_entry->next = entry->next;
 

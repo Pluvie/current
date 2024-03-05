@@ -11,8 +11,9 @@ struct map_entry* map_get_entry (
     return NULL;
 
   size key_size = map->key_size;
-  u64 hash = map_hash(key, key_size) % map->capacity;
-  struct map_entry* entry = map->buckets[hash];
+  u64 hash = map_hash(key, key_size);
+  u64 capped_hash = map_capped_hash(hash, map->capacity);
+  struct map_entry* entry = map->buckets[capped_hash];
 
 compare_key:
   if (entry == NULL)

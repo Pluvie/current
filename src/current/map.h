@@ -74,6 +74,7 @@ enum map_flags {
 /**
  * All map function definitions. */
 function( map_alloc,                void              )(  struct map*                                           );
+function( map_capped_hash,          u64               )(  i64, u64                                              );
 function( map_compare,              bool              )(  void*, void*, size                                    );
 function( map_del,                  void*             )(  struct map*, void*                                    );
 function( map_entry_add,            void              )(  struct map*, void*, void*, u64, struct map_entry**    );

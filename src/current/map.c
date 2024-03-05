@@ -13,6 +13,7 @@
 #include "./map/free.c"
 #include "./map/free/bucket.c"
 #include "./map/free/entry.c"
+#include "./map/generic/capped_hash.c"
 #include "./map/generic/compare.c"
 #include "./map/generic/hash.c"
 #include "./map/get.c"
