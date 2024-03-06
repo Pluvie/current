@@ -1,4 +1,4 @@
-test(map_correct_key_size) {
+test(map_init_correct_key_size) {
 
   given("a map")
     struct map map = map_init(i32, i32);

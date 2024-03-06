@@ -1,4 +1,4 @@
-test(map_provided_flags) {
+test(map_init_provided_flags) {
 
   given("a map")
     struct map map = map_init(i32, i32);
