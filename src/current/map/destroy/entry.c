@@ -1,4 +1,4 @@
-void map_free_entry (
+void map_destroy_entry (
     struct map* map,
     struct map_entry* entry
 )

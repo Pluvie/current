@@ -17,5 +17,5 @@ test(map_get_retrieve_value) {
     verify(*(i32*) retrieved_value == value);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

@@ -11,6 +11,7 @@
 #include "./test/arena/realloc/reallocate_end_region.c"
 #include "./test/arena/realloc/no_copy_overlap_old_region.c"
 #include "./test/vector/init/correct_element_size.c"
+#include "./test/vector/create/default_capacity.c"
 #include "./test/map/init/correct_key_size.c"
 #include "./test/map/init/correct_value_size.c"
 #include "./test/map/init/default_flags.c"
@@ -52,7 +53,8 @@ int main (
   test_run( arena_realloc_reallocate_end_region );
   test_run( arena_realloc_no_copy_overlap_old_region );
 
-  test_run( vector_correct_element_size );
+  test_run( vector_init_correct_element_size );
+  test_run( vector_create_default_capacity );
 
   test_run( map_correct_key_size );
   test_run( map_correct_value_size );

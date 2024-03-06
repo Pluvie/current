@@ -34,5 +34,5 @@ test(map_set_reuse_value_copy_if_key_present) {
     verify(*((i32*) entry->value) == value);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

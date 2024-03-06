@@ -9,5 +9,5 @@ test(map_correct_value_size) {
     verify(map.value_size == sizeof(i32));
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

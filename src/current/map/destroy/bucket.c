@@ -1,4 +1,4 @@
-void map_free_bucket (
+void map_destroy_bucket (
     struct map* map,
     struct map_entry* entry
 )
@@ -8,6 +8,6 @@ void map_free_bucket (
   if (entry == NULL)
     return;
 
-  map_free_bucket(map, entry->next);
-  map_free_entry(map, entry);
+  map_destroy_bucket(map, entry->next);
+  map_destroy_entry(map, entry);
 }

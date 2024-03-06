@@ -11,5 +11,5 @@ test(map_default_flags) {
     verify(map.flags == Map_Flag__None);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

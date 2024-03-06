@@ -80,9 +80,9 @@ function( map_del,                  void*             )(  struct map*, void*    
 function( map_entry_add,            void              )(  struct map*, void*, void*, u64, struct map_entry**    );
 function( map_entry_key_set,        void              )(  struct map*, struct map_entry*, void*                 );
 function( map_entry_value_set,      void              )(  struct map*, struct map_entry*, void*                 );
-function( map_free,                 void              )(  struct map*                                           );
-function( map_free_bucket,          void              )(  struct map*, struct map_entry*                        );
-function( map_free_entry,           void              )(  struct map*, struct map_entry*                        );
+function( map_destroy,              void              )(  struct map*                                           );
+function( map_destroy_bucket,       void              )(  struct map*, struct map_entry*                        );
+function( map_destroy_entry,        void              )(  struct map*, struct map_entry*                        );
 function( map_get,                  void*             )(  struct map*, void*                                    );
 function( map_get_entry,            struct map_entry* )(  struct map*, void*                                    );
 function( map_has,                  bool              )(  struct map*, void*                                    );

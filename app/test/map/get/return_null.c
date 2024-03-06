@@ -14,5 +14,5 @@ test(map_get_return_null) {
     verify(retrieved_value == NULL);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

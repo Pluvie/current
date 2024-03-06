@@ -23,5 +23,5 @@ test(map_set_rehash_trigger) {
     }
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

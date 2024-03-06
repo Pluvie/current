@@ -71,5 +71,6 @@ function( vector_add,             void                    )(  struct vector*, vo
 function( vector_del,             void                    )(  struct vector*, u64                           );
 function( vector_get,             void*                   )(  struct vector*, u64                           );
 function( vector_get_for_each,    bool                    )(  struct vector*, u64, void**                   );
+function( vector_pretty_print,    void                    )(  struct vector*                                );
 function( vector_resize,          void                    )(  struct vector*                                );
 function( vector_set,             bool                    )(  struct vector*, u64, void*                    );

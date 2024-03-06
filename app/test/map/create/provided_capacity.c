@@ -14,5 +14,5 @@ test(map_create_provided_capacity) {
     verify(map.capacity == 16);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

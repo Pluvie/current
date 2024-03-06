@@ -36,6 +36,6 @@ delete_entry:
   else
     previous_entry->next = entry->next;
 
-  map_free_entry(map, entry);
+  map_destroy_entry(map, entry);
   return deleted_value;
 }

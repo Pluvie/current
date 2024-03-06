@@ -16,5 +16,5 @@ test(map_del_do_nothing) {
     verify(map.length == map_length);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

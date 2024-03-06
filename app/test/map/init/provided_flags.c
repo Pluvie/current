@@ -14,5 +14,5 @@ test(map_provided_flags) {
     verify(map.flags & Map_Flag__Copy_Values);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

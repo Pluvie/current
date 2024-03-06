@@ -1,4 +1,4 @@
-test(vector_correct_element_size) {
+test(vector_init_correct_element_size) {
 
   given("a vector")
     struct vector vector = vector_init(i32);

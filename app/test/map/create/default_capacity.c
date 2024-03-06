@@ -12,5 +12,5 @@ test(map_create_default_capacity) {
     verify(map.capacity == MAP_DEFAULT_CAPACITY);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

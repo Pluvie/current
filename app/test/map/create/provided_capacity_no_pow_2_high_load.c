@@ -16,5 +16,5 @@ test(map_create_provided_capacity_no_pow_2_high_load) {
     verify(map.capacity == 64);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

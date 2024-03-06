@@ -31,5 +31,5 @@ test(map_set_avoid_copying_key_if_present) {
     verify(*((i32*) entry->value) == value);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

@@ -13,5 +13,5 @@ test(map_create_provided_capacity_inferior_to_minimum) {
     verify(map.capacity == MAP_DEFAULT_CAPACITY);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

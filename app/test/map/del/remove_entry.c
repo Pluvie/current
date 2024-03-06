@@ -19,5 +19,5 @@ test(map_del_remove_entry) {
     verify(*(i32*) deleted_value == value);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

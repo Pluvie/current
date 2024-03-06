@@ -16,5 +16,5 @@ test(map_has_true_if_key_present) {
     verify(result == true);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

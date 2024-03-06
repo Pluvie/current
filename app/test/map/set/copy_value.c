@@ -25,5 +25,5 @@ test(map_set_copy_value) {
     verify(*((i32*) entry->value) == value);
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

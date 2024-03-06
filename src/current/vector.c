@@ -13,5 +13,6 @@
 #include "./vector/del.c"
 #include "./vector/get.c"
 #include "./vector/get_for_each.c"
+#include "./vector/pretty_print.c"
 #include "./vector/resize.c"
 #include "./vector/set.c"

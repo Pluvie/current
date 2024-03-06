@@ -40,5 +40,5 @@ test(map_set_rehash_avoid_double_copy) {
     }
 
   success()
-    map_free(&map);
+    map_destroy(&map);
 }

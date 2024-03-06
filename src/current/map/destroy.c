@@ -1,4 +1,4 @@
-void map_free (
+void map_destroy (
     struct map* map
 )
 /**
@@ -8,6 +8,6 @@ void map_free (
     return;
 
   for (i64 i = 0; i < map->capacity; i++)
-    map_free_bucket(map, map->buckets[i]);
+    map_destroy_bucket(map, map->buckets[i]);
   free(map->buckets);
 }
