@@ -8,6 +8,7 @@ void vector_del (
   if (element == NULL)
     return;
 
+  vector->length--;
   element->used = false;
 
   if (vector->flags & Vector_Flag__Copy_Elements)
