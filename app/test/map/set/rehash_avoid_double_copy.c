@@ -2,7 +2,7 @@ test(map_set_rehash_avoid_double_copy) {
 
   given("a map")
     struct map map = map_init(i32, i32);
-    map_alloc(&map);
+    map_create(&map);
 
   when("the `Map_Flag__Copy_Keys` is enabled")
     map_flag_enable(&map, Map_Flag__Copy_Keys);

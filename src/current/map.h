@@ -8,8 +8,8 @@
                                                                                       **/
 
 /**
- * Defines the `map` macro to declare and create a new map with the given *key_type*
- * and *value_type*. */
+ * Defines the `map_init` macro to initialize a new map with the given *key_type* and
+ * *value_type*. */
 #define map_init(key_type, value_type)  \
   { .key_size = sizeof(key_type),       \
     .value_size = sizeof(value_type) }
@@ -73,7 +73,7 @@ enum map_flags {
 
 /**
  * All map function definitions. */
-function( map_alloc,                void              )(  struct map*                                           );
+function( map_create,               void              )(  struct map*                                           );
 function( map_capped_hash,          u64               )(  i64, u64                                              );
 function( map_compare,              bool              )(  void*, void*, size                                    );
 function( map_del,                  void*             )(  struct map*, void*                                    );

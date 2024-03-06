@@ -1,0 +1,75 @@
+/**
+          ____    ____  _______   ______ .___________.  ______   .______      
+        \   \  /   / |   ____| /      ||           | /  __  \  |   _  \     
+         \   \/   /  |  |__   |  ,----'`---|  |----`|  |  |  | |  |_)  |    
+          \      /   |   __|  |  |         |  |     |  |  |  | |      /     
+           \    /    |  |____ |  `----.    |  |     |  `--'  | |  |\  \----.
+            \__/     |_______| \______|    |__|      \______/  | _| `._____|
+        
+                                                                                      **/
+/**
+ * Defines the `vector_init` macro to initialize new vector with the given
+ * *element_type*. */
+#define vector_init(element_type)  \
+  { .element_size = sizeof(element_type) }
+
+/**
+ * Defines the defaul initial capacity of a vector, if not specified by the
+ * programmer. */
+#define VECTOR_DEFAULT_CAPACITY 8
+
+struct vector {
+  u64   capacity;
+  u64   length;
+  size  element_size;
+  u32   flags;
+  struct arena* arena;
+  struct vector_element* elements;
+};
+
+struct vector_element {
+  void* value;
+  bool  used;
+};
+
+/**
+ * Defines all the flags used to tweak and configure the vector behaviour. */
+enum vector_flags {
+  Vector_Flag__None           = 0,
+  Vector_Flag__Copy_Elements  = 1 << 1,
+};
+
+/**
+ * Defines a macro to enable the provided flag in the vector. */
+#define vector_flag_enable(vector, flag) \
+  (vector)->flags |= (flag)
+
+/**
+ * Defines a macro to disable the provided flag in the vector. */
+#define vector_flag_disable(vector, flag) \
+  (vector)->flags &= ~(flag)
+
+/**
+ * Defines a macro to iterate all the elements in the vector. */
+#define vector_each(vector, element) \
+  (u64 i = 0; i < vector->capacity; i++) \
+    if (vector_get_for_each(vector, i, &(element)))
+
+/**
+ * Defines a macro to iterate all the elements in the vector, with a specified index. */
+#define vector_each_with_index(vector, element, index) \
+  (u64 index = 0; index < vector->capacity; index++) \
+    if (vector_get_for_each(vector, index, &(element)))
+
+/**
+ * All vector function definitions. */
+function( vector_create,          void                    )(  struct vector*                                );
+function( vector_destroy,         void                    )(  struct vector*                                );
+function( vector_element_get,     struct vector_element*  )(  struct vector*, u64                           );
+function( vector_element_set,     void                    )(  struct vector*, struct vector_element*, void* );
+function( vector_add,             void                    )(  struct vector*, void*                         );
+function( vector_del,             void                    )(  struct vector*, u64                           );
+function( vector_get,             void*                   )(  struct vector*, u64                           );
+function( vector_get_for_each,    bool                    )(  struct vector*, u64, void**                   );
+function( vector_resize,          void                    )(  struct vector*                                );
+function( vector_set,             bool                    )(  struct vector*, u64, void*                    );

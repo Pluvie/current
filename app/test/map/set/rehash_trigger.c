@@ -2,7 +2,7 @@ test(map_set_rehash_trigger) {
 
   given("a map")
     struct map map = map_init(i32, i32);
-    map_alloc(&map);
+    map_create(&map);
 
   when("the map load factor is near the threshold")
     i32 numbers[] = { 0, 1, 2, 3, 4, 5 };

@@ -1,11 +1,48 @@
+#include "test.h"
+#include "./test/arena/init/on_stack.c"
+#include "./test/arena/create/allocate_begin_region.c"
+#include "./test/arena/create/provided_capacity.c"
+#include "./test/arena/malloc/allocate_by_advancing_position.c"
+#include "./test/arena/malloc/allocate_in_next_region.c"
+#include "./test/arena/calloc/allocate_at_zero.c"
+#include "./test/arena/realloc/copy_reallocated_memory.c"
+#include "./test/arena/realloc/reallocate_same_region.c"
+#include "./test/arena/realloc/no_copy_overlap_same_region.c"
+#include "./test/arena/realloc/reallocate_end_region.c"
+#include "./test/arena/realloc/no_copy_overlap_old_region.c"
+#include "./test/vector/init/correct_element_size.c"
+#include "./test/map/init/correct_key_size.c"
+#include "./test/map/init/correct_value_size.c"
+#include "./test/map/init/default_flags.c"
+#include "./test/map/init/provided_flags.c"
+#include "./test/map/create/default_capacity.c"
+#include "./test/map/create/provided_capacity.c"
+#include "./test/map/create/provided_capacity_no_pow_2.c"
+#include "./test/map/create/provided_capacity_no_pow_2_high_load.c"
+#include "./test/map/create/provided_capacity_inferior_to_minimum.c"
+#include "./test/map/set/correct_key_value.c"
+#include "./test/map/set/overwrite_value.c"
+#include "./test/map/set/copy_key.c"
+#include "./test/map/set/avoid_copying_key_if_present.c"
+#include "./test/map/set/copy_value.c"
+#include "./test/map/set/reuse_value_copy_if_key_present.c"
+#include "./test/map/set/rehash_trigger.c"
+#include "./test/map/set/rehash_avoid_double_copy.c"
+#include "./test/map/get/retrieve_value.c"
+#include "./test/map/get/return_null.c"
+#include "./test/map/del/remove_entry.c"
+#include "./test/map/del/do_nothing.c"
+#include "./test/map/has/true_if_key_present.c"
+#include "./test/map/has/false_if_key_not_present.c"
+
 int main (
     int argc,
     char** argv
 )
 {
   test_run( arena_init_on_stack );
-  test_run( arena_alloc_allocate_begin_region );
-  test_run( arena_alloc_provided_capacity );
+  test_run( arena_create_allocate_begin_region );
+  test_run( arena_create_provided_capacity );
   test_run( arena_malloc_allocate_by_advancing_position );
   test_run( arena_malloc_allocate_in_next_region );
   test_run( arena_calloc_allocate_at_zero );
@@ -15,14 +52,17 @@ int main (
   test_run( arena_realloc_reallocate_end_region );
   test_run( arena_realloc_no_copy_overlap_old_region );
 
+  test_run( vector_correct_element_size );
+
   test_run( map_correct_key_size );
   test_run( map_correct_value_size );
   test_run( map_default_flags );
   test_run( map_provided_flags );
-  test_run( map_alloc_default_capacity );
-  test_run( map_alloc_provided_capacity );
-  test_run( map_alloc_provided_capacity_no_pow_2 );
-  test_run( map_alloc_provided_capacity_inferior_to_minimum );
+  test_run( map_create_default_capacity );
+  test_run( map_create_provided_capacity );
+  test_run( map_create_provided_capacity_no_pow_2 );
+  test_run( map_create_provided_capacity_no_pow_2_high_load );
+  test_run( map_create_provided_capacity_inferior_to_minimum );
   test_run( map_set_correct_key_value );
   test_run( map_set_overwrite_value );
   test_run( map_set_copy_key );

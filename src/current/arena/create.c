@@ -1,4 +1,4 @@
-void* arena_alloc (
+void* arena_create (
     struct arena* arena,
     u64 capacity
 )

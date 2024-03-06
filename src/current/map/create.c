@@ -1,4 +1,4 @@
-void map_alloc (
+void map_create (
     struct map* map
 )
 /**
@@ -10,7 +10,8 @@ void map_alloc (
 
   struct arena* arena = map->arena;
 
-  if ((d64) map->capacity / (d64) initial_capacity >= MAP_MAXIMUM_LOAD_FACTOR)
+  if ((initial_capacity > map->capacity) &&
+      ((d64) map->capacity / (d64) initial_capacity >= MAP_MAXIMUM_LOAD_FACTOR))
     initial_capacity *= 2;
 
   map->capacity = initial_capacity;

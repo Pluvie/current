@@ -1,12 +1,12 @@
-test(arena_alloc_provided_capacity) {
+test(arena_create_provided_capacity) {
 
   given("an arena")
     struct arena arena = arena_init();
     verify(arena.begin == NULL);
   
-  calling("arena_alloc()")
+  calling("arena_create()")
     u64 capacity = 128;
-    arena_alloc(&arena, capacity);
+    arena_create(&arena, capacity);
   
   must("allocate the begin region with the provided capacity")
     verify(arena.begin != NULL);

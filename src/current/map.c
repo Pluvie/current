@@ -5,7 +5,7 @@
  * If the compiler sees all the single .c files as a single entity (this file) it is
  * able to do inlining optimizations. */
 
-#include "./map/alloc.c"
+#include "./map/create.c"
 #include "./map/del.c"
 #include "./map/entry/add.c"
 #include "./map/entry/key_set.c"

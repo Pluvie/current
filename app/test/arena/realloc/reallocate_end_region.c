@@ -2,7 +2,7 @@ test(arena_realloc_reallocate_end_region) {
 
   given("an arena")
     struct arena arena = arena_init();
-    arena_alloc(&arena, 128);
+    arena_create(&arena, 128);
 
   when("some allocated memory is present in the end region");
     arena_malloc(&arena, 92);

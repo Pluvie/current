@@ -2,7 +2,7 @@ test(arena_calloc_allocate_at_zero) {
 
   given("an arena")
     struct arena arena = arena_init();
-    arena_alloc(&arena, 128);
+    arena_create(&arena, 128);
 
   calling("arena_calloc()")
     byte* data = arena_calloc(&arena, 1, 32);

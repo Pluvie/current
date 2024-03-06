@@ -5,7 +5,7 @@
  * If the compiler sees all the single .c files as a single entity (this file) it is
  * able to do inlining optimizations. */
 
-#include "./arena/alloc.c"
+#include "./arena/create.c"
 #include "./arena/calloc.c"
 #include "./arena/destroy.c"
 #include "./arena/malloc.c"

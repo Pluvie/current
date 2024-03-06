@@ -2,7 +2,7 @@ test(map_del_remove_entry) {
 
   given("a map")
     struct map map = map_init(i32, i32);
-    map_alloc(&map);
+    map_create(&map);
 
   when("a key is present")
     i32 key = 3;

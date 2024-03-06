@@ -2,7 +2,7 @@ test(map_set_copy_key) {
 
   given("a map")
     struct map map = map_init(i32, i32);
-    map_alloc(&map);
+    map_create(&map);
 
   when("the `Map_Flag__Copy_Keys` is enabled")
     map_flag_enable(&map, Map_Flag__Copy_Keys);
@@ -15,7 +15,8 @@ test(map_set_copy_key) {
     map_set(&map, &key, &value);
   
   must("make a copy of the provided key")
-    u64 capped_hash = map.hash(&key, map.key_size) % map.capacity;
+    u64 hash = map_hash(&key, map.key_size);
+    u64 capped_hash = map_capped_hash(hash, map.capacity);
     struct map_entry* entry = map.buckets[capped_hash];
 
     verify(entry->key != &key);
