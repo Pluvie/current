@@ -8,20 +8,7 @@ bool map_has (
  * If the key is present in the map, `true` shall be returned.
  * If the key is not present in the map, `false` shall be returned. */
 {
-  if (key == NULL)
-    return NULL;
+  struct map_entry* entry = map_get_entry(map, key);
 
-  size key_size = map->key_size;
-  u64 hash = map_hash(key, key_size);
-  u64 capped_hash = map_capped_hash(hash, map->capacity);
-  struct map_entry* entry = map->buckets[capped_hash];
-
-compare_key:
-  if (entry == NULL)
-    return false;
-  if (map_compare(entry->key, key, key_size))
-    return true;
-
-  entry = entry->next;
-  goto compare_key;
+  return entry != NULL;
 }

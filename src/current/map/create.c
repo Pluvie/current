@@ -15,14 +15,15 @@ void map_create (
     initial_capacity *= 2;
 
   map->capacity = initial_capacity;
+  map->probe_limit = log2(initial_capacity);
 
   if (arena == NULL)
-    goto alloc_buckets_only;
+    goto allocate;
 
-  size footprint =
-    (initial_capacity * sizeof(struct map_entry*)) +
-    (initial_capacity * sizeof(struct map_entry));
+  size footprint = (initial_capacity * sizeof(struct map_entry));
 
+  if (map->flags & Map_Flag__Rehashing)
+    goto allocate;
   if (map->flags & Map_Flag__Copy_Keys)
     footprint += (initial_capacity * map->key_size);
   if (map->flags & Map_Flag__Copy_Values)
@@ -30,6 +31,8 @@ void map_create (
 
   arena_prealloc(arena, footprint);
 
-alloc_buckets_only:
-  map->buckets = arena_calloc(arena, initial_capacity, sizeof(struct map_entry*));
+allocate:
+  map->entries = arena_calloc(arena,
+    map->capacity + map->probe_limit,
+    sizeof(struct map_entry));
 }

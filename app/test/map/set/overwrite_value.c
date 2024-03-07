@@ -11,7 +11,7 @@ test(map_set_overwrite_value) {
 
     u64 hash = map_hash(&key, map.key_size);
     u64 capped_hash = map_capped_hash(hash, map.capacity);
-    struct map_entry* entry = map.buckets[capped_hash];
+    struct map_entry* entry = map.entries + capped_hash;
     verify(entry->value == &value);
     verify(*((i32*)entry->value) == value);
 

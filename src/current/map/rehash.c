@@ -3,58 +3,37 @@ void map_rehash (
 )
 /**
  * This function shall double the map capacity and shall reposition all entries in their
- * new hashed location in the buckets.
+ * new hashed location.
  *
  * This operation is necessary in order to avoid overcrowding of the map: when this
- * happens, the map performances start to degrade, because the buckets will hold more
- * and more entries in the linked lists, requiring linear search in order to find
- * the entries.
+ * happens, the map performances start to degrade, because the entries will start to
+ * overcrowd, requiring more linear probing in order to find the entries.
  *
- * Increasing the capacity and redistributing the entries across ampler buckets shall
+ * Increasing the capacity and redistributing the entries across ampler capacity shall
  * avoid the overcrowdinge of linked lists, which will allow more direct hash access. */
 {
-  u64 old_capacity = map->capacity;
-  u64 new_capacity = old_capacity * 2;
-
-  map->length = 0;
-  map->capacity = new_capacity;
-  struct map_entry* old_entry = NULL;
-  struct map_entry** new_buckets = calloc(new_capacity, sizeof(struct map_entry*));
+  struct map rehashed_map;
+  memcpy(&rehashed_map, map, sizeof(struct map));
+  map_create(&rehashed_map);
 
   /* Temporarily enables the `Map_Flag__Rehashing` which prevents copying the keys
    * and values during the rehash, to avoid double copies. */
-  map_flag_enable(map, Map_Flag__Rehashing);
+  map_flag_enable(&rehashed_map, Map_Flag__Rehashing);
+  rehashed_map.capacity <<= 1;
+  rehashed_map.probe_limit <<= 1;
 
-  u64 index = 0;
-  old_entry = map->buckets[index];
-  /* Starting from the first entry of the first bucket, the following cycle will pass
-   * over every entry in the map, and will set its corresponding key and value in the
-   * new buckets, thus effectively redistributing the load. */
+  struct map_entry* old_entry = map->entries;
 
-next_entry:
-  if (old_entry == NULL)
-    goto next_bucket;
+  for (u64 i = 0; i < map->capacity; i++, old_entry++) {
+    if (old_entry->key == NULL)
+      continue;
 
-  map_set_with_buckets(
-    map, old_entry->key, old_entry->value, old_entry->hash, new_buckets);
+    map_set_with_hash(&rehashed_map,
+      old_entry->key, old_entry->value, old_entry->hash);
+  }
 
-  if (old_entry->next == NULL)
-    goto next_bucket;
+  map_flag_disable(&rehashed_map, Map_Flag__Rehashing);
 
-  old_entry = old_entry->next;
-  goto next_entry;
-
-next_bucket:
-  map_destroy_bucket(map, map->buckets[index]);
-  index++;
-  if (index >= old_capacity)
-    goto assign_new_buckets;
-
-  old_entry = map->buckets[index];
-  goto next_entry;
-
-assign_new_buckets:
-  free(map->buckets);
-  map->buckets = new_buckets;
-  map_flag_disable(map, Map_Flag__Rehashing);
+  free(map->entries);
+  memcpy(map, &rehashed_map, sizeof(struct map));
 }

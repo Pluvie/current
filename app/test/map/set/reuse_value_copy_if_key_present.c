@@ -14,7 +14,7 @@ test(map_set_reuse_value_copy_if_key_present) {
 
     u64 hash = map_hash(&key, map.key_size);
     u64 capped_hash = map_capped_hash(hash, map.capacity);
-    struct map_entry* entry = map.buckets[capped_hash];
+    struct map_entry* entry = map.entries + capped_hash;
     void* value_copy_addr = entry->value;
     verify(entry->key == &key);
     verify(entry->value != &value);

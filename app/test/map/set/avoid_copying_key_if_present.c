@@ -14,7 +14,7 @@ test(map_set_avoid_copying_key_if_present) {
 
     u64 hash = map_hash(&key, map.key_size);
     u64 capped_hash = map_capped_hash(hash, map.capacity);
-    struct map_entry* entry = map.buckets[capped_hash];
+    struct map_entry* entry = map.entries + capped_hash;
     void* key_copy_addr = entry->key;
     verify(entry->key != &key);
     verify(*((i32*)entry->key) == key);

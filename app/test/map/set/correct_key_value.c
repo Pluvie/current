@@ -12,7 +12,7 @@ test(map_set_correct_key_value) {
   must("set the provided key with the provided value")
     u64 hash = map_hash(&key, map.key_size);
     u64 capped_hash = map_capped_hash(hash, map.capacity);
-    struct map_entry* entry = map.buckets[capped_hash];
+    struct map_entry* entry = map.entries + capped_hash;
 
     verify(entry->key == &key);
     verify(entry->value == &value);

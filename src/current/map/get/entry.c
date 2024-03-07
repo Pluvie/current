@@ -11,16 +11,24 @@ struct map_entry* map_get_entry (
     return NULL;
 
   size key_size = map->key_size;
+  u32 probe_limit = map->probe_limit;
+  u32 probe_count = 0;
   u64 hash = map_hash(key, key_size);
   u64 capped_hash = map_capped_hash(hash, map->capacity);
-  struct map_entry* entry = map->buckets[capped_hash];
 
-compare_key:
-  if (entry == NULL)
+  struct map_entry* entry = map->entries + capped_hash;
+
+linear_probing:
+  if (entry->key == NULL)
     return NULL;
+
+  if (probe_count >= probe_limit)
+    return NULL;
+
   if (map_compare(entry->key, key, key_size))
     return entry;
 
-  entry = entry->next;
-  goto compare_key;
+  entry++;
+  probe_count++;
+  goto linear_probing;
 }

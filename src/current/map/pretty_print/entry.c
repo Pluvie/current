@@ -1,14 +1,14 @@
 void map_pretty_print_entry (
     size key_size,
     size value_size,
-    u64 bucket_index,
+    u64 entry_index,
     struct map_entry* entry
 )
 /**
  * Pretty prints an entry of the map. */
 {
-  fprintf(stderr, "[%4li] [ ", bucket_index);
-  if (entry == NULL) goto print_empty_entry;
+  fprintf(stderr, "[%4li] [ ", entry_index);
+  if (entry->key == NULL) goto print_empty_entry;
 
   byte* key = (byte*) entry->key;
   byte* value = (byte*) entry->value;

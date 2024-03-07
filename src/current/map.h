@@ -29,27 +29,27 @@
  *
  * This is achieved by using a hash function on the key, and using the resulting number
  * as the index where to store the pair in the pairs array. If two different keys should
- * result in the same hash, they will be stored in the same index of the pairs array
- * using a linked list: this is why the pairs array is called "buckets". */
+ * result in the same hash, they will be addressed by scanning the entries array until
+ * a free entry is found. This technique is called "open addressing". */
 struct map {
   u64   length;
   u64   capacity;
   size  key_size;
   size  value_size;
   u32   flags;
+  u32   probe_limit;
   struct arena* arena;
-  struct map_entry** buckets;
+  struct map_entry* entries;
 };
 
 /**
  * Defines the `map_entry` struct, which is a single pair { key, value } in the map.
- * All entries are grouped in buckets, where they share the same (capped) hash.
- * A bucket is just a linked list of entries. */
+ * All entries are stored sequentially one after the other. Collision will be handled
+ * using open addressing with linear probing. */
 struct map_entry {
   void* key;
   void* value;
   u64   hash;
-  struct map_entry* next;
 };
 
 /**
@@ -77,19 +77,17 @@ function( map_create,               void              )(  struct map*           
 function( map_capped_hash,          u64               )(  i64, u64                                              );
 function( map_compare,              bool              )(  void*, void*, size                                    );
 function( map_del,                  void*             )(  struct map*, void*                                    );
-function( map_entry_add,            void              )(  struct map*, void*, void*, u64, struct map_entry**    );
+function( map_entry_add,            void*             )(  struct map*, struct map_entry*, void*, void*, u64     );
 function( map_entry_key_set,        void              )(  struct map*, struct map_entry*, void*                 );
 function( map_entry_value_set,      void              )(  struct map*, struct map_entry*, void*                 );
 function( map_destroy,              void              )(  struct map*                                           );
-function( map_destroy_bucket,       void              )(  struct map*, struct map_entry*                        );
 function( map_destroy_entry,        void              )(  struct map*, struct map_entry*                        );
 function( map_get,                  void*             )(  struct map*, void*                                    );
 function( map_get_entry,            struct map_entry* )(  struct map*, void*                                    );
 function( map_has,                  bool              )(  struct map*, void*                                    );
 function( map_hash,                 u64               )(  void*, size                                           );
 function( map_pretty_print,         void              )(  struct map*                                           );
-function( map_pretty_print_bucket,  void              )(  size, size, u64, struct map_entry*                    );
 function( map_pretty_print_entry,   void              )(  size, size, u64, struct map_entry*                    );
 function( map_rehash,               void              )(  struct map*                                           );
 function( map_set,                  void*             )(  struct map*, void*, void*                             );
-function( map_set_with_buckets,     void*             )(  struct map*, void*, void*, u64, struct map_entry**    );
+function( map_set_with_hash,        void*             )(  struct map*, void*, void*, u64                        );

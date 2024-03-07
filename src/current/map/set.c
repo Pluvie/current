@@ -4,10 +4,11 @@ void* map_set (
     void* value
 )
 /**
- * This function shall set corresponding *key* with the provided *value* in the map.
+ * This function shall set corresponding *key* with the provided *value* in the
+ * map entries.
  *
- * If the *key* is already present in the map, its value shall be replaced, otherwise
- * a new entry shall be added.
+ * If the *key* is already present in the entries, its value shall be replaced,
+ * otherwise a new entry shall be added.
  *
  * The function will return the provided *value*. */
 {
@@ -15,5 +16,5 @@ void* map_set (
     return NULL;
 
   u64 hash = map_hash(key, map->key_size);
-  return map_set_with_buckets(map, key, value, hash, map->buckets);
+  return map_set_with_hash(map, key, value, hash);
 }
