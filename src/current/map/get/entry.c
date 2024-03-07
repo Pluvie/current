@@ -22,13 +22,14 @@ linear_probing:
   if (entry->key == NULL)
     return NULL;
 
-  if (probe_count >= probe_limit)
-    return NULL;
-
   if (map_compare(entry->key, key, key_size))
     return entry;
 
   entry++;
   probe_count++;
+
+  if (probe_count >= probe_limit)
+    return NULL;
+
   goto linear_probing;
 }

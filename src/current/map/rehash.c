@@ -16,9 +16,6 @@ void map_rehash (
   memcpy(&rehashed_map, map, sizeof(struct map));
   map_create(&rehashed_map);
 
-  /* Temporarily enables the `Map_Flag__Rehashing` which prevents copying the keys
-   * and values during the rehash, to avoid double copies. */
-  map_flag_enable(&rehashed_map, Map_Flag__Rehashing);
   rehashed_map.capacity <<= 1;
   rehashed_map.probe_limit <<= 1;
 
@@ -28,11 +25,8 @@ void map_rehash (
     if (old_entry->key == NULL)
       continue;
 
-    map_set_with_hash(&rehashed_map,
-      old_entry->key, old_entry->value, old_entry->hash);
+    map_set_entry(&rehashed_map, old_entry);
   }
-
-  map_flag_disable(&rehashed_map, Map_Flag__Rehashing);
 
   free(map->entries);
   memcpy(map, &rehashed_map, sizeof(struct map));

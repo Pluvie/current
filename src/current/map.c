@@ -7,9 +7,6 @@
 
 #include "./map/create.c"
 #include "./map/del.c"
-#include "./map/entry/add.c"
-#include "./map/entry/key_set.c"
-#include "./map/entry/value_set.c"
 #include "./map/destroy.c"
 #include "./map/destroy/entry.c"
 #include "./map/generic/capped_hash.c"
@@ -22,4 +19,4 @@
 #include "./map/pretty_print/entry.c"
 #include "./map/rehash.c"
 #include "./map/set.c"
-#include "./map/set/with_hash.c"
+#include "./map/set/entry.c"

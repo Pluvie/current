@@ -22,8 +22,6 @@ void map_create (
 
   size footprint = (initial_capacity * sizeof(struct map_entry));
 
-  if (map->flags & Map_Flag__Rehashing)
-    goto allocate;
   if (map->flags & Map_Flag__Copy_Keys)
     footprint += (initial_capacity * map->key_size);
   if (map->flags & Map_Flag__Copy_Values)
