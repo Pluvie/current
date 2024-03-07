@@ -3,10 +3,9 @@ void* vector_get (
     u64 position
 )
 {
-  struct vector_element* element = vector_element_get(vector, position);
-
-  if (element == NULL)
+  if (position >= vector->length)
     return NULL;
 
+  struct vector_element* element = vector->elements + position;
   return element->value;
 }

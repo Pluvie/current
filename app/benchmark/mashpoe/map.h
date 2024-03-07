@@ -17,6 +17,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 
 // hashmaps can associate keys with pointer values or integral types.
 typedef struct hashmap hashmap;

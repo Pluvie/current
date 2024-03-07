@@ -4,11 +4,11 @@ bool vector_set (
     void* value
 )
 {
-  struct vector_element* element = vector_element_get(vector, position);
-
-  if (element == NULL)
+  if (position >= vector->length)
     return false;
 
-  vector_element_set(vector, element, value);
+  struct vector_element* element = vector->elements + position;
+  element->value = value;
+
   return true;
 }

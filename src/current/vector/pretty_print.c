@@ -13,7 +13,7 @@ void vector_pretty_print (
   for (u64 i = 0; i < vector->capacity; i++) {
     element = vector->elements + i;
     element_value = (byte*) element->value;
-    fprintf(stderr, "[%4li] [ ", i);
+    fprintf(stderr, "[%4li] [", i);
 
     if (element_value != NULL) {
       fprintf(stderr, "■] [ ");

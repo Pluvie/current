@@ -1,8 +1,9 @@
 #!/bin/bash
 echo "Compiling."
-bin/compile benchmark/current -o exe/benchmark/current -O3
-bin/compile benchmark/mashpoe -o exe/benchmark/mashpoe -O3
-bin/compile benchmark/tidwall -o exe/benchmark/tidwall -O3
+gcc app/benchmark/current.c -o exe/benchmark/current -O3
+gcc app/benchmark/current-chained.c -o exe/benchmark/current-chained -O3
+gcc app/benchmark/mashpoe.c -o exe/benchmark/mashpoe -O3
+gcc app/benchmark/tidwall.c -o exe/benchmark/tidwall -O3
 go build -o exe/benchmark/go app/benchmark/go.go
 
 echo
@@ -16,6 +17,10 @@ echo "Running C Mashpoe."
 echo
 echo "Running C Tidwall."
 \time -v exe/benchmark/tidwall
+
+echo
+echo "Running C Current [Chained]."
+\time -v exe/benchmark/current-chained
 
 echo
 echo "Running Go."

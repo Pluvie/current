@@ -1,4 +1,4 @@
-test(vector_add_resize_if_capacity_reached) {
+test(vector_push_resize_if_capacity_reached) {
 
   given("a vector")
     struct vector vector = vector_init(i32);
@@ -6,18 +6,18 @@ test(vector_add_resize_if_capacity_reached) {
 
   when("the vector is reaching full capacity")
     i32 element = 3;
-    vector_add(&vector, &element);
-    vector_add(&vector, &element);
-    vector_add(&vector, &element);
-    vector_add(&vector, &element);
-    vector_add(&vector, &element);
-    vector_add(&vector, &element);
-    vector_add(&vector, &element);
+    vector_push(&vector, &element);
+    vector_push(&vector, &element);
+    vector_push(&vector, &element);
+    vector_push(&vector, &element);
+    vector_push(&vector, &element);
+    vector_push(&vector, &element);
+    vector_push(&vector, &element);
     verify(vector.length == 7);
     verify(vector.capacity == 8);
   
-  calling("vector_add()")
-    vector_add(&vector, &element);
+  calling("vector_push()")
+    vector_push(&vector, &element);
 
   must("resize the vector by doubling the capacity")
     verify(vector.length == 8);

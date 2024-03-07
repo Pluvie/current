@@ -16,9 +16,13 @@
 #include "./test/vector/create/default_capacity.c"
 #include "./test/vector/create/provided_capacity.c"
 #include "./test/vector/create/provided_capacity_inferior_to_minimum.c"
-#include "./test/vector/add/element_at_length.c"
-#include "./test/vector/add/resize_if_capacity_reached.c"
-#include "./test/vector/del/set_unused.c"
+#include "./test/vector/push/element_at_length.c"
+#include "./test/vector/push/resize_if_capacity_reached.c"
+#include "./test/vector/pop/reduce_length.c"
+#include "./test/vector/get/value_at_position.c"
+#include "./test/vector/get/null_if_over_length.c"
+#include "./test/vector/set/value_at_position.c"
+#include "./test/vector/set/false_if_over_length.c"
 #include "./test/map/init/correct_key_size.c"
 #include "./test/map/init/correct_value_size.c"
 #include "./test/map/init/default_flags.c"
@@ -66,9 +70,13 @@ int main (
   test_run( vector_create_default_capacity );
   test_run( vector_create_provided_capacity );
   test_run( vector_create_provided_capacity_inferior_to_minimum );
-  test_run( vector_add_element_at_length );
-  test_run( vector_add_resize_if_capacity_reached );
-  test_run( vector_del_set_unused );
+  test_run( vector_push_element_at_length );
+  test_run( vector_push_resize_if_capacity_reached );
+  test_run( vector_pop_reduce_length );
+  test_run( vector_get_value_at_position );
+  test_run( vector_get_null_if_over_length );
+  test_run( vector_set_value_at_position );
+  test_run( vector_set_false_if_over_length );
 
   test_run( map_init_correct_key_size );
   test_run( map_init_correct_value_size );

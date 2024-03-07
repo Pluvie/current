@@ -1,5 +1,17 @@
-#include "../../src/current.h"
-#include "../../src/current.c"
+#include <errno.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../../src/current/preamble.h"
+#include "../../src/current/arena.h"
+#include "../../src/current/arena.c"
+#include "./current-chained/map.c"
+
+/**
+ * Old Current implementation using separate chaining. */
 
 void insert(void);
 void capacity(void);

@@ -5,8 +5,15 @@
 #define ANSI_COLOR_RED            "\x1b[31m"
 #define ANSI_COLOR_GREEN          "\x1b[32m"
 #define ANSI_COLOR_NONE           "\x1b[0m"
-#define VT100_SAVE_CURSOR_POS     fprintf(stderr, "%c7", ASCII_ESC)
-#define VT100_RESTORE_CURSOR_POS  fprintf(stderr, "%c8", ASCII_ESC)
+
+//#define USE_VT100
+#ifdef  USE_VT100
+  #define VT100_SAVE_CURSOR_POS     fprintf(stderr, "%c7", ASCII_ESC)
+  #define VT100_RESTORE_CURSOR_POS  fprintf(stderr, "%c8", ASCII_ESC)
+#else
+  #define VT100_SAVE_CURSOR_POS
+  #define VT100_RESTORE_CURSOR_POS  fprintf(stderr, "\r")
+#endif
 
 /**
  * Test framework macros.

@@ -1,11 +1,15 @@
-void vector_element_set (
+void vector_push (
     struct vector* vector,
-    struct vector_element* element,
     void* value
 )
 {
-  if (element->used)
-    goto do_not_copy;
+  u64 position = vector->length;
+
+  vector->length++;
+  if (vector->length >= vector->capacity)
+    vector_resize(vector);
+
+  struct vector_element* element = vector->elements + position;
 
   if (vector->flags & Vector_Flag__Copy_Elements)
     goto do_copy;

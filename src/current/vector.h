@@ -1,5 +1,5 @@
 /**
-          ____    ____  _______   ______ .___________.  ______   .______      
+        ____    ____  _______   ______ .___________.  ______   .______      
         \   \  /   / |   ____| /      ||           | /  __  \  |   _  \     
          \   \/   /  |  |__   |  ,----'`---|  |----`|  |  |  | |  |_)  |    
           \      /   |   __|  |  |         |  |     |  |  |  | |      /     
@@ -29,7 +29,6 @@ struct vector {
 
 struct vector_element {
   void* value;
-  bool  used;
 };
 
 /**
@@ -63,14 +62,11 @@ enum vector_flags {
 
 /**
  * All vector function definitions. */
-function( vector_create,          void                    )(  struct vector*                                );
-function( vector_destroy,         void                    )(  struct vector*                                );
-function( vector_element_get,     struct vector_element*  )(  struct vector*, u64                           );
-function( vector_element_set,     void                    )(  struct vector*, struct vector_element*, void* );
-function( vector_add,             void                    )(  struct vector*, void*                         );
-function( vector_del,             void                    )(  struct vector*, u64                           );
-function( vector_get,             void*                   )(  struct vector*, u64                           );
-function( vector_get_for_each,    bool                    )(  struct vector*, u64, void**                   );
-function( vector_pretty_print,    void                    )(  struct vector*                                );
-function( vector_resize,          void                    )(  struct vector*                                );
-function( vector_set,             bool                    )(  struct vector*, u64, void*                    );
+function( vector_create,          void    )(  struct vector*                );
+function( vector_destroy,         void    )(  struct vector*                );
+function( vector_get,             void*   )(  struct vector*, u64           );
+function( vector_pop,             void    )(  struct vector*                );
+function( vector_pretty_print,    void    )(  struct vector*                );
+function( vector_push,            void    )(  struct vector*, void*         );
+function( vector_resize,          void    )(  struct vector*                );
+function( vector_set,             bool    )(  struct vector*, u64, void*    );
