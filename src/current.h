@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "current/preamble.h"
+#include "current/prelude.h"
 #include "current/arena.h"
 #include "current/map.h"
 #include "current/vector.h"

@@ -56,9 +56,10 @@ struct map_entry {
 /**
  * Defines all the flags used to tweak and configure the map behaviour. */
 enum map_flags {
-  Map_Flag__None        = 0,
-  Map_Flag__Copy_Keys   = 1 << 0,
-  Map_Flag__Copy_Values = 1 << 1,
+  Map_Flag__None          = 0,
+  Map_Flag__Fixed_Lookup  = 1 << 0,
+  Map_Flag__Copy_Keys     = 1 << 1,
+  Map_Flag__Copy_Values   = 1 << 2,
 };
 
 /**
@@ -73,18 +74,19 @@ enum map_flags {
 
 /**
  * All map function definitions. */
-function( map_capped_hash,          u64               )(  i64, u64                                );
-function( map_compare,              bool              )(  void*, void*, size                      );
-function( map_create,               void              )(  struct map*                             );
-function( map_del,                  void*             )(  struct map*, void*                      );
-function( map_destroy,              void              )(  struct map*                             );
-function( map_destroy_entry,        void              )(  struct map*, struct map_entry*          );
-function( map_get,                  void*             )(  struct map*, void*                      );
-function( map_get_entry,            struct map_entry* )(  struct map*, void*                      );
-function( map_has,                  bool              )(  struct map*, void*                      );
-function( map_hash,                 u64               )(  void*, size                             );
-function( map_pretty_print,         void              )(  struct map*                             );
-function( map_pretty_print_entry,   void              )(  size, size, u64, struct map_entry*      );
-function( map_rehash,               void              )(  struct map*                             );
-function( map_set,                  void*             )(  struct map*, void*, void*               );
-function( map_set_entry,            void*             )(  struct map*, struct map_entry*          );
+function( map_capped_hash,          u64               )(  i64, u64                                            );
+function( map_compare,              bool              )(  void*, void*, size                                  );
+function( map_create,               void              )(  struct map*                                         );
+function( map_del,                  void*             )(  struct map*, void*                                  );
+function( map_destroy,              void              )(  struct map*                                         );
+function( map_entry_add,            void*             )(  struct map*, struct map_entry*, struct map_entry*   );
+function( map_entry_destroy,        void              )(  struct map*, struct map_entry*                      );
+function( map_entry_get,            struct map_entry* )(  struct map*, void*                                  );
+function( map_entry_set,            void*             )(  struct map*, struct map_entry*                      );
+function( map_get,                  void*             )(  struct map*, void*                                  );
+function( map_has,                  bool              )(  struct map*, void*                                  );
+function( map_hash,                 u64               )(  void*, size                                         );
+function( map_pretty_print,         void              )(  struct map*                                         );
+function( map_pretty_print_entry,   void              )(  size, size, u64, struct map_entry*                  );
+function( map_rehash,               void              )(  struct map*                                         );
+function( map_set,                  void*             )(  struct map*, void*, void*                           );

@@ -8,6 +8,6 @@ void map_destroy (
     return;
 
   for (i64 i = 0; i < map->capacity; i++)
-    map_destroy_entry(map, map->entries + i);
+    map_entry_destroy(map, map->entries + i);
   free(map->entries);
 }

@@ -14,10 +14,13 @@ void map_rehash (
 {
   struct map rehashed_map;
   memcpy(&rehashed_map, map, sizeof(struct map));
-  map_create(&rehashed_map);
 
+  rehashed_map.length = 0;
   rehashed_map.capacity <<= 1;
   rehashed_map.probe_limit <<= 1;
+
+  map_flag_enable(&rehashed_map, Map_Flag__Fixed_Lookup);
+  map_create(&rehashed_map);
 
   struct map_entry* old_entry = map->entries;
 
@@ -25,9 +28,12 @@ void map_rehash (
     if (old_entry->key == NULL)
       continue;
 
-    map_set_entry(&rehashed_map, old_entry);
+    map_entry_set(&rehashed_map, old_entry);
   }
 
-  free(map->entries);
+  if (map->arena == NULL)
+    free(map->entries);
+
+  map_flag_disable(&rehashed_map, Map_Flag__Fixed_Lookup);
   memcpy(map, &rehashed_map, sizeof(struct map));
 }

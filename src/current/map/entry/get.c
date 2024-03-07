@@ -1,4 +1,4 @@
-struct map_entry* map_get_entry (
+inline struct map_entry* map_entry_get (
     struct map* map,
     void* key
 )
