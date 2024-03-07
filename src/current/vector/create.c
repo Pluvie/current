@@ -14,8 +14,7 @@ void vector_create (
   if (arena == NULL)
     goto allocate_elements;
 
-  size footprint = sizeof(struct vector) +
-    (initial_capacity * sizeof(struct vector_element));
+  size footprint = (initial_capacity * sizeof(struct vector_element));
 
   if (vector->flags & Vector_Flag__Copy_Elements)
     footprint += (initial_capacity * vector->element_size);

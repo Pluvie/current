@@ -21,5 +21,6 @@ typedef size_t        usize;
 #define function(name, type)  type name
 #define countof(name)         (sizeof(name) / sizeof(*(name)))
 #define lengthof(name)        (countof(name) - 1)
-#define next_pow2(number)     (1 << ((8 * sizeof(u32)) - __builtin_clz(number - 1)))
+#define log2(number)          ((8 * sizeof(number)) - __builtin_clz(number - 1))
+#define next_pow2(number)     (1 << log2(number))
 #define is_pow2(number)       (number > 0 ? (number & (number - 1)) == 0 : false)
