@@ -23,6 +23,9 @@ void* map_set_with_hash (
     return map_entry_add(map, entry, key, value, hash);
 
 linear_probing:
+  if (entry->key == NULL)
+    return map_entry_add(map, entry, key, value, hash);
+
   if (probe_count >= probe_limit) {
     map_rehash(map);
     return map_set(map, key, value);
