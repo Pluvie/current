@@ -1,151 +1,86 @@
 # Map
 
-A `map` is an unordered collection of pairs { *key*, *value* }.
-For each given *key*, there can be only one value: in other words, a map cannot hold two
-pairs with the same *key*.
+A `map` is an unordered collection of pairs { *key*, *value* }. This pair is called
+an *entry*.
 
-The map can get, set, or delete a { *key*, *value* } pair. All these operations are done
-in constant time. This is achieved with the use of a hash function -- this is why this
-data structure is often referred as "hashmap". To know more on how a map works,
+The most important map property is that for each given *key*, there can be only one
+value: in other words, a map cannot hold two pairs with the same *key*.
+
+The map can get, set, or delete an *entry*. All these operations are done in constant
+time. This is achieved with the use of a hash function -- this is why this data
+structure is often referred as "hashmap". To know more on how a map works,
 [refer to this article](https://benhoyt.com/writings/hash-table-in-c/).
 
 In __Current__, a map can be declared like this:
 
 ```c
-struct map* my_map = map(char*, int);
+struct map* map = map_init(int, char*);
 ```
 
-The key type is `char*`, and the value type is `int`.
+The key type is `int`, and the value type is `char*`.
 
 ## Initialization
 
-As you probably have guessed, the map initialization is done by a macro which accepts
-variadic args as configuration parameters. These parameters are fields of the
-`configuration` struct that will be given to the map during initialization.
+The map is designed to be used on the stack. You can freely pass its address around to
+other functions as there are no internal pointers.
 
-We have already seen the `hash` and `compare` parameters, [below](#configuration) you
-can find a list of the other ones available.
+When initialized with `map_init`, the map will not do any allocation. In order to start
+using it, you must call `map_create`:
 
-The map object created by the `map_init` or `map_new` macros is just a pointer, so you
-can safely pass it around.
+```c
+struct map* map = map_init(int, char*);
+map_create(&map);
+```
 
 ## Usage
 
-Using the
+You can do these operations on the map:
+
+  - `set` to put a { *key*, *value* } entry in the map: this operation will add a new
+    entry if the *key* is not present in the map, otherwise it will substitute the
+    *value* of the already existing entry with the same *key*.
+  - `del` to remove a { *key*, *value* } entry.
+  - `get` to retrieve the *value* for a *key*: if there are no entries with that *key*,
+    `NULL` will be returned.
+  - `has` to know if the map has an entry with a provided *key*.
+
+Examples:
 
 ```c
-map(char*, int) my_map
+struct map* map = map_init(int, int);
+map_create(&map);
+
+int key = 3;
+int value = 7;
+
+map_set(&map, &key, &value);          // Will create the new entry { 3, 7 }.
+
+int other_value = 9;
+map_set(&map, &key, &other_value);    // Will replace the previous entry with { 3, 9 }.
+
+int* value_pointer;
+value_pointer = map_get(&map, &key);  // Will retrieve the value 9.
+
+map_has(&map, &key);                  // Will return `true`.
+map_del(&map, &key);                  // Will remove the entry { 3, 9 }.
 ```
 
-defined above, you can:
+As you can see, the map will work with pointers. You will not be able to pass direct
+keys or values to __Current__ map, e.g. you cannot do `map_get(&map, 3)`.
 
-### Set
+This is because the map will just hold pointers to its real keys and values. With this
+usage, it is mandatory that the objects holding the keys and values will continue to
+remain valid and unchanged throughout all the map lifetime.
 
-Set an association between a *key* and a *value* (in this case a `char*` and an
-`int`), by doing:
+Of course, this cannot always be the case. To cope with this, __Current__ map has two
+flags: `Map_Flag__Copy_Keys` and `Map_Flag__Copy_Values`. You can activate them, before
+creating the map, using:
 
 ```c
-char* key = "abc";
-map_set(my_map, &key, 10);
+map_flag_enable(&map, Map_Flag__Copy_Keys);
+map_flag_enable(&map, Map_Flag__Copy_Values);
 ```
 
-__IMPORTANT__: the key argument passed to `map_set` must be an address of a local
-variable of the exact same type of the map key. You cannot use a constant, a literal and
-neither an array:
-
-```c
-#define KEY "abc"
-map_set(my_map, &KEY, 10);    /* Will not work! */
-
-char key[4] = "abc";
-map_set(my_map, &key, 10);    /* Will not work! */
-
-map_set(my_map, &"abc", 10);  /* Will not work! */
-```
-
-All of the above examples will not work. The reason is because the map implementation
-demands a pointer to the key object (as `void*`) and the address of operator (`&`) will
-not give the correct address when used on a constant, an array or a literal.
-
-### Get
-
-You can get a value with:
-
-```c
-char* key = "abc";
-map_get(my_map, &key);
-```
-
-As said in the set operation, the key must be a pointer to a local variable.
-
-If the key is not present in the map, then the *zero value* of the same type of the
-map *value* type shall be returned. The *zero value* is just a fixed sequence of bytes,
-all at value 0, with the same length of the size of the map *value* type.
-
-### Delete
-
-You can delete a value with:
-
-```c
-char* key = "abc";
-map_del(my_map, &key);
-```
-
-As said in the set and get operation, the key must be a pointer to a local variable.
-
-### Has
-
-You can check if the map has a given key with:
-
-```c
-char* key = "abc";
-map_has(my_map, &key);
-```
-
-This function shall return `true` if the map has the key, `false` otherwise.
-
-## Configuration
-
-All map configuration parameters are:
-
-  - `initial_capacity` (`uint64`), if you have an idea of how many *keys* the map will
-    hold, in order to optimize memory allocations.
-  - `copy_keys` (`bool`), if you want the map to do a copy of each *key*, more info
-    [here](#copy-keys).
-  - `key_copy_size` (`unit64`), an optional length in bytes of the key copy: if not
-    given, it will be the same length of the key.
-  - `key_copy_func` (`(void)(void*, void*, unit64)`), an optional function that shall
-    handle the copy of the key.
-  - `key_copy_size_func` (`(uint64)(void*)`), an optional function that shall return the
-    length of the key copy.
-  - `copy_values` (`bool`), if you want the map to do a copy of each *value*, more info
-    [here](#copy-values).
-  - `value_copy_size` (`unit64`), an optional length in bytes of the value copy: if not
-    given, it will be the same length of the value.
-  - `value_copy_func` (`(void)(void*, void*, unit64)`), an optional function that shall
-    handle the copy of the value.
-  - `value_copy_size_func` (`(uint64)(void*)`), an optional function that shall return
-    the length of the value copy.
-  - `arena` (`struct arena*`), an optional arena pointer to use for memory allocations.
-
-## Hash and compare functions
-
-The hash and compare function for some base types are already provided by __Current__.
-These are the prebuilt functions that you can use as hash or compare:
-
-  - `__map_prebuilt_int32_hash`
-  - `__map_prebuilt_int32_compare`
-  - `__map_prebuilt_int64_hash`
-  - `__map_prebuilt_int64_compare`
-  - `__map_prebuilt_string_hash`
-  - `__map_prebuilt_string_compare`
-
-So, if you want to use the prebuilt functions the example above becomes:
-
-```c
-map_new(my_map, char*, int,
-  .hash = __map_prebuilt_string_hash,
-  .compare = __map_prebuilt_string_compare);
-```
-
-But you are of course free to use the functions that you like.
+With these flags active, the map will copy all keys and values, and you can scratch
+whatever was holding them after being given to the map. These flags can be active
+individually, should you need to just copy the keys, or the values.
