@@ -2,8 +2,7 @@ void map_pretty_print (
     struct map* map
 )
 /**
- * This function shall pretty print the map, showing all entries in the map grouped
- * in buckets.
+ * This function shall pretty print the map, showing all entries of the map.
  *
  * For each entry, this function shall print the bytes of its key and value. */
 {

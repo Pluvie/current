@@ -7,4 +7,5 @@
 
 #include "current/arena.c"
 #include "current/map.c"
+#include "current/set.c"
 #include "current/vector.c"
