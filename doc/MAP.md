@@ -4,7 +4,7 @@ A `map` is an unordered collection of pairs { *key*, *value* }. This pair is cal
 an *entry*.
 
 The most important map property is that for each given *key*, there can be only one
-value: in other words, a map cannot hold two pairs with the same *key*.
+value: in other words, a map cannot hold two entries with the same *key*.
 
 The map can get, set, or delete an *entry*. All these operations are done in constant
 time. This is achieved with the use of a hash function -- this is why this data
@@ -65,12 +65,12 @@ map_has(&map, &key);                  // Will return `true`.
 map_del(&map, &key);                  // Will remove the entry { 3, 9 }.
 ```
 
-As you can see, the map will work with pointers. You will not be able to pass direct
-keys or values to __Current__ map, e.g. you cannot do `map_get(&map, 3)`.
+As you can see, the map works exclusively with pointers. You will not be able to pass
+direct keys or values to __Current__ map, e.g. you cannot do `map_get(&map, 3)`.
 
 This is because the map will just hold pointers to its real keys and values. With this
-usage, it is mandatory that the objects holding the keys and values will continue to
-remain valid and unchanged throughout all the map lifetime.
+usage, **it is mandatory that the objects holding the keys and values will continue to
+remain valid and unchanged throughout all the map lifetime**.
 
 Of course, this cannot always be the case. To cope with this, __Current__ map has two
 flags: `Map_Flag__Copy_Keys` and `Map_Flag__Copy_Values`. You can activate them, before
@@ -84,3 +84,13 @@ map_flag_enable(&map, Map_Flag__Copy_Values);
 With these flags active, the map will copy all keys and values, and you can scratch
 whatever was holding them after being given to the map. These flags can be active
 individually, should you need to just copy the keys, or the values.
+
+Once done with the map, you must release its memory with:
+
+```c
+map_destroy(&map);
+```
+
+This will just release the memory occupied by the map entries, and all potential key or
+value copies. Since the map struct is on the stack, it will be cleared upon function
+return.
