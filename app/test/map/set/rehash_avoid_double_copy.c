@@ -20,7 +20,7 @@ test(map_set_rehash_avoid_double_copy) {
     void* value_addresses[5] = { 0 };
     struct map_entry* entry = NULL;
     for (u32 i = 0; i < countof(numbers) - 1; i++) {
-      entry = map_get_entry(&map, &numbers[i]);
+      entry = map_entry_get(&map, &numbers[i]);
       key_addresses[i] = entry->key;
       value_addresses[i] = entry->value;
     }
@@ -34,7 +34,7 @@ test(map_set_rehash_avoid_double_copy) {
      * values addresses. */
     verify(map.capacity == 16);
     for (u32 i = 0; i < countof(numbers) - 1; i++) {
-      entry = map_get_entry(&map, &numbers[i]);
+      entry = map_entry_get(&map, &numbers[i]);
       verify(entry->key == key_addresses[i]);
       verify(entry->value == value_addresses[i]);
     }

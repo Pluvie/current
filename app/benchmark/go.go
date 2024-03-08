@@ -2,22 +2,27 @@ package main
 
 import (
   "fmt"
+  "os"
 )
 
-func pseudorand(a int) int {
-  a = (a ^ 61) ^ (a >> 16)
-  a = a + (a << 3)
-  a = a ^ (a >> 4)
-  a = a * 0x27d4eb2d
-  a = a ^ (a >> 15)
-  return a;
+func pseudorand(n int) int {
+  return 18000 * (n & 65535) + (n >> 16);
 }
 
 func main() {
-  //insert();
-  //capacity();
-  //lookup();
-  insert_rand();
+  args := os.Args[1:]
+
+  if (args[0] == "insert") {
+    insert()
+  } else if (args[0] == "capacity") {
+    capacity()
+  } else if (args[0] == "lookup") {
+    lookup()
+  } else if (args[0] == "insert_rand") {
+    insert_rand()
+  } else {
+    fmt.Println("no benchmark")
+  }
 }
 
 func insert() {
@@ -71,12 +76,16 @@ func insert_rand() {
   m := make(map[int]int)
   result := 0
 
+  var k int
+  var v int
   for i := 0; i < 300000; i++ {
     for j := 0; j < 1000; j++ {
-      m[pseudorand(j)] = pseudorand(i);
+      k = pseudorand(i)
+      v = pseudorand(j)
+      m[k] = v
     }
   }
 
-  result = m[999];
+  result = m[126000]; // value should be: 17982000
   fmt.Println("done: ", result)
 }

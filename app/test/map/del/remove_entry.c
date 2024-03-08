@@ -13,7 +13,7 @@ test(map_del_remove_entry) {
     void* deleted_value = map_del(&map, &key);
 
   must("remove the entry with that key")
-    struct map_entry* entry = map_get_entry(&map, &key);
+    struct map_entry* entry = map_entry_get(&map, &key);
     verify(entry == NULL);
     verify(deleted_value == &value);
     verify(*(i32*) deleted_value == value);

@@ -18,16 +18,11 @@ void capacity(void);
 void lookup(void);
 void insert_rand(void);
 
-static inline u32 pseudorand (
-    u64 a
+static inline i32 pseudorand (
+    i32 n
 )
 {
-    a = (a ^ 61) ^ (a >> 16);
-    a = a + (a << 3);
-    a = a ^ (a >> 4);
-    a = a * 0x27d4eb2d;
-    a = a ^ (a >> 15);
-    return a;
+  return 18000 * (n & 65535) + (n >> 16);
 }
 
 int main (
@@ -35,10 +30,17 @@ int main (
     char** argv
 )
 {
-  //insert();
-  //capacity();
-  //lookup();
-  insert_rand();
+  if (strcmp(argv[1], "insert") == 0)
+    insert();
+  else if (strcmp(argv[1], "capacity") == 0)
+    capacity();
+  else if (strcmp(argv[1], "lookup") == 0)
+    lookup();
+  else if (strcmp(argv[1], "insert_rand") == 0)
+    insert_rand();
+  else
+    fprintf(stderr, "no benchmark\n");
+
   return 0;
 }
 
@@ -142,7 +144,7 @@ void insert_rand (
     }
   }
 
-  int key = 999;
+  int key = 126000; // value should be: 17982000
   result = map_get(&map, &key);
   fprintf(stderr, "done: %i\n", result ? *result : 0);
 }
