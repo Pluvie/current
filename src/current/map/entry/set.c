@@ -16,7 +16,6 @@ inline void* map_entry_set (
   u64 probe_count = 0;
 
   struct map_entry* entry = map->entries + capped_hash;
-  //struct map_entry robin = { 0 };
 
 linear_probing:
   if (entry->key == NULL)
@@ -34,16 +33,9 @@ linear_probing:
     return entry->value;
   }
 
-  //if (new_entry->distance > entry->distance) {
-  //  memcpy(&robin, entry, sizeof(struct map_entry));
-  //  memcpy(entry, new_entry, sizeof(struct map_entry));
-  //  memcpy(new_entry, &robin, sizeof(struct map_entry));
-  //}
-
 next_entry:
   entry++;
   probe_count++;
-  //new_entry->distance++;
 
   if (probe_count >= probe_limit) {
     map_rehash(map);

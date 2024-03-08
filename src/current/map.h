@@ -50,7 +50,6 @@ struct map_entry {
   void* key;
   void* value;
   u64   hash;
-//  u64   distance;
 };
 
 /**

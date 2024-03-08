@@ -19,7 +19,15 @@ void map_rehash (
   rehashed_map.capacity <<= 1;
   rehashed_map.probe_limit <<= 1;
 
+  u32 original_flags = map->flags;
+  /* Enables fixed lookup flag: we can assume that the keys are unique, since we just
+   * have to redistribute them over a broader capacity. */
   map_flag_enable(&rehashed_map, Map_Flag__Fixed_Lookup);
+  /* Disables the copy flags: we want to avoid double copies, the keys and values of
+   * the map are already a copy of the original, so we can keep their addresses. */
+  map_flag_disable(&rehashed_map, Map_Flag__Copy_Keys);
+  map_flag_disable(&rehashed_map, Map_Flag__Copy_Values);
+
   map_create(&rehashed_map);
 
   struct map_entry* old_entry = map->entries;
@@ -34,6 +42,6 @@ void map_rehash (
   if (map->arena == NULL)
     free(map->entries);
 
-  map_flag_disable(&rehashed_map, Map_Flag__Fixed_Lookup);
   memcpy(map, &rehashed_map, sizeof(struct map));
+  map->flags = original_flags;
 }

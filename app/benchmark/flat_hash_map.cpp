@@ -22,6 +22,11 @@ int main(
     int argc,
     char* argv[]
 ) {
+  if (argc < 2) {
+    std::cout << "no benchmark" << std::endl;
+    return 0;
+  }
+
   if (strcmp(argv[1], "insert") == 0)
     insert();
   else if (strcmp(argv[1], "capacity") == 0)
@@ -31,7 +36,7 @@ int main(
   else if (strcmp(argv[1], "insert_rand") == 0)
     insert_rand();
   else
-    std::cout << "no benchmark" << std::endl;
+    std::cout << "invalid benchmark" << std::endl;
 
   return 0;
 }

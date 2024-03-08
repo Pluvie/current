@@ -2,7 +2,7 @@
 echo "Compiling."
 gcc app/benchmark/current.c -o exe/benchmark/current -O3 -Wall -Werror -Wno-unused-label                  && \
 gcc app/benchmark/current-chained.c -o exe/benchmark/current-chained -O3 -Wall -Werror -Wno-unused-label  && \
-g++ app/benchmark/flat_hash_map.cpp -o exe/benchmark/flat_hash_map -O3 -Wall -Werror -Wno-unused-label    && \
+#g++ app/benchmark/flat_hash_map.cpp -o exe/benchmark/flat_hash_map -O3 -Wall -Werror -Wno-unused-label    && \
 #gcc app/benchmark/mashpoe.c -o exe/benchmark/mashpoe -O3 -Wall -Werror -Wno-unused-label                  && \
 #gcc app/benchmark/tidwall.c -o exe/benchmark/tidwall -O3 -Wall -Werror -Wno-unused-label                  && \
 go build -o exe/benchmark/go app/benchmark/go.go                                                          && \
@@ -18,10 +18,10 @@ go build -o exe/benchmark/go app/benchmark/go.go                                
 #  echo
 #  echo "Running C Tidwall."
 #  \time -v exe/benchmark/tidwall
-  
-  echo
-  echo "Running Flat Hash Map."
-  \time -v exe/benchmark/flat_hash_map $1
+#  
+#  echo
+#  echo "Running Flat Hash Map."
+#  \time -v exe/benchmark/flat_hash_map $1
   
   echo
   echo "Running C Current [Chained]."

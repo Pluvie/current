@@ -25,11 +25,28 @@ static inline i32 pseudorand (
   return 18000 * (n & 65535) + (n >> 16);
 }
 
+static inline void report (
+    i32* result,
+    struct arena* arena,
+    struct map* map
+)
+{
+  fprintf(stderr, "done: %i - arena: %li / %li / %li - map: %li\n",
+    result ? *result : 0,
+    arena->total_capacity, arena->number_of_allocs, arena->number_of_regions,
+    map->capacity);
+}
+
 int main (
     int argc,
     char** argv
 )
 {
+  if (argc < 2) {
+    fprintf(stderr, "no benchmark\n");
+    return 0;
+  }
+
   if (strcmp(argv[1], "insert") == 0)
     insert();
   else if (strcmp(argv[1], "capacity") == 0)
@@ -39,7 +56,7 @@ int main (
   else if (strcmp(argv[1], "insert_rand") == 0)
     insert_rand();
   else
-    fprintf(stderr, "no benchmark\n");
+    fprintf(stderr, "invalid benchmark\n");
 
   return 0;
 }
@@ -66,7 +83,7 @@ void insert (
 
   int key = 999;
   result = map_get(&map, &key);
-  fprintf(stderr, "done: %i\n", result ? *result : 0);
+  report(result, &arena, &map);
 }
 
 void capacity (
@@ -91,7 +108,7 @@ void capacity (
 
   int key = 0;
   result = map_get(&map, &key);
-  fprintf(stderr, "done: %i - %li / %li / %li\n", result ? *result : 0, arena.total_capacity, arena.number_of_allocs, arena.number_of_regions);
+  report(result, &arena, &map);
 }
 
 void lookup (
@@ -118,7 +135,7 @@ void lookup (
     }
   }
 
-  fprintf(stderr, "done: %i - %li / %li / %li\n", result ? *result : 0, arena.total_capacity, arena.number_of_allocs, arena.number_of_regions);
+  report(result, &arena, &map);
 }
 
 void insert_rand (
@@ -146,5 +163,5 @@ void insert_rand (
 
   int key = 126000; // value should be: 17982000
   result = map_get(&map, &key);
-  fprintf(stderr, "done: %i\n", result ? *result : 0);
+  report(result, &arena, &map);
 }

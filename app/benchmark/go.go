@@ -11,6 +11,11 @@ func pseudorand(n int) int {
 
 func main() {
   args := os.Args[1:]
+  
+  if (len(args) == 0) {
+    fmt.Println("no benchmark")
+    return;
+  }
 
   if (args[0] == "insert") {
     insert()
@@ -21,7 +26,7 @@ func main() {
   } else if (args[0] == "insert_rand") {
     insert_rand()
   } else {
-    fmt.Println("no benchmark")
+    fmt.Println("invalid benchmark")
   }
 }
 
