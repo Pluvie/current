@@ -1,3 +1,5 @@
-app/benchmark/  linguist-generated
-bin/            linguist-generated
-exe/            linguist-generated
+app/benchmark/* linguist-vendored
+bin/*           linguist-vendored
+exe/*           linguist-vendored
+*.cpp           linguist-vendored
+*.go            linguist-vendored
