@@ -11,6 +11,6 @@
 #include "./arena/malloc.c"
 #include "./arena/prealloc.c"
 #include "./arena/realloc.c"
-#include "./arena/region/alloc.c"
+#include "./arena/region/create.c"
 #include "./arena/region/next.c"
 #include "./arena/region/search.c"

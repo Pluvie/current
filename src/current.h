@@ -7,7 +7,7 @@
      \______| \______/  | _| `._____|| _| `._____||_______||__| \__|     |__|     
 
 
-                      an arena optimized map-vector C library
+                    an arena optimized map-set-vector C library
                                                       
                                                                                       **/
 

@@ -12,17 +12,11 @@ __Current__'s endeavor is to streamline and make as joyful as possible your work
 those data structures in C. This, of course, does not come without limits, however
 our hope is that you'll find it as useful and enjoyable as we do.
 
-## Installation
-
-To install __Current__, use the provided Linux Bash script `bin/install`. It will
-compile the library and output the shared object `libcurrent.so` in the `lib` directory
-of the current path. The library has no dependencies, so it can be directly copied into
-your `/usr/lib` directory and linked using `gcc ... -lcurrent`.
-
 ## Features
 
 __Current__ will make possible to create maps, sets and vectors of generic types, and
-operate with these data structures as you are probably used from higher level languages.
+operate with these data structures in a way that will resemble what you are probably
+used from higher level languages.
 
 To be true to the C way, memory management of these objects is *manual*. However, they
 also come with an arena implementation, which will significantly help in managing the
@@ -37,18 +31,67 @@ To read more on __Current__ map, set and vector usage, refer to each single sect
   - [Set](doc/SET.md)
   - [Vector](doc/VECTOR.md)
 
+To read more on the arena allocator, refer to [this excellent article](
+https://www.rfleury.com/p/untangling-lifetimes-the-arena-allocator).
+
+
+## Installation
+
+To install __Current__, clone the git repository at the version you want, and then link
+the `src` directory in your project, at the path you prefer. Then, include
+`current.h` in your sources, and compile them alongside `current.c`, as a
+separate translation unit. Example:
+
+Suppose your project folder is `my_project` with a `src/main.c` file. Suppose you
+link __Current__ in your project `lib` directory. Your tree will look like:
+
+```
+  my_project/
+  │
+  ├─ lib/
+  │  └─ current/
+  │
+  └─ src/
+     └─ main.c
+```
+
+You can then add to your `main.c` file:
+
+```c
+#include "../lib/current/current.h"
+```
+
+And compile the whole project with:
+
+```bash
+gcc src/main.c lib/current/current.c -o my_project_executable
+```
+
+At the moment, __Current__ did not put any effort in being portable. We are very much
+open to contributions on this note. __Current__ is guaranteed to work with `gcc 11.4.0`
+on `x86_64` architecture.
+
 ## Test
 
-Use the provided Linux Bash script `bin/test`. You must have Valgrind installed to run
-the test. Everything should run without memory leaks and without assert failures.
+To run tests, install `valgrind` before. Then run the Linux Bash script:
+
+```bash
+bin/valgrind test
+```
+
+Everything should run without memory leaks and without verification failures.
 
 ## Benchmarks
 
-TODO
+There is a benchmarking tool available that can be run using:
 
-```shell
-\time -v exe/benchmark insert
+```bash
+bin/benchmark [case]
 ```
+
+Benchmark cases are: `insert`, `capacity`, `lookup` and `insert_rand`. They will
+benchmark __Current__'s performances against other C/C++ hashmaps implementations, and
+against Golang `map`.
 
 ## Contributing
 

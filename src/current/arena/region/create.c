@@ -1,4 +1,4 @@
-struct region* arena_region_alloc (
+struct region* arena_region_create (
     struct arena* arena,
     u64 amount
 )

@@ -28,9 +28,10 @@
  * time.
  *
  * This is achieved by using a hash function on the key, and using the resulting number
- * as the index where to store the pair in the pairs array. If two different keys should
- * result in the same hash, they will be addressed by scanning the entries array until
- * a free entry is found. This technique is called "open addressing". */
+ * as the index where to store the pair in the pairs array. If two different keys would
+ * result in the same hash, then a collision will happen. This collision shall be
+ * addressed by scanning the entries array until a free entry is found.
+ * This technique is called "open addressing". */
 struct map {
   u64   length;
   u64   capacity;

@@ -16,7 +16,7 @@ void* arena_prealloc (
     return last_region->data + last_region->position;
 
 allocate_new_region:
-  struct region* region = arena_region_alloc(arena, amount);
+  struct region* region = arena_region_create(arena, amount);
   if (region == NULL)
     return NULL;
 
