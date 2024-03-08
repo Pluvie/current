@@ -33,8 +33,14 @@
 #include "./test/map/set/rehash_avoid_double_copy.c"
 #include "./test/map/set/rehash_trigger.c"
 #include "./test/map/set/reuse_value_copy_if_key_present.c"
+#include "./test/set/add/invariant_if_element_present.c"
+#include "./test/set/add/new_element_if_not_present.c"
+#include "./test/set/create/default_capacity.c"
+#include "./test/set/create/provided_capacity.c"
 #include "./test/set/del/do_nothing.c"
 #include "./test/set/del/remove_element.c"
+#include "./test/set/has/false_if_element_not_present.c"
+#include "./test/set/has/true_if_element_present.c"
 #include "./test/set/init/correct_element_size.c"
 #include "./test/set/init/default_flags.c"
 #include "./test/set/init/provided_flags.c"
@@ -93,8 +99,14 @@ int main (
   test_run( map_set_rehash_trigger );
   test_run( map_set_reuse_value_copy_if_key_present );
 
+  test_run( set_add_invariant_if_element_present );
+  test_run( set_add_new_element_if_not_present );
+  test_run( set_create_default_capacity );
+  test_run( set_create_provided_capacity );
   test_run( set_del_do_nothing );
   test_run( set_del_remove_element );
+  test_run( set_has_false_if_element_not_present );
+  test_run( set_has_true_if_element_present );
   test_run( set_init_correct_element_size );
   test_run( set_init_default_flags );
   test_run( set_init_provided_flags );
