@@ -21,14 +21,10 @@
 struct vector {
   u64   capacity;
   u64   length;
-  size  element_size;
   u32   flags;
+  size  element_size;
+  void* elements;
   struct arena* arena;
-  struct vector_element* elements;
-};
-
-struct vector_element {
-  void* value;
 };
 
 /**
@@ -51,21 +47,21 @@ enum vector_flags {
 /**
  * Defines a macro to iterate all the elements in the vector. */
 #define vector_each(vector, element) \
-  (u64 i = 0; i < vector->capacity; i++) \
-    if (vector_get_for_each(vector, i, &(element)))
+  (u64 i = 0; i < (vector)->capacity; i++) \
+    if ((element = vector_get(vector, i)) != NULL)
 
 /**
  * Defines a macro to iterate all the elements in the vector, with a specified index. */
 #define vector_each_with_index(vector, element, index) \
-  (u64 index = 0; index < vector->capacity; index++) \
-    if (vector_get_for_each(vector, index, &(element)))
+  (u64 index = 0; index < (vector)->capacity; index++) \
+    if ((element = vector_get(vector, index)) != NULL)
 
 /**
  * All vector function definitions. */
 function( vector_create,          void    )(  struct vector*                );
 function( vector_destroy,         void    )(  struct vector*                );
 function( vector_get,             void*   )(  struct vector*, u64           );
-function( vector_pop,             void    )(  struct vector*                );
+function( vector_pop,             void*   )(  struct vector*                );
 function( vector_pretty_print,    void    )(  struct vector*                );
 function( vector_push,            void    )(  struct vector*, void*         );
 function( vector_resize,          void    )(  struct vector*                );

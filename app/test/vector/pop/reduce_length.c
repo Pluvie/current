@@ -14,8 +14,8 @@ test(vector_pop_reduce_length) {
 
   must("delete the last element and reduce the length of the vector")
     verify(vector.length == 1);
-    verify(vector.elements[0].value == &element);
-    verify(vector.elements[1].value == NULL);
+    verify(vector_get(&vector, 0) == &element);
+    verify(vector_get(&vector, 1) == NULL);
 
   success()
     vector_destroy(&vector);

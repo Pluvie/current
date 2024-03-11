@@ -9,19 +9,10 @@ void vector_create (
     initial_capacity = VECTOR_DEFAULT_CAPACITY;
   vector->capacity = initial_capacity;
 
-  struct arena* arena = vector->arena;
-
-  if (arena == NULL)
-    goto allocate_elements;
-
-  size footprint = (initial_capacity * sizeof(struct vector_element));
-
   if (vector->flags & Vector_Flag__Copy_Elements)
-    footprint += (initial_capacity * vector->element_size);
-
-  arena_prealloc(arena, footprint);
-
-allocate_elements:
-  vector->elements = arena_calloc(
-    arena, initial_capacity, sizeof(struct vector_element));
+    vector->elements = arena_calloc(
+      vector->arena, initial_capacity, vector->element_size);
+  else
+    vector->elements = arena_calloc(
+      vector->arena, initial_capacity, sizeof(void*));
 }

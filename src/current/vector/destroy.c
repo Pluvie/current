@@ -10,9 +10,5 @@ void vector_destroy (
   if (vector->elements == NULL)
     return;
 
-  if (vector->flags & Vector_Flag__Copy_Elements)
-    for (i64 i = 0; i < vector->capacity; i++)
-      free(vector->elements[i].value);
-
   free(vector->elements);
 }

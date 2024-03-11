@@ -1,16 +1,12 @@
-void vector_pop (
+void* vector_pop (
     struct vector* vector
 )
 {
   if (vector->length == 0)
-    return;
+    return NULL;
 
+  void* element = vector_get(vector, vector->length);
   vector->length--;
-  u64 position = vector->length;
-  struct vector_element* element = vector->elements + position;
 
-  if (vector->flags & Vector_Flag__Copy_Elements)
-    free(element->value);
-
-  element->value = NULL;
+  return element;
 }

@@ -6,25 +6,32 @@ void vector_pretty_print (
  *
  * For each element, this function shall print the bytes of its value. */
 {
-  struct vector_element* element;
+  byte* element;
   size element_size = vector->element_size;
-  byte* element_value;
+  fprintf(stderr, "\n");
 
   for (u64 i = 0; i < vector->capacity; i++) {
-    element = vector->elements + i;
-    element_value = (byte*) element->value;
-    fprintf(stderr, "[%4li] [", i);
+    fprintf(stderr, "[%4li] [ ", i);
 
-    if (element_value != NULL) {
-      fprintf(stderr, "■] [ ");
+    if (vector->flags & Vector_Flag__Copy_Elements) {
+      element = (byte*) vector->elements + (i * element_size);
       for (size i = 0; i < element_size; i++)
-        fprintf(stderr, "%02x ", element_value[i]);
+        fprintf(stderr, "%02x ", element[i]);
       fprintf(stderr, "]\n");
+
     } else {
-      fprintf(stderr, " ] [ ");
-      for (size i = 0; i < element_size; i++)
-        fprintf(stderr, "-- ");
-      fprintf(stderr, "]\n");
+      element = ((void**) vector->elements)[i];
+      fprintf(stderr, "%p ]\n", element);
+      //element = ((void**) vector->elements)[i];
+      //if (element != NULL) {
+      //  for (size i = 0; i < element_size; i++)
+      //    fprintf(stderr, "%02x ", ((byte*) element)[i]);
+      //  fprintf(stderr, "]\n");
+      //} else {
+      //  for (size i = 0; i < element_size; i++)
+      //    fprintf(stderr, "-- ");
+      //  fprintf(stderr, "]\n");
+      //}
     }
   }
 }

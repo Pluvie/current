@@ -23,9 +23,9 @@ test(vector_push_resize_if_capacity_reached) {
     verify(vector.length == 8);
     verify(vector.capacity == 16);
     for (u32 i = 0; i < vector.length; i++)
-      verify(vector.elements[i].value == &element);
+      verify(vector_get(&vector, i) == &element);
     for (u32 i = vector.length; i < vector.capacity; i++)
-      verify(vector.elements[i].value == NULL);
+      verify(vector_get(&vector, i) == NULL);
 
   success()
     vector_destroy(&vector);

@@ -6,6 +6,8 @@ void* vector_get (
   if (position >= vector->length)
     return NULL;
 
-  struct vector_element* element = vector->elements + position;
-  return element->value;
+  if (vector->flags & Vector_Flag__Copy_Elements)
+    return (byte*) vector->elements + (position * vector->element_size);
+  else
+    return ((void**) vector->elements)[position];
 }

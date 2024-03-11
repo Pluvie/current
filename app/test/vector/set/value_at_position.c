@@ -15,8 +15,8 @@ test(vector_set_value_at_position) {
 
   must("set the value at the provided position")
     verify(vector.length == 2);
-    verify(vector.elements[0].value == &element);
-    verify(vector.elements[1].value == &other_element);
+    verify(vector_get(&vector, 0) == &element);
+    verify(vector_get(&vector, 1) == &other_element);
     verify(result == true);
 
   success()

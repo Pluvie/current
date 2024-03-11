@@ -53,9 +53,11 @@
 #include "./test/vector/init/default_flags.c"
 #include "./test/vector/init/provided_flags.c"
 #include "./test/vector/pop/reduce_length.c"
+#include "./test/vector/push/copy_element.c"
 #include "./test/vector/push/element_at_length.c"
 #include "./test/vector/push/resize_if_capacity_reached.c"
 #include "./test/vector/set/false_if_over_length.c"
+#include "./test/vector/set/overwrite_copy.c"
 #include "./test/vector/set/value_at_position.c"
 
 int main (
@@ -120,9 +122,11 @@ int main (
   test_run( vector_init_default_flags );
   test_run( vector_init_provided_flags );
   test_run( vector_pop_reduce_length );
+  test_run( vector_push_copy_element );
   test_run( vector_push_element_at_length );
   test_run( vector_push_resize_if_capacity_reached );
   test_run( vector_set_false_if_over_length );
+  test_run( vector_set_overwrite_copy );
   test_run( vector_set_value_at_position );
 
   return 0;

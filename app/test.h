@@ -45,18 +45,15 @@
 #define test(test_function_name)                                                        \
   void test_function_name(void)
 
-#define test_function(test_function_name)                                               \
-  void test_function_name(void);
-
 #define test_run(test_function_name)                                                    \
   VT100_SAVE_CURSOR_POS;                                                                \
-  fprintf(stderr, "  "#test_function_name);                                             \
+  fprintf(stderr, "  " #test_function_name);                                            \
   test_function_name()
 
-#define given(description)    fprintf(stderr, " "); fprintf(stderr, "%c\b", ASCII_ESC);
-#define when(description)     fprintf(stderr, " "); fprintf(stderr, "%c\b", ASCII_ESC);
-#define calling(description)  fprintf(stderr, " "); fprintf(stderr, "%c\b", ASCII_ESC);
-#define must(description)     fprintf(stderr, " "); fprintf(stderr, "%c\b", ASCII_ESC);
+#define given(description)    ;
+#define when(description)     ;
+#define calling(description)  ;
+#define must(description)     ;
 
 #define verify(condition)                                                               \
   if (!(condition)) { fail(__FILE__, __LINE__, #condition ); }

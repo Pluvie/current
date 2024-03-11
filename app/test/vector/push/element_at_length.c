@@ -12,10 +12,10 @@ test(vector_push_element_at_length) {
 
   must("add the element at the position equal to the vector length")
     verify(vector.length == 3);
-    verify(vector.elements[0].value == &element);
-    verify(vector.elements[1].value == &element);
-    verify(vector.elements[2].value == &element);
-    verify(vector.elements[3].value == NULL);
+    verify(vector_get(&vector, 0) == &element);
+    verify(vector_get(&vector, 1) == &element);
+    verify(vector_get(&vector, 2) == &element);
+    verify(vector_get(&vector, 3) == NULL);
 
   success()
     vector_destroy(&vector);
