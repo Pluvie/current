@@ -32,7 +32,7 @@ void map_rehash (
 
   struct map_entry* old_entry = map->entries;
 
-  for (u64 i = 0; i < map->capacity; i++, old_entry++) {
+  for (u64 i = 0; i < map->capacity + map->probe_limit; i++, old_entry++) {
     if (old_entry->key == NULL)
       continue;
 

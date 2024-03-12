@@ -7,7 +7,7 @@ void map_pretty_print_entry (
 /**
  * Pretty prints an entry of the map. */
 {
-  fprintf(stderr, "[%4li] [ ", entry_index);
+  fprintf(stderr, "[%4li] [%p] [ ", entry_index, entry);
   if (entry->key == NULL) goto print_empty_entry;
 
   byte* key = (byte*) entry->key;

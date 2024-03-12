@@ -15,22 +15,21 @@ void map_create (
     initial_capacity *= 2;
 
   map->capacity = initial_capacity;
-  map->probe_limit = log2(initial_capacity);
+  map->probe_limit = log2(map->capacity);
+  u64 probed_capacity = map->capacity + map->probe_limit;
 
   if (arena == NULL)
     goto allocate;
 
-  size footprint = (initial_capacity * sizeof(struct map_entry));
+  size footprint = (probed_capacity * sizeof(struct map_entry));
 
   if (map->flags & Map_Flag__Copy_Keys)
-    footprint += (initial_capacity * map->key_size);
+    footprint += (probed_capacity * map->key_size);
   if (map->flags & Map_Flag__Copy_Values)
-    footprint += (initial_capacity * map->value_size);
+    footprint += (probed_capacity * map->value_size);
 
   arena_prealloc(arena, footprint);
 
 allocate:
-  map->entries = arena_calloc(arena,
-    map->capacity + map->probe_limit,
-    sizeof(struct map_entry));
+  map->entries = arena_calloc(arena, probed_capacity, sizeof(struct map_entry));
 }
