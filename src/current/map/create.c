@@ -1,5 +1,5 @@
 void map_create (
-    struct map* map
+    Map* map
 )
 /**
  * This function shall allocate the provided map. */
@@ -8,7 +8,7 @@ void map_create (
   if (initial_capacity < MAP_DEFAULT_CAPACITY)
     initial_capacity = MAP_DEFAULT_CAPACITY;
 
-  struct arena* arena = map->arena;
+  Arena* arena = map->arena;
 
   if ((initial_capacity > map->capacity) &&
       ((d64) map->capacity / (d64) initial_capacity >= MAP_MAXIMUM_LOAD_FACTOR))
@@ -21,15 +21,15 @@ void map_create (
   if (arena == NULL)
     goto allocate;
 
-  size footprint = (probed_capacity * sizeof(struct map_entry));
+  size footprint = (probed_capacity * sizeof(MapEntry));
 
-  if (map->flags & Map_Flag__Copy_Keys)
+  if (map->flags & MAP_FLAG__COPY_KEYS)
     footprint += (probed_capacity * map->key_size);
-  if (map->flags & Map_Flag__Copy_Values)
+  if (map->flags & MAP_FLAG__COPY_VALUES)
     footprint += (probed_capacity * map->value_size);
 
   arena_prealloc(arena, footprint);
 
 allocate:
-  map->entries = arena_calloc(arena, probed_capacity, sizeof(struct map_entry));
+  map->entries = arena_calloc(arena, probed_capacity, sizeof(MapEntry));
 }

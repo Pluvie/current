@@ -1,14 +1,14 @@
 test(map_set_rehash_avoid_double_copy) {
 
   given("a map")
-    struct map map = map_init(i32, i32);
+    Map map = map_init(i32, i32);
     map_create(&map);
 
-  when("the `Map_Flag__Copy_Keys` is enabled")
-    map_flag_enable(&map, Map_Flag__Copy_Keys);
+  when("the `MAP_FLAG__COPY_KEYS` is enabled")
+    map_flag_enable(&map, MAP_FLAG__COPY_KEYS);
 
-  when("the `Map_Flag__Copy_Values` is enabled")
-    map_flag_enable(&map, Map_Flag__Copy_Values);
+  when("the `MAP_FLAG__COPY_VALUES` is enabled")
+    map_flag_enable(&map, MAP_FLAG__COPY_VALUES);
 
   when("a map rehash is triggered")
     i32 numbers[] = { 0, 1, 2, 3, 4, 5 };
@@ -18,7 +18,7 @@ test(map_set_rehash_avoid_double_copy) {
     /* Saves all keys and values addresses before the rehash. */
     void* key_addresses[5] = { 0 };
     void* value_addresses[5] = { 0 };
-    struct map_entry* entry = NULL;
+    MapEntry* entry = NULL;
     for (u32 i = 0; i < countof(numbers) - 1; i++) {
       entry = map_entry_get(&map, &numbers[i]);
       key_addresses[i] = entry->key;

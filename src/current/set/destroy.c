@@ -1,5 +1,5 @@
 void set_destroy (
-    struct set* set
+    Set* set
 )
 /**
  * This function shall free the memory used by the set and all its entries. */

@@ -1,5 +1,5 @@
 void vector_push (
-    struct vector* vector,
+    Vector* vector,
     void* element
 )
 {

@@ -1,16 +1,16 @@
 test(set_init_provided_flags) {
 
   given("a set")
-    struct set set = set_init(i32);
+    Set set = set_init(i32);
   
   when("flags are provided")
-    set_flag_enable(&set, Set_Flag__Copy_Elements);
+    set_flag_enable(&set, SET_FLAG__COPY_ELEMENTS);
   
   calling("set_init()")
   
   must("create the set with the provided flags")
-    verify(set.elements.flags & Map_Flag__Copy_Keys);
-    verify(set.elements.flags & Map_Flag__Copy_Values);
+    verify(set.elements.flags & MAP_FLAG__COPY_KEYS);
+    verify(set.elements.flags & MAP_FLAG__COPY_VALUES);
 
   success()
     set_destroy(&set);

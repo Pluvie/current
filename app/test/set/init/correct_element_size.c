@@ -1,7 +1,7 @@
 test(set_init_correct_element_size) {
 
   given("a set")
-    struct set set = set_init(i32);
+    Set set = set_init(i32);
   
   calling("set_init()")
 

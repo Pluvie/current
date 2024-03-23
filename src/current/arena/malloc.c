@@ -1,5 +1,5 @@
 void* arena_malloc (
-    struct arena* arena,
+    Arena* arena,
     u64 amount
 )
 /**
@@ -11,7 +11,7 @@ void* arena_malloc (
   if (arena->begin == NULL)
     return NULL;
 
-  struct region* last_region = arena->end;
+  Region* last_region = arena->end;
   /* If there is enough space in the last region, allocate the provided *amount* there.
    * Otherwise, create a new region, with *amount* bytes of capacity. */
   if (last_region->position + amount <= last_region->capacity)
@@ -26,7 +26,7 @@ allocate_on_last_region:
   return data;
 
 create_next_region:
-  struct region* next = arena_region_next(arena, amount);
+  Region* next = arena_region_next(arena, amount);
   if (next == NULL) 
     return NULL;
 

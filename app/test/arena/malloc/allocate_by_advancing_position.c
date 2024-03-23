@@ -1,7 +1,7 @@
 test(arena_malloc_allocate_by_advancing_position) {
 
   given("an arena")
-    struct arena arena = arena_init();
+    Arena arena = arena_init();
     arena_create(&arena, 128);
 
   when("there is enough space in the end region");

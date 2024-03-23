@@ -1,7 +1,7 @@
 test(map_del_do_nothing) {
 
   given("a map")
-    struct map map = map_init(i32, i32);
+    Map map = map_init(i32, i32);
     map_create(&map);
 
   when("a key is not present")

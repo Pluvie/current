@@ -1,6 +1,6 @@
 void map_entry_destroy (
-    struct map* map,
-    struct map_entry* entry
+    Map* map,
+    MapEntry* entry
 )
 /**
  * This function shall free the provided map *entry*. */
@@ -8,8 +8,8 @@ void map_entry_destroy (
   if (entry == NULL)
     return;
 
-  if (map->flags & Map_Flag__Copy_Keys)
+  if (map->flags & MAP_FLAG__COPY_KEYS)
     free(entry->key);
-  if (map->flags & Map_Flag__Copy_Values)
+  if (map->flags & MAP_FLAG__COPY_VALUES)
     free(entry->value);
 }

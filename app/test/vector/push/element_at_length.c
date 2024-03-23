@@ -1,7 +1,7 @@
 test(vector_push_element_at_length) {
 
   given("a vector")
-    struct vector vector = vector_init(i32);
+    Vector vector = vector_init(i32);
     vector_create(&vector);
   
   calling("vector_push()")

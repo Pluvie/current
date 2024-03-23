@@ -1,7 +1,7 @@
 test(map_create_default_capacity) {
 
   given("a map")
-    struct map map = map_init(i32, i32);
+    Map map = map_init(i32, i32);
   
   when("no capacity is provided")
   

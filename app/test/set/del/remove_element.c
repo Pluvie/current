@@ -1,7 +1,7 @@
 test(set_del_remove_element) {
 
   given("a set")
-    struct set set = set_init(i32);
+    Set set = set_init(i32);
     set_create(&set);
 
   when("an element is present")

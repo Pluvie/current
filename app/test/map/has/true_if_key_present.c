@@ -1,7 +1,7 @@
 test(map_has_true_if_key_present) {
 
   given("a map")
-    struct map map = map_init(i32, i32);
+    Map map = map_init(i32, i32);
     map_create(&map);
 
   when("a key is present")

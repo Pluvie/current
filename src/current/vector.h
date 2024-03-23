@@ -7,32 +7,43 @@
             \__/     |_______| \______|    |__|      \______/  | _| `._____|
         
                                                                                       **/
+
+
 /**
- * Defines the `vector_init` macro to initialize new vector with the given
- * *element_type*. */
-#define vector_init(element_type)  \
-  { .element_size = sizeof(element_type) }
+ * # Vector
+ *
+ * A vector is a collection of dynamically allocated elements of the same type.
+ * It will grow automatically to fit the memory occupied by all the elements. */
+
+
+enum vector_flags;
+typedef enum vector_flags {
+  VECTOR_FLAG__NONE           = 0,
+  VECTOR_FLAG__COPY_ELEMENTS  = 1 << 1,
+} VectorFlags;
+
+
+struct vector;
+typedef struct vector {
+  u64 capacity;
+  u64 length;
+  size element_size;
+  void* elements;
+  VectorFlags flags;
+  Arena* arena;
+} Vector;
+
 
 /**
  * Defines the defaul initial capacity of a vector, if not specified by the
  * programmer. */
 #define VECTOR_DEFAULT_CAPACITY 8
 
-struct vector {
-  u64   capacity;
-  u64   length;
-  u32   flags;
-  size  element_size;
-  void* elements;
-  struct arena* arena;
-};
-
 /**
- * Defines all the flags used to tweak and configure the vector behaviour. */
-enum vector_flags {
-  Vector_Flag__None           = 0,
-  Vector_Flag__Copy_Elements  = 1 << 1,
-};
+ * Defines the `vector_init` macro to initialize new vector with the given
+ * *element_type*. */
+#define vector_init(element_type)  \
+  { .element_size = sizeof(element_type) }
 
 /**
  * Defines a macro to enable the provided flag in the vector. */
@@ -56,13 +67,15 @@ enum vector_flags {
   (u64 index = 0; index < (vector)->capacity; index++) \
     if ((element = vector_get(vector, index)) != NULL)
 
+
 /**
  * All vector function definitions. */
-function( vector_create,          void    )(  struct vector*                );
-function( vector_destroy,         void    )(  struct vector*                );
-function( vector_get,             void*   )(  struct vector*, u64           );
-function( vector_pop,             void*   )(  struct vector*                );
-function( vector_pretty_print,    void    )(  struct vector*                );
-function( vector_push,            void    )(  struct vector*, void*         );
-function( vector_resize,          void    )(  struct vector*                );
-function( vector_set,             bool    )(  struct vector*, u64, void*    );
+
+void    vector_create         ( Vector* );
+void    vector_destroy        ( Vector* );
+void*   vector_get            ( Vector*, u64 );
+void*   vector_pop            ( Vector* );
+void    vector_pretty_print   ( Vector* );
+void    vector_push           ( Vector*, void* );
+void    vector_resize         ( Vector* );
+bool    vector_set            ( Vector*, u64, void* );

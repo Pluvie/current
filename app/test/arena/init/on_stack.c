@@ -3,7 +3,7 @@ test(arena_init_on_stack) {
   given("an arena")
   
   calling("arena_init()")
-    struct arena arena = arena_init();
+    Arena arena = arena_init();
   
   must("initialize an empty arena on the stack")
     verify(arena.begin == NULL);

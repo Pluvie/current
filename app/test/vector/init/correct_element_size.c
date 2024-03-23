@@ -1,7 +1,7 @@
 test(vector_init_correct_element_size) {
 
   given("a vector")
-    struct vector vector = vector_init(i32);
+    Vector vector = vector_init(i32);
   
   calling("vector_init()")
 

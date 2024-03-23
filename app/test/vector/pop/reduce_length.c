@@ -1,7 +1,7 @@
 test(vector_pop_reduce_length) {
 
   given("a vector")
-    struct vector vector = vector_init(i32);
+    Vector vector = vector_init(i32);
     vector_create(&vector);
 
   when("the vector has some elements")

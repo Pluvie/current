@@ -1,7 +1,7 @@
 inline void* map_entry_add (
-    struct map* map,
-    struct map_entry* entry,
-    struct map_entry* location
+    Map* map,
+    MapEntry* entry,
+    MapEntry* location
 )
 /**
  * This function shall add a new *entry* in the map, at the provided *location*.
@@ -11,7 +11,7 @@ inline void* map_entry_add (
  * invoking the #map_rehash function. */
 {
 check_key_copy:
-  if (!(map->flags & Map_Flag__Copy_Keys))
+  if (!(map->flags & MAP_FLAG__COPY_KEYS))
     goto check_value_copy;
 
   size key_size = map->key_size;
@@ -20,7 +20,7 @@ check_key_copy:
   entry->key = key_copy;
 
 check_value_copy:
-  if (!(map->flags & Map_Flag__Copy_Values))
+  if (!(map->flags & MAP_FLAG__COPY_VALUES))
     goto add_entry;
 
   size value_size = map->value_size;
@@ -29,7 +29,7 @@ check_value_copy:
   entry->value = value_copy;
 
 add_entry:
-  memcpy(location, entry, sizeof(struct map_entry));
+  memcpy(location, entry, sizeof(MapEntry));
   map->length++;
 
 check_rehash:

@@ -15,8 +15,8 @@ static inline i32 pseudorand (
 
 static inline void report (
     i32* result,
-    struct arena* arena,
-    struct map* map
+    Arena* arena,
+    Map* map
 )
 {
   fprintf(stderr, "done: %i - arena: %li / %li / %li - map: %li\n",
@@ -54,13 +54,13 @@ void insert (
 )
 {
   i32* result = 0;
-  struct arena arena = arena_init();
+  Arena arena = arena_init();
   arena_create(&arena, 0);
-  struct map map = map_init(i32, i32);
+  Map map = map_init(i32, i32);
   map.capacity = 1000;
   map.arena = &arena;
-  map_flag_enable(&map, Map_Flag__Copy_Keys);
-  map_flag_enable(&map, Map_Flag__Copy_Values);
+  map_flag_enable(&map, MAP_FLAG__COPY_KEYS);
+  map_flag_enable(&map, MAP_FLAG__COPY_VALUES);
   map_create(&map);
 
   for (i32 i = 0; i < 300000; i++) {
@@ -79,13 +79,13 @@ void capacity (
 )
 {
   i32* result = 0;
-  struct arena arena = arena_init();
+  Arena arena = arena_init();
   arena_create(&arena, 0);
-  struct map map = map_init(i32, i32);
+  Map map = map_init(i32, i32);
   map.capacity = 16777216;
   map.arena = &arena;
-  map_flag_enable(&map, Map_Flag__Copy_Keys);
-  map_flag_enable(&map, Map_Flag__Copy_Values);
+  map_flag_enable(&map, MAP_FLAG__COPY_KEYS);
+  map_flag_enable(&map, MAP_FLAG__COPY_VALUES);
   map_create(&map);
 
   for (i32 i = 0; i < 3000000; i++) {
@@ -104,13 +104,13 @@ void lookup (
 )
 {
   i32* result = 0;
-  struct arena arena = arena_init();
+  Arena arena = arena_init();
   arena_create(&arena, 0);
-  struct map map = map_init(i32, i32);
+  Map map = map_init(i32, i32);
   map.capacity = 100;
   map.arena = &arena;
-  map_flag_enable(&map, Map_Flag__Copy_Keys);
-  map_flag_enable(&map, Map_Flag__Copy_Values);
+  map_flag_enable(&map, MAP_FLAG__COPY_KEYS);
+  map_flag_enable(&map, MAP_FLAG__COPY_VALUES);
   map_create(&map);
 
   for (i32 i = 0; i < 100; i++) {
@@ -131,13 +131,13 @@ void insert_rand (
 )
 {
   i32* result = 0;
-  struct arena arena = arena_init();
+  Arena arena = arena_init();
   arena_create(&arena, 0);
-  struct map map = map_init(i32, i32);
+  Map map = map_init(i32, i32);
   map.capacity = 3000000;
   map.arena = &arena;
-  map_flag_enable(&map, Map_Flag__Copy_Keys);
-  map_flag_enable(&map, Map_Flag__Copy_Values);
+  map_flag_enable(&map, MAP_FLAG__COPY_KEYS);
+  map_flag_enable(&map, MAP_FLAG__COPY_VALUES);
   map_create(&map);
 
   i32 k, v;

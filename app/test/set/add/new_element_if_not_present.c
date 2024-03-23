@@ -1,7 +1,7 @@
 test(set_add_new_element_if_not_present) {
 
   given("a set")
-    struct set set = set_init(i32);
+    Set set = set_init(i32);
     set_create(&set);
 
   when("a element is not present")

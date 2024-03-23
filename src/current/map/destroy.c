@@ -1,5 +1,5 @@
 void map_destroy (
-    struct map* map
+    Map* map
 )
 /**
  * This function shall free the memory used by the map and all its entries. */

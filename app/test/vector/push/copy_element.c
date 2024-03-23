@@ -1,11 +1,11 @@
 test(vector_push_copy_element) {
 
   given("a vector")
-    struct vector vector = vector_init(i32);
+    Vector vector = vector_init(i32);
     vector_create(&vector);
   
   when("the copy elements flag is enabled")
-    vector_flag_enable(&vector, Vector_Flag__Copy_Elements);
+    vector_flag_enable(&vector, VECTOR_FLAG__COPY_ELEMENTS);
 
   calling("vector_push()")
     i32 element = 3;

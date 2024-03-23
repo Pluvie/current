@@ -1,7 +1,7 @@
 test(arena_realloc_reallocate_end_region) {
 
   given("an arena")
-    struct arena arena = arena_init();
+    Arena arena = arena_init();
     arena_create(&arena, 128);
 
   when("some allocated memory is present in the end region");
@@ -9,7 +9,7 @@ test(arena_realloc_reallocate_end_region) {
     byte* data = arena_malloc(&arena, 16);
 
   when("there not is enough space in the end region");
-    struct region* original_region = arena.end;
+    Region* original_region = arena.end;
     verify(arena.end->position == 108);
   
   calling("arena_realloc() on the previously allocated memory")

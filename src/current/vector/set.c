@@ -1,5 +1,5 @@
 bool vector_set (
-    struct vector* vector,
+    Vector* vector,
     u64 position,
     void* element
 )
@@ -7,7 +7,7 @@ bool vector_set (
   if (position >= vector->length)
     return false;
 
-  if (vector->flags & Vector_Flag__Copy_Elements)
+  if (vector->flags & VECTOR_FLAG__COPY_ELEMENTS)
     goto copy_by_size;
 
   void** elements = vector->elements;

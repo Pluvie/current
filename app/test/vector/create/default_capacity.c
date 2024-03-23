@@ -1,7 +1,7 @@
 test(vector_create_default_capacity) {
 
   given("a vector")
-    struct vector vector = vector_init(i32);
+    Vector vector = vector_init(i32);
   
   when("no capacity is provided")
   

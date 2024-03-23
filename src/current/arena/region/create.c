@@ -1,15 +1,15 @@
-struct region* arena_region_create (
-    struct arena* arena,
+Region* arena_region_create (
+    Arena* arena,
     u64 amount
 )
 /**
  * Allocates a new region, with given *amount* of data, in the arena. */
 {
-  void* memory = calloc(1, sizeof(struct region) + amount);
+  void* memory = calloc(1, sizeof(Region) + amount);
   if (memory == NULL)
     return NULL;
 
-  struct region* region = (struct region*) memory;
+  Region* region = (Region*) memory;
   byte* data = (byte*) (region + 1);
 
   region->data = data;

@@ -1,5 +1,5 @@
 void* map_set (
-    struct map* map,
+    Map* map,
     void* key,
     void* value
 )
@@ -16,6 +16,6 @@ void* map_set (
     return NULL;
 
   u64 hash = map_hash(key, map->key_size);
-  struct map_entry entry = { .key = key, .value = value, .hash = hash };
+  MapEntry entry = { .key = key, .value = value, .hash = hash };
   return map_entry_set(map, &entry);
 }

@@ -1,5 +1,5 @@
-struct region* arena_region_search (
-    struct arena* arena,
+Region* arena_region_search (
+    Arena* arena,
     void* memptr
 )
 /**
@@ -9,7 +9,7 @@ struct region* arena_region_search (
  * If the pointer is found, the function returns the region containing such pointer.
  * If not, the function shall return `NULL`. */
 {
-  struct region* current = arena->begin;
+  Region* current = arena->begin;
   void* range[2] = { 0 };
 
   do {

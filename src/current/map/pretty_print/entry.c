@@ -2,7 +2,7 @@ void map_pretty_print_entry (
     size key_size,
     size value_size,
     u64 entry_index,
-    struct map_entry* entry
+    MapEntry* entry
 )
 /**
  * Pretty prints an entry of the map. */

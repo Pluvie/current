@@ -1,7 +1,7 @@
 test(vector_push_resize_if_capacity_reached) {
 
   given("a vector")
-    struct vector vector = vector_init(i32);
+    Vector vector = vector_init(i32);
     vector_create(&vector);
 
   when("the vector is reaching full capacity")

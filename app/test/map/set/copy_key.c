@@ -1,11 +1,11 @@
 test(map_set_copy_key) {
 
   given("a map")
-    struct map map = map_init(i32, i32);
+    Map map = map_init(i32, i32);
     map_create(&map);
 
-  when("the `Map_Flag__Copy_Keys` is enabled")
-    map_flag_enable(&map, Map_Flag__Copy_Keys);
+  when("the `MAP_FLAG__COPY_KEYS` is enabled")
+    map_flag_enable(&map, MAP_FLAG__COPY_KEYS);
 
   when("the provided key is not yet present in the map")
 
@@ -17,7 +17,7 @@ test(map_set_copy_key) {
   must("make a copy of the provided key")
     u64 hash = map_hash(&key, map.key_size);
     u64 capped_hash = map_capped_hash(hash, map.capacity);
-    struct map_entry* entry = map.entries + capped_hash;
+    MapEntry* entry = map.entries + capped_hash;
 
     verify(entry->key != &key);
     verify(entry->value == &value);

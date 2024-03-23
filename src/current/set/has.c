@@ -1,5 +1,5 @@
 bool set_has (
-    struct set* set,
+    Set* set,
     void* element
 )
 /**

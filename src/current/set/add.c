@@ -1,5 +1,5 @@
 void* set_add (
-    struct set* set,
+    Set* set,
     void* element
 )
 /**

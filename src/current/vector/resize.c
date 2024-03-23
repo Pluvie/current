@@ -1,10 +1,10 @@
 void vector_resize (
-    struct vector* vector
+    Vector* vector
 )
 {
   vector->capacity <<= 1;
 
-  if (vector->flags & Vector_Flag__Copy_Elements)
+  if (vector->flags & VECTOR_FLAG__COPY_ELEMENTS)
     goto resize_by_element_size;
 
   vector->elements = arena_realloc(

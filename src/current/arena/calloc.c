@@ -1,5 +1,5 @@
 void* arena_calloc (
-    struct arena* arena,
+    Arena* arena,
     u64 quantity,
     u64 amount
 )

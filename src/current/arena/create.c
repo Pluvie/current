@@ -1,12 +1,12 @@
 void* arena_create (
-    struct arena* arena,
+    Arena* arena,
     u64 capacity
 )
 /**
  * This function shall allocate the begin region of an arena, with the provided
  * *capacity*. */
 {
-  struct region* region = arena_region_create(arena, capacity);
+  Region* region = arena_region_create(arena, capacity);
   if (region == NULL)
     return NULL;
 

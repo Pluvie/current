@@ -1,5 +1,5 @@
 void vector_create (
-    struct vector* vector
+    Vector* vector
 )
 /**
  * This function shall allocate the provided vector. */
@@ -9,7 +9,7 @@ void vector_create (
     initial_capacity = VECTOR_DEFAULT_CAPACITY;
   vector->capacity = initial_capacity;
 
-  if (vector->flags & Vector_Flag__Copy_Elements)
+  if (vector->flags & VECTOR_FLAG__COPY_ELEMENTS)
     vector->elements = arena_calloc(
       vector->arena, initial_capacity, vector->element_size);
   else

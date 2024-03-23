@@ -1,7 +1,7 @@
 test(vector_create_provided_capacity_inferior_to_minimum) {
 
   given("a vector")
-    struct vector vector = vector_init(i32);
+    Vector vector = vector_init(i32);
   
   when("the provided capacity is inferior to the minimum")
     vector.capacity = 4;

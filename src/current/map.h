@@ -7,12 +7,49 @@
                           |__|  |__| /__/     \__\ | _|      
                                                                                       **/
 
+
 /**
- * Defines the `map_init` macro to initialize a new map with the given *key_type* and
- * *value_type*. */
-#define map_init(key_type, value_type)  \
-  { .key_size = sizeof(key_type),       \
-    .value_size = sizeof(value_type) }
+ * # Map
+ *
+ * A map is an unordered array of pairs { key, value } that can be retrieved in constant
+ * time.
+ *
+ * This is achieved by using a hash function on the key, and using the resulting number
+ * as the index where to store the pair in the pairs array. If two different keys would
+ * result in the same hash, then a collision will happen. This collision shall be
+ * addressed by scanning the entries array until a free entry is found.
+ * This technique is called "open addressing". */
+
+
+enum map_flags;
+typedef enum map_flags {
+  MAP_FLAG__NONE          = 0,
+  MAP_FLAG__FIXED_LOOKUP  = 1 << 0,
+  MAP_FLAG__COPY_KEYS     = 1 << 1,
+  MAP_FLAG__COPY_VALUES   = 1 << 2,
+} MapFlags;
+
+
+struct map_entry;
+typedef struct map_entry {
+  void* key;
+  void* value;
+  u64 hash;
+} MapEntry;
+
+
+struct map;
+typedef struct map {
+  u64 length;
+  u64 capacity;
+  size key_size;
+  size value_size;
+  u64 probe_limit;
+  Arena* arena;
+  MapFlags flags;
+  MapEntry* entries;
+} Map;
+
 
 /**
  * Defines the defaul initial capacity of a map, if not specified by the programmer. */
@@ -23,44 +60,11 @@
 #define MAP_MAXIMUM_LOAD_FACTOR   0.7
 
 /**
- * Defines the `map` struct.
- * A map is an unordered array of pairs { key, value } that can be retrieved in constant
- * time.
- *
- * This is achieved by using a hash function on the key, and using the resulting number
- * as the index where to store the pair in the pairs array. If two different keys would
- * result in the same hash, then a collision will happen. This collision shall be
- * addressed by scanning the entries array until a free entry is found.
- * This technique is called "open addressing". */
-struct map {
-  u64   length;
-  u64   capacity;
-  size  key_size;
-  size  value_size;
-  u32   flags;
-  u64   probe_limit;
-  struct arena* arena;
-  struct map_entry* entries;
-};
-
-/**
- * Defines the `map_entry` struct, which is a single pair { key, value } in the map.
- * All entries are stored sequentially one after the other. Collision will be handled
- * using open addressing with linear probing. */
-struct map_entry {
-  void* key;
-  void* value;
-  u64   hash;
-};
-
-/**
- * Defines all the flags used to tweak and configure the map behaviour. */
-enum map_flags {
-  Map_Flag__None          = 0,
-  Map_Flag__Fixed_Lookup  = 1 << 0,
-  Map_Flag__Copy_Keys     = 1 << 1,
-  Map_Flag__Copy_Values   = 1 << 2,
-};
+ * Defines the `map_init` macro to initialize a new map with the given *key_type* and
+ * *value_type*. */
+#define map_init(key_type, value_type)  \
+  { .key_size = sizeof(key_type),       \
+    .value_size = sizeof(value_type) }
 
 /**
  * Defines a macro to enable the provided flag in the map. */
@@ -72,21 +76,23 @@ enum map_flags {
 #define map_flag_disable(map, flag) \
   (map)->flags &= ~(flag)
 
+
 /**
  * All map function definitions. */
-function( map_capped_hash,          u64               )(  i64, u64                                            );
-function( map_compare,              bool              )(  void*, void*, size                                  );
-function( map_create,               void              )(  struct map*                                         );
-function( map_del,                  void*             )(  struct map*, void*                                  );
-function( map_destroy,              void              )(  struct map*                                         );
-function( map_entry_add,            void*             )(  struct map*, struct map_entry*, struct map_entry*   );
-function( map_entry_destroy,        void              )(  struct map*, struct map_entry*                      );
-function( map_entry_get,            struct map_entry* )(  struct map*, void*                                  );
-function( map_entry_set,            void*             )(  struct map*, struct map_entry*                      );
-function( map_get,                  void*             )(  struct map*, void*                                  );
-function( map_has,                  bool              )(  struct map*, void*                                  );
-function( map_hash,                 u64               )(  void*, size                                         );
-function( map_pretty_print,         void              )(  struct map*                                         );
-function( map_pretty_print_entry,   void              )(  size, size, u64, struct map_entry*                  );
-function( map_rehash,               void              )(  struct map*                                         );
-function( map_set,                  void*             )(  struct map*, void*, void*                           );
+
+u64           map_capped_hash         ( i64, u64 );
+bool          map_compare             ( void*, void*, size );
+void          map_create              ( Map* );
+void*         map_del                 ( Map*, void* );
+void          map_destroy             ( Map* );
+void*         map_entry_add           ( Map*, MapEntry*, MapEntry* );
+void          map_entry_destroy       ( Map*, MapEntry* );
+MapEntry*     map_entry_get           ( Map*, void* );
+void*         map_entry_set           ( Map*, MapEntry* );
+void*         map_get                 ( Map*, void* );
+bool          map_has                 ( Map*, void* );
+u64           map_hash                ( void*, size );
+void          map_pretty_print        ( Map* );
+void          map_pretty_print_entry  ( size, size, u64, MapEntry* );
+void          map_rehash              ( Map* );
+void*         map_set                 ( Map*, void*, void* );

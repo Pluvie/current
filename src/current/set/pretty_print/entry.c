@@ -1,7 +1,7 @@
 void set_pretty_print_entry (
     size element_size,
     u64 entry_index,
-    struct map_entry* entry
+    MapEntry* entry
 )
 /**
  * Pretty prints an element of the set. */

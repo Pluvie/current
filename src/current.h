@@ -11,8 +11,8 @@
                                                       
                                                                                       **/
 
-#ifndef CURRENT_H
-#define CURRENT_H
+#ifndef CURRENT_INCLUDES_H
+#define CURRENT_INCLUDES_H
 
 #include <errno.h>
 #include <stdbool.h>
@@ -22,10 +22,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#endif
+
+
 #include "current/prelude.h"
 #include "current/arena.h"
 #include "current/map.h"
 #include "current/set.h"
 #include "current/vector.h"
-
-#endif

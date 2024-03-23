@@ -1,7 +1,7 @@
 test(set_create_default_capacity) {
 
   given("a set")
-    struct set set = set_init(i32);
+    Set set = set_init(i32);
   
   when("no capacity is provided")
   

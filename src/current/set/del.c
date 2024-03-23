@@ -1,5 +1,5 @@
 void* set_del (
-    struct set* set,
+    Set* set,
     void* element
 )
 /**

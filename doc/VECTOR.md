@@ -1,22 +1,23 @@
 # Vector
 
-A `vector` is a collection of dynamically allocated elements of the same type.
+A vector is a collection of dynamically allocated elements of the same type.
 It will grow automatically to fit the memory occupied by all the elements.
 
 Usage example:
 
 ```c
-vector(int) my_vector = vector_new(int);
+Vector vector = vector_init(int);
+vector_flag_enable(VECTOR_FLAG__COPY_ELEMENTS);
+vector_create(&vector);
 
-vector_push(my_vector, 1);
-vector_push(my_vector, 2);
-vector_push(my_vector, 3);
+for (int i = 0; i < 3; i++)
+  vector_push(&vector, &i);
 
-my_vector[0];   // Holds 1.
-my_vector[1];   // Holds 2.
+vector_get(&vector, 0)  // Holds a pointer to 0.
+vector_get(&vector, 1)  // Holds a pointer to 1.
 
-vector_each(my_vector, int, iter)
-  my_vector[iter.index] == iter.element  // You can access them both ways.
+vector_each(&vector, element)
+  printf("> %i", *element); // Will print 0 and 1.
 
-vector_free(my_vector);
+vector_destroy(&vector);
 ```

@@ -1,6 +1,6 @@
 inline void* map_entry_set (
-    struct map* map,
-    struct map_entry* new_entry
+    Map* map,
+    MapEntry* new_entry
 )
 /**
  * This function shall set corresponding *new_entry* in the map entries.
@@ -15,17 +15,17 @@ inline void* map_entry_set (
   u64 probe_limit = map->probe_limit;
   u64 probe_count = 0;
 
-  struct map_entry* entry = map->entries + capped_hash;
+  MapEntry* entry = map->entries + capped_hash;
 
 linear_probing:
   if (entry->key == NULL)
     return map_entry_add(map, new_entry, entry);
 
-  if (map->flags & Map_Flag__Fixed_Lookup)
+  if (map->flags & MAP_FLAG__FIXED_LOOKUP)
     goto next_entry;
 
   if (map_compare(entry->key, new_entry->key, key_size)) {
-    if (map->flags & Map_Flag__Copy_Values)
+    if (map->flags & MAP_FLAG__COPY_VALUES)
       memcpy(entry->value, new_entry->value, map->value_size);
     else
       entry->value = new_entry->value;

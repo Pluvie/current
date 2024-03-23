@@ -1,7 +1,7 @@
 test(map_create_provided_capacity_no_pow_2) {
 
   given("a map")
-    struct map map = map_init(i32, i32);
+    Map map = map_init(i32, i32);
   
   when("the provided capacity is greater or equal than the minimum")
   when("the provided capacity is not a power of 2")

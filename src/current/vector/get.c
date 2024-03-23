@@ -1,12 +1,12 @@
 void* vector_get (
-    struct vector* vector,
+    Vector* vector,
     u64 position
 )
 {
   if (position >= vector->length)
     return NULL;
 
-  if (vector->flags & Vector_Flag__Copy_Elements)
+  if (vector->flags & VECTOR_FLAG__COPY_ELEMENTS)
     return (byte*) vector->elements + (position * vector->element_size);
   else
     return ((void**) vector->elements)[position];

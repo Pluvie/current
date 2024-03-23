@@ -1,5 +1,5 @@
 void* map_del (
-    struct map* map,
+    Map* map,
     void* key
 )
 /**
@@ -8,14 +8,14 @@ void* map_del (
  * If the key is found, its value shall be returned.
  * If not, `NULL` shall be returned. */
 {
-  struct map_entry* entry = map_entry_get(map, key);
+  MapEntry* entry = map_entry_get(map, key);
 
   if (entry == NULL)
     return NULL;
 
   void* deleted_value = entry->value;
   map_entry_destroy(map, entry);
-  memset(entry, '\0', sizeof(struct map_entry));
+  memset(entry, '\0', sizeof(MapEntry));
 
   return deleted_value;
 }

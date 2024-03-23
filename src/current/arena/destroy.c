@@ -1,9 +1,9 @@
 void arena_destroy (
-    struct arena* arena
+    Arena* arena
 )
 {
-  struct region* current = arena->begin;
-  struct region* next = arena->begin;
+  Region* current = arena->begin;
+  Region* next = arena->begin;
 
   if (current == NULL)
     return;

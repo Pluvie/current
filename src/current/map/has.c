@@ -1,5 +1,5 @@
 bool map_has (
-    struct map* map,
+    Map* map,
     void* key
 )
 /**
@@ -8,7 +8,7 @@ bool map_has (
  * If the key is present in the map, `true` shall be returned.
  * If the key is not present in the map, `false` shall be returned. */
 {
-  struct map_entry* entry = map_entry_get(map, key);
+  MapEntry* entry = map_entry_get(map, key);
 
   return entry != NULL;
 }

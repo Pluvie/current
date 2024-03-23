@@ -1,5 +1,5 @@
 void vector_destroy (
-    struct vector* vector
+    Vector* vector
 )
 /**
  * This function shall free the memory used by the vector and all its elements. */

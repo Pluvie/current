@@ -1,5 +1,5 @@
 void* vector_pop (
-    struct vector* vector
+    Vector* vector
 )
 {
   if (vector->length == 0)

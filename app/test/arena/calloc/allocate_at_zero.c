@@ -1,7 +1,7 @@
 test(arena_calloc_allocate_at_zero) {
 
   given("an arena")
-    struct arena arena = arena_init();
+    Arena arena = arena_init();
     arena_create(&arena, 128);
 
   calling("arena_calloc()")

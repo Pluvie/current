@@ -1,5 +1,5 @@
 void* arena_prealloc (
-    struct arena* arena,
+    Arena* arena,
     u64 amount
 )
 /**
@@ -10,13 +10,13 @@ void* arena_prealloc (
   if (arena == NULL)
     return NULL;
 
-  struct region* last_region = arena->end;
+  Region* last_region = arena->end;
   i64 available_space = last_region->capacity - last_region->position;
   if (available_space >= amount)
     return last_region->data + last_region->position;
 
 allocate_new_region:
-  struct region* region = arena_region_create(arena, amount);
+  Region* region = arena_region_create(arena, amount);
   if (region == NULL)
     return NULL;
 

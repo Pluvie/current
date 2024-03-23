@@ -1,5 +1,5 @@
 void* arena_realloc (
-    struct arena* arena,
+    Arena* arena,
     void* memory,
     u64 amount
 )
@@ -11,7 +11,7 @@ void* arena_realloc (
   if (memory == NULL)
     return arena_malloc(arena, amount);
 
-  struct region* memory_region = arena_region_search(arena, memory);
+  Region* memory_region = arena_region_search(arena, memory);
   if (memory_region == NULL)
     return NULL;
 
@@ -93,7 +93,7 @@ void* arena_realloc (
    * */
   else {
     amount_to_copy = (memory_region->data + memory_region->capacity) - (byte*) memory;
-    struct region* end_region = arena->end;
+    Region* end_region = arena->end;
     if (amount_to_copy > end_region->capacity)
       amount_to_copy = end_region->capacity;
     goto exec_copy;

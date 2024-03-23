@@ -1,5 +1,5 @@
-inline struct map_entry* map_entry_get (
-    struct map* map,
+inline MapEntry* map_entry_get (
+    Map* map,
     void* key
 )
 /**
@@ -16,7 +16,7 @@ inline struct map_entry* map_entry_get (
   u64 hash = map_hash(key, key_size);
   u64 capped_hash = map_capped_hash(hash, map->capacity);
 
-  struct map_entry* entry = map->entries + capped_hash;
+  MapEntry* entry = map->entries + capped_hash;
 
 linear_probing:
   if (entry->key == NULL)
