@@ -47,6 +47,8 @@
 #include "./test/vector/create/default_capacity.c"
 #include "./test/vector/create/provided_capacity.c"
 #include "./test/vector/create/provided_capacity_inferior_to_minimum.c"
+#include "./test/vector/from_data/init_read_only.c"
+#include "./test/vector/from_data/incorrect_length.c"
 #include "./test/vector/get/null_if_over_length.c"
 #include "./test/vector/get/value_at_position.c"
 #include "./test/vector/init/correct_element_size.c"
@@ -116,6 +118,8 @@ int main (
   test_run( vector_create_default_capacity );
   test_run( vector_create_provided_capacity );
   test_run( vector_create_provided_capacity_inferior_to_minimum );
+  test_run( vector_from_data_init_read_only );
+  test_run( vector_from_data_incorrect_length );
   test_run( vector_get_null_if_over_length );
   test_run( vector_get_value_at_position );
   test_run( vector_init_correct_element_size );

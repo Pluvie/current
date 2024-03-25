@@ -9,7 +9,7 @@ test(vector_create_default_capacity) {
     vector_create(&vector);
   
   must("allocate the vector with the default capacity")
-    verify(vector.capacity == MAP_DEFAULT_CAPACITY);
+    verify(vector.capacity == VECTOR_DEFAULT_CAPACITY);
 
   success()
     vector_destroy(&vector);

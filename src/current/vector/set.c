@@ -4,6 +4,9 @@ bool vector_set (
     void* element
 )
 {
+  if (vector->flags & VECTOR_FLAG__READ_ONLY)
+    return false;
+
   if (position >= vector->length)
     return false;
 

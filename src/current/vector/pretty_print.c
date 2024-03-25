@@ -9,6 +9,8 @@ void vector_pretty_print (
   byte* element;
   size element_size = vector->element_size;
   fprintf(stderr, "\n");
+  fprintf(stderr, "Vector [%li] [%li]", vector->length, vector->element_size);
+  fprintf(stderr, "\n");
 
   for (u64 i = 0; i < vector->capacity; i++) {
     fprintf(stderr, "[%4li] [ ", i);

@@ -4,6 +4,9 @@ void vector_destroy (
 /**
  * This function shall free the memory used by the vector and all its elements. */
 {
+  if (vector->flags & VECTOR_FLAG__READ_ONLY)
+    return;
+
   if (vector->arena != NULL)
     return;
 

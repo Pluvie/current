@@ -3,6 +3,9 @@ void vector_push (
     void* element
 )
 {
+  if (vector->flags & VECTOR_FLAG__READ_ONLY)
+    return;
+
   u64 position = vector->length;
   if (position + 1 >= vector->capacity)
     vector_resize(vector);

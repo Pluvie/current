@@ -7,6 +7,7 @@
 
 #include "./vector/create.c"
 #include "./vector/destroy.c"
+#include "./vector/from_data.c"
 #include "./vector/get.c"
 #include "./vector/pop.c"
 #include "./vector/pretty_print.c"
