@@ -37,13 +37,12 @@ https://www.rfleury.com/p/untangling-lifetimes-the-arena-allocator).
 
 ## Installation
 
-To install __Current__, clone the git repository at the version you want, and then link
-the `src` directory in your project, at the path you prefer. Then, include
-`current.h` in your sources, and compile them alongside `current.c`, as a
-separate translation unit. Example:
+To install __Current__, clone the git repository at the version you want, add `#include
+<current.h>` in your sources, and then compile them alongside `current.c`, as a separate
+translation unit. Example:
 
-Suppose your project folder is `my_project` with a `src/main.c` file. Suppose you
-link __Current__ in your project `lib` directory. Your tree will look like:
+Suppose your project folder is `my_project` with main function in `src/main.c` file.
+Suppose you link __Current__ in your project `lib` directory. Your tree will look like:
 
 ```
   my_project/
