@@ -76,6 +76,12 @@ typedef struct map {
 #define map_flag_disable(map, flag) \
   (map)->flags &= ~(flag)
 
+/**
+ * Defines a macro to iterate all the entries in the map. */
+#define map_each(map, key, value) \
+  (u64 i = 0; i < (map)->capacity + (map)->probe_limit; i++) \
+    if (key = (map)->entries[i].key, value = (map)->entries[i].value, key != NULL)
+
 
 /**
  * All map function definitions. */
