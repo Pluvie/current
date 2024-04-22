@@ -7,6 +7,8 @@ void vector_destroy (
   if (vector->flags & VECTOR_FLAG__READ_ONLY)
     return;
 
+  vector->length = 0;
+
   if (vector->arena != NULL)
     return;
 
