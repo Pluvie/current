@@ -74,7 +74,7 @@ typedef struct vector {
 
 void    vector_create         ( Vector* );
 void    vector_destroy        ( Vector* );
-bool    vector_from_data      ( Vector*, const byte*, u64 );
+bool    vector_from_data      ( Vector*, void*, u64 );
 void*   vector_get            ( Vector*, u64 );
 void*   vector_pop            ( Vector* );
 void    vector_pretty_print   ( Vector* );

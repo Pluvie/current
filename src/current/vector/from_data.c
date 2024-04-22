@@ -1,6 +1,6 @@
 bool vector_from_data (
     Vector* vector,
-    const byte* data,
+    void* data,
     u64 data_length
 )
 /**
@@ -16,7 +16,7 @@ bool vector_from_data (
   if (vector->element_size * vector_length != data_length)
     return false;
 
-  vector->elements = (void*) data;
+  vector->elements = data;
   vector->length = vector_length;
   vector->capacity = vector_length;
   vector->flags |= VECTOR_FLAG__READ_ONLY;
